@@ -1,5 +1,7 @@
 package top.mc506lw.rebar.endfield_industry.content.powersystem.gui
 
+import io.github.pylonmc.rebar.i18n.RebarArgument
+import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 import top.mc506lw.rebar.endfield_industry.content.powersystem.PowerGrid
 import top.mc506lw.rebar.endfield_industry.content.powersystem.devices.PowerDevice
@@ -11,23 +13,27 @@ abstract class PowerSystemGui(protected val device: PowerDevice, protected val p
 
     protected fun getGrid(): PowerGrid? = device.getGrid()
 
-    protected fun getGridCapacityText(): String {
-        val grid = getGrid() ?: return "未连接电网"
-        return "电网电量: ${grid.totalCapacity - grid.usedCapacity}"
+    protected fun getGridCapacityText(): Component {
+        val grid = getGrid() ?: return Component.translatable("endfield-industry.gui.power_grid.not_connected")
+        return Component.translatable("endfield-industry.gui.power_grid.grid_capacity")
+            .arguments(RebarArgument.of("value", grid.totalCapacity - grid.usedCapacity))
     }
 
-    protected fun getDeviceCountText(): String {
-        val grid = getGrid() ?: return "连接设备: 0"
-        return "连接设备: ${grid.getDevices().size}"
+    protected fun getDeviceCountText(): Component {
+        val grid = getGrid() ?: return Component.translatable("endfield-industry.gui.power_grid.not_connected")
+        return Component.translatable("endfield-industry.gui.power_grid.device_count")
+            .arguments(RebarArgument.of("count", grid.getDevices().size))
     }
 
-    protected fun getConnectionStatusText(): String {
-        val grid = getGrid() ?: return "连接状态: 未连接"
-        return String.format("连接状态: 已连接 (%s)", grid.gridId.toString().substring(0, 8))
+    protected fun getConnectionStatusText(): Component {
+        val grid = getGrid() ?: return Component.translatable("endfield-industry.gui.power_grid.connection_status_not_connected")
+        return Component.translatable("endfield-industry.gui.power_grid.connection_status")
+            .arguments(RebarArgument.of("id", grid.gridId.toString().substring(0, 8)))
     }
     
-    protected fun getGridIdText(): String {
-        val grid = getGrid() ?: return "电网ID: 未连接"
-        return "电网ID: ${grid.gridId.toString().substring(0, 8)}"
+    protected fun getGridIdText(): Component {
+        val grid = getGrid() ?: return Component.translatable("endfield-industry.gui.power_grid.grid_id_not_connected")
+        return Component.translatable("endfield-industry.gui.power_grid.grid_id")
+            .arguments(RebarArgument.of("id", grid.gridId.toString().substring(0, 8)))
     }
 }

@@ -811,6 +811,13 @@ message:
     success: '<green>连接成功! 距离: %distance%M</green>'
     out_of_range: '<red>超出连接范围! 超出: %distance%M</red>'
     remaining_distance: '<yellow>拉电线模式 - 剩余距离: %distance%M</yellow>'
+  wirepath:
+    started: '<yellow>开始拉电线 - 最大距离: %max%M</yellow>'
+    ended: '<red>拉电线模式已结束</red>'
+    status: '<yellow>拉电线中: %current%M / %max%M (剩余: %remaining%M)</yellow>'
+    over_distance: '<red>路径超出最大距离! 超出: %distance%M</red>'
+    over_distance_auto_end: '<red>路径超出最大距离，自动退出! 路径长度: %max%M</red>'
+    cannot_start: '<red>无法从此设备开始拉电线</red>'
 gui:
   processing: <white>处理中...</white>
   planter:
@@ -848,6 +855,10 @@ gui:
     supply_devices: '<gray>供电设备: <yellow>%count%</yellow></gray>'
     consumer_devices: '<gray>用电设备: <yellow>%count%</yellow></gray>'
     no_devices: <gray>无设备连接</gray>
+    grid_capacity: '<gray>电网电量: <yellow>%value%</yellow></gray>'
+    device_count: '<gray>连接设备: <yellow>%count%</yellow></gray>'
+    connection_status: '<gray>连接状态: 已连接 (<yellow>%id%</yellow>)</gray>'
+    connection_status_not_connected: '<gray>连接状态: 未连接</gray>'
 waila:
   structure_incomplete: ' <red>(结构未完成)</red>'
   not_connected: ' <yellow>(未连接电网)</yellow>'

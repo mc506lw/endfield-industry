@@ -802,6 +802,13 @@ message:
     success: "<green>Connection successful! Distance: %distance%M</green>"
     out_of_range: "<red>Out of connection range! Exceeds: %distance%M</red>"
     remaining_distance: "<yellow>Wire connection mode - Remaining distance: %distance%M</yellow>"
+  wirepath:
+    started: "<yellow>Started wire path - Max distance: %max%M</yellow>"
+    ended: "<red>Wire path mode ended</red>"
+    status: "<yellow>Wire path: %current%M / %max%M (Remaining: %remaining%M)</yellow>"
+    over_distance: "<red>Path exceeds max distance! Exceeds: %distance%M</red>"
+    over_distance_auto_end: "<red>Path exceeded max distance, auto-exited! Path length: %max%M</red>"
+    cannot_start: "<red>Cannot start wire path from this device</red>"
 
 gui:
   processing: "<white>Processing...</white>"
@@ -840,6 +847,10 @@ gui:
     supply_devices: "<gray>Supply devices: <yellow>%count%</yellow></gray>"
     consumer_devices: "<gray>Consumer devices: <yellow>%count%</yellow></gray>"
     no_devices: "<gray>No devices connected</gray>"
+    grid_capacity: "<gray>Grid capacity: <yellow>%value%</yellow></gray>"
+    device_count: "<gray>Connected devices: <yellow>%count%</yellow></gray>"
+    connection_status: "<gray>Connection status: Connected (<yellow>%id%</yellow>)</gray>"
+    connection_status_not_connected: "<gray>Connection status: Not connected</gray>"
 
 waila:
   structure_incomplete: " <red>(Structure incomplete)</red>"

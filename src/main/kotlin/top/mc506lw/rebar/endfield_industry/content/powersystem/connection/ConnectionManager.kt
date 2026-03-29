@@ -16,6 +16,8 @@ import top.mc506lw.rebar.endfield_industry.content.powersystem.devices.RelayDiff
 import top.mc506lw.rebar.endfield_industry.content.powersystem.devices.PowerStationEmitter
 import top.mc506lw.rebar.endfield_industry.content.powersystem.event.PowerDeviceConnectEvent
 import top.mc506lw.rebar.endfield_industry.content.powersystem.storage.PowerSystemStorage
+import top.mc506lw.rebar.endfield_industry.content.powersystem.connection.wirepath.WirePathManager
+import top.mc506lw.rebar.endfield_industry.content.powersystem.connection.wirepath.WirePathSession
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.sqrt
@@ -26,14 +28,21 @@ class ConnectionManager(private val config: PowerSystemConfig) {
     private val pathCache: PathCache = PathCache()
     private val deviceConnections: MutableMap<String, MutableSet<PowerConnection>> = ConcurrentHashMap()
 
+    init {
+        WirePathManager.relayMaxDistance = config.relayConnectionDistance.toDouble()
+        WirePathManager.powerStationMaxDistance = config.powerStationConnectionDistance.toDouble()
+    }
+
     fun startConnection(player: Player, device: PowerDevice) {
         connectingPlayers[player.uniqueId] = device
-        player.sendActionBar(Component.translatable("endfield-industry.message.connection.mode_started"))
+        
+        WirePathManager.startPath(player, device)
     }
 
     fun endConnection(player: Player) {
         connectingPlayers.remove(player.uniqueId)
-        player.sendActionBar(Component.translatable("endfield-industry.message.connection.mode_ended"))
+        
+        WirePathManager.endPath(player)
     }
 
     fun isConnecting(player: Player): Boolean = connectingPlayers.containsKey(player.uniqueId)
@@ -59,14 +68,28 @@ class ConnectionManager(private val config: PowerSystemConfig) {
             return null
         }
 
-        val actualDistance = calculateDistance(sourceDevice, targetDevice)
+        val session = WirePathManager.getSession(player)
+        if (session != null && session.isOverMaxDistance) {
+            player.sendActionBar(Component.translatable("endfield-industry.message.connection.too_far")
+                .arguments(RebarArgument.of("distance", (session.pathLength - maxDistance).toInt())))
+            return null
+        }
+
+        val pathLength = WirePathManager.getPathLength(player)
+        val actualDistance = if (pathLength > 0) {
+            pathLength.toInt()
+        } else {
+            calculateDistance(sourceDevice, targetDevice)
+        }
+
         if (actualDistance > maxDistance) {
             player.sendActionBar(Component.translatable("endfield-industry.message.connection.too_far")
                 .arguments(RebarArgument.of("distance", actualDistance - maxDistance)))
             return null
         }
 
-        val connection = createConnection(sourceDevice, targetDevice, actualDistance)
+        val pathLocations = WirePathManager.getFullPath(player)
+        val connection = createConnectionWithPath(sourceDevice, targetDevice, pathLocations, actualDistance)
         if (connection != null) {
             endConnection(player)
             player.sendActionBar(Component.translatable("endfield-industry.message.connection.success")
@@ -123,10 +146,20 @@ class ConnectionManager(private val config: PowerSystemConfig) {
         return sqrt(dx * dx + dy * dy + dz * dz).toInt()
     }
 
-    private fun createConnection(source: PowerDevice, target: PowerDevice, distance: Int): PowerConnection? {
-        val path = mutableListOf<Block>()
-        path.add(source.block)
-        path.add(target.block)
+    private fun createConnectionWithPath(
+        source: PowerDevice, 
+        target: PowerDevice, 
+        pathLocations: List<Location>?,
+        distance: Int
+    ): PowerConnection? {
+        val path = if (pathLocations != null && pathLocations.isNotEmpty()) {
+            pathLocations.map { it.block }.toMutableList()
+        } else {
+            val simplePath = mutableListOf<Block>()
+            simplePath.add(source.block)
+            simplePath.add(target.block)
+            simplePath
+        }
         
         val connection = PowerConnection(source, target, path, distance)
         
@@ -179,6 +212,10 @@ class ConnectionManager(private val config: PowerSystemConfig) {
         event.callEvent()
         
         return connection
+    }
+
+    private fun createConnection(source: PowerDevice, target: PowerDevice, distance: Int): PowerConnection? {
+        return createConnectionWithPath(source, target, null, distance)
     }
     
     private fun notifyNearbyConsumersForStation(station: PowerStationEmitter, grid: PowerGrid) {
@@ -243,26 +280,23 @@ class ConnectionManager(private val config: PowerSystemConfig) {
 
     fun getPathCache(): PathCache = pathCache
 
-    fun updateDistanceDisplay(player: Player) {
-        val sourceDevice = connectingPlayers[player.uniqueId] ?: return
-        
-        val sourceLoc = sourceDevice.block.location
-        val playerLoc = player.location
-        
-        val dx = sourceLoc.x - playerLoc.x
-        val dy = sourceLoc.y - playerLoc.y
-        val dz = sourceLoc.z - playerLoc.z
-        val distance = sqrt(dx * dx + dy * dy + dz * dz).toInt()
-        
-        val maxDistance = getDeviceMaxDistance(sourceDevice)
-        val remaining = maxDistance - distance
-        
-        if (remaining < 0) {
-            player.sendActionBar(Component.translatable("endfield-industry.message.connection.out_of_range")
-                .arguments(RebarArgument.of("distance", -remaining)))
-        } else {
-            player.sendActionBar(Component.translatable("endfield-industry.message.connection.remaining_distance")
-                .arguments(RebarArgument.of("distance", remaining)))
+    fun updatePath(player: Player): Boolean {
+        val result = WirePathManager.updatePath(player)
+        if (!result) {
+            connectingPlayers.remove(player.uniqueId)
         }
+        return result
+    }
+
+    fun getPathLength(player: Player): Double {
+        return WirePathManager.getPathLength(player)
+    }
+
+    fun cleanupAllPaths() {
+        WirePathManager.cleanupAll()
+    }
+
+    fun cleanupPlayerPath(player: Player) {
+        WirePathManager.cleanupPlayer(player)
     }
 }
