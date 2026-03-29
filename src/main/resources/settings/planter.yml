@@ -1,0 +1,46 @@
+recipes:
+  planter_buckwheat:
+    input: endfield-industry:buckwheat_seed
+    output:
+      item: endfield-industry:buckwheat
+      amount: 1
+  planter_gray_wheat:
+    input: endfield-industry:gray_wheat_seed
+    output:
+      item: endfield-industry:gray_wheat
+      amount: 1
+  planter_ketone_tree:
+    input: endfield-industry:ketone_tree_seed
+    output:
+      item: endfield-industry:log
+      amount: 2
+  planter_citrus:
+    input: endfield-industry:citrus_seed
+    output:
+      item: endfield-industry:citrus
+      amount: 3
+  planter_jin_grass:
+    input: endfield-industry:jin_grass_seed
+    output:
+      item: endfield-industry:jin_grass
+      amount: 2
+  planter_bud_needle:
+    input: endfield-industry:bud_needle_seed
+    output:
+      item: endfield-industry:bud_needle
+      amount: 2
+  planter_gold_stone_rice:
+    input: endfield-industry:gold_stone_rice_seed
+    output:
+      item: endfield-industry:gold_stone_rice
+      amount: 3
+  planter_jade_leaf_ginseng:
+    input: endfield-industry:jade_leaf_ginseng_seed
+    output:
+      item: endfield-industry:jade_leaf_ginseng
+      amount: 1
+  planter_sand_leaf:
+    input: endfield-industry:sand_leaf_seed
+    output:
+      item: endfield-industry:sand_leaf
+      amount: 2

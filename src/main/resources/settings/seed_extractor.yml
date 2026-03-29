@@ -1,0 +1,46 @@
+recipes:
+  seed_extractor_buckwheat:
+    input: endfield-industry:buckwheat
+    output:
+      item: endfield-industry:buckwheat_seed
+      amount: 2
+  seed_extractor_gray_wheat:
+    input: endfield-industry:gray_wheat
+    output:
+      item: endfield-industry:gray_wheat_seed
+      amount: 2
+  seed_extractor_ketone_tree:
+    input: endfield-industry:ketone_bush
+    output:
+      item: endfield-industry:ketone_tree_seed
+      amount: 2
+  seed_extractor_citrus:
+    input: endfield-industry:citrus
+    output:
+      item: endfield-industry:citrus_seed
+      amount: 2
+  seed_extractor_jin_grass:
+    input: endfield-industry:jin_grass
+    output:
+      item: endfield-industry:jin_grass_seed
+      amount: 2
+  seed_extractor_bud_needle:
+    input: endfield-industry:bud_needle
+    output:
+      item: endfield-industry:bud_needle_seed
+      amount: 2
+  seed_extractor_gold_stone_rice:
+    input: endfield-industry:gold_stone_rice
+    output:
+      item: endfield-industry:gold_stone_rice_seed
+      amount: 2
+  seed_extractor_jade_leaf_ginseng:
+    input: endfield-industry:jade_leaf_ginseng
+    output:
+      item: endfield-industry:jade_leaf_ginseng_seed
+      amount: 2
+  seed_extractor_sand_leaf:
+    input: endfield-industry:sand_leaf
+    output:
+      item: endfield-industry:sand_leaf_seed
+      amount: 2

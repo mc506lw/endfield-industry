@@ -1,0 +1,28 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Gradle
+.gradle/
+
+# Build
+build/
+bin/
+out/
+
+# Kotlin
+.kotlin/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Trae
+.trae/
+
+# Documentation
+rebarapi.md

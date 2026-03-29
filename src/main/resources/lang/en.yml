@@ -1,0 +1,847 @@
+addon: "Endfield Industry"
+
+guide:
+  page:
+    endfield_industry: "<#60A5FA>Endfield Industry</#60A5FA>"
+    plants: "<#34D399>Plants</#34D399>"
+    materials: "<#A78BFA>Materials</#A78BFA>"
+    components: "<#60A5FA>Components</#60A5FA>"
+    machines: "<#94A3B8>Machines</#94A3B8>"
+    medicines: "<#22D3EE>Medicines</#22D3EE>"
+    products: "<#FBBF24>Products</#FBBF24>"
+    multiblock_structures: "<#A78BFA>Multiblock Structures</#A78BFA>"
+    seed_extractor_structure: "<#34D399>Seed Extractor Structure</#34D399>"
+    planter_structure: "<#34D399>Planter Structure</#34D399>"
+    power_system: "<#F59E0B>Power System</#F59E0B>"
+    relay_structure: "<#F59E0B>Relay Structure</#F59E0B>"
+    power_station_structure: "<#F59E0B>Power Station Structure</#F59E0B>"
+  button:
+    endfield_industry:
+      lore: "<#94A3B8>Endfield Industry mod - Industrial equipment and machines</#94A3B8>"
+    plants:
+      lore: "<#94A3B8>Crops and seeds</#94A3B8>"
+    materials:
+      lore: "<#94A3B8>Basic raw materials</#94A3B8>"
+    components:
+      lore: "<#94A3B8>Processed parts</#94A3B8>"
+    machines:
+      lore: "<#94A3B8>Industrial equipment</#94A3B8>"
+    medicines:
+      lore: "<#94A3B8>Medical items</#94A3B8>"
+    products:
+      lore: "<#94A3B8>Finished products</#94A3B8>"
+    multiblock_structures:
+      lore: "<#94A3B8>Construction guides for multiblock machines</#94A3B8>"
+    seed_extractor:
+      layer1:
+        name: "<yellow>Layer 1 (Base)"
+        lore: |-
+          <arrow> Top view:
+          
+          <white>Stone bricks Stone bricks Stone bricks Stone bricks</white>
+          <white>Stone bricks Anvil Stone bricks Anvil Stone bricks</white>
+          <white>Stone bricks Stone bricks Stone bricks Stone bricks</white>
+      layer2:
+        name: "<yellow>Layer 2"
+        lore: |-
+          <arrow> Top view:
+          
+          <white>Iron blocks Iron blocks Iron blocks</white>
+          <white>Iron blocks <blue>Controller</blue> Iron blocks</white>
+          <white>Iron blocks Iron blocks Iron blocks</white>
+    planter:
+      layer1:
+        name: "<yellow>Layer 1 (Base)"
+        lore: |-
+          <arrow> Top view:
+          
+          <white>Stone bricks Stone bricks Stone bricks Stone bricks</white>
+          <white>Stone bricks Dirt Stone bricks Dirt Stone bricks</white>
+          <white>Stone bricks Stone bricks Stone bricks Stone bricks</white>
+      layer2:
+        name: "<yellow>Layer 2"
+        lore: |-
+          <arrow> Top view:
+          
+          <white>Iron blocks Iron blocks Iron blocks</white>
+          <white>Iron blocks <blue>Controller</blue> Iron blocks</white>
+          <white>Iron blocks Iron blocks Iron blocks</white>"
+    relay:
+      layer1:
+        name: "<yellow>Layer 1 (Base)"
+        lore: |-
+          <arrow> Top view:
+          
+          <white>Stone bricks Stone bricks Stone bricks</white>
+          <white>Stone bricks Stone bricks Stone bricks</white>
+          <white>Stone bricks Stone bricks Stone bricks</white>"
+      layer2:
+        name: "<yellow>Layer 2 (Base)"
+        lore: |-
+          <arrow> Top view:
+          
+          <white>Air Air Air</white>
+          <white>Air <blue>Base</blue> Air</white>
+          <white>Air Air Air</white>"
+      layer3:
+        name: "<yellow>Layer 3 (Diffuser)"
+        lore: |-
+          <arrow> Top view:
+          
+          <white>Air Air Air</white>
+          <white>Air <blue>Diffuser</blue> Air</white>
+          <white>Air Air Air</white>"
+    power_station:
+      layer1:
+        name: "<yellow>Layer 1 (Base)"
+        lore: |-
+          <arrow> Top view:
+          
+          <white>Air Air Air</white>
+          <white>Air <blue>Base</blue> Air</white>
+          <white>Air Air Air</white>"
+      layer2:
+        name: "<yellow>Layer 2 (Emitter)"
+        lore: |-
+          <arrow> Top view:
+          
+          <white>Air Air Air</white>
+          <white>Air <blue>Emitter</blue> Air</white>
+          <white>Air Air Air</white>"
+
+research:
+  plants_basic: "<#87dd87>Basic Plant Cultivation"
+  materials_basic: "<#a8a8a8>Basic Material Processing"
+  components_basic: "<#5555ff>Basic Component Manufacturing"
+  machines_basic: "<#5555ff>Basic Industrial Equipment"
+  medicines_basic: "<#ff5555>Basic Medicine Manufacturing"
+  products_basic: "<#aa00aa>Basic Product Packaging"
+
+item:
+  high_crystal_part:
+    name: "<white><b>High Crystal Part</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>High crystal fiber processed into parts, usable for other material synthesis or equipment manufacturing</#94A3B8>
+      <#64748B>Versatile high-quality parts</#64748B>
+  steel_part:
+    name: "<white><b>Steel Part</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Steel blocks processed into parts, usable for other material synthesis or equipment manufacturing</#94A3B8>
+      <#64748B>Versatile steel parts</#64748B>
+  stable_carbon_block:
+    name: "<white><b>Stable Carbon Block</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Advanced material from refined dense carbon powder</#94A3B8>
+      <#64748B>After multi-stage processing, carbon blocks achieve a subtle and stable balance in elemental state</#64748B>
+  sand_leaf_powder:
+    name: "<white><b>Sand Leaf Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Sand leaf powder, usable for other material synthesis</#94A3B8>
+      <#64748B>After crushing, the coarse parts of sand leaves are fully utilized</#64748B>
+  dense_originium_powder:
+    name: "<white><b>Dense Originium Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Originium ore powder after grinding, stable state</#94A3B8>
+      <#64748B>The guild attempted "powder cultivation method" during the early stages of the originium cultivation project</#64748B>
+  dense_crystal_powder:
+    name: "<white><b>Dense Crystal Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Crystal shell powder after grinding</#94A3B8>
+      <#64748B>After fine grinding, the particles in dense crystal powder become almost invisible</#64748B>
+  high_crystal_powder:
+    name: "<white><b>High Crystal Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Amethyst powder after grinding</#94A3B8>
+      <#64748B>After fine grinding, improperly stored high-quality powder will "flow" in non-sealed containers</#64748B>
+  dense_blue_iron_powder:
+    name: "<white><b>Dense Blue Iron Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Blue iron powder after grinding</#94A3B8>
+      <#64748B>After fine grinding, dense blue iron powder is popular among painting enthusiasts</#64748B>
+  dense_carbon_powder:
+    name: "<white><b>Dense Carbon Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Carbon powder after grinding</#94A3B8>
+      <#64748B>After crushing, carbon powder has acquired a unique delicate texture</#64748B>
+  high_cap_valley_battery:
+    name: "<white><b>High-Capacity Valley Battery</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>Purple Quality</#A78BFA>
+      <#94A3B8>Battery obtained through equipment packaging</#94A3B8>
+      <#64748B>Recycling used batteries is the main livelihood for many wasteland residents</#64748B>
+  large_bud_spray:
+    name: "<white><b>Large Bud Spray</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>Purple Quality</#A78BFA>
+      <#94A3B8>Tactical item that can restore operator health when used</#94A3B8>
+      <#64748B>Simple bottled spray. Can be taken orally if necessary</#64748B>
+  high_crystal_bottle:
+    name: "<white><b>High Crystal Bottle</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Metal bottle processed from high crystal fiber</#94A3B8>
+      <#64748B>Some special chemical reagents can only be stored in high-quality bottles</#64748B>
+  steel_bottle:
+    name: "<white><b>Steel Bottle</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Metal bottle processed from steel blocks</#94A3B8>
+      <#64748B>The most common steel bottle on the market</#64748B>
+  fine_ground_buckwheat_powder:
+    name: "<white><b>Fine Ground Buckwheat Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Buckwheat powder after grinding</#94A3B8>
+      <#64748B>After fine grinding, buckwheat extract shows "abnormal" activity</#64748B>
+  fine_ground_citrus_powder:
+    name: "<white><b>Fine Ground Citrus Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Citrus powder after grinding</#94A3B8>
+      <#64748B>After fine grinding, fine ground citrus powder tastes extremely bitter</#64748B>
+  steel_block:
+    name: "<white><b>Steel Block</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Advanced material from refined dense blue iron powder</#94A3B8>
+      <#64748B>Steel produced by Endfield Industry has been listed as a Class 2 reference standard in the "Terra II Industrial Metal Erosion Tolerance Standard"</#64748B>
+  high_crystal_fiber:
+    name: "<white><b>High Crystal Fiber</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Advanced material from refined high crystal powder</#94A3B8>
+      <#64748B>After multi-stage processing, high crystal fiber can be applied to various signal transmission scenarios</#64748B>
+  dense_crystal:
+    name: "<white><b>Dense Crystal</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Advanced material from refined dense crystal powder</#94A3B8>
+      <#64748B>After multi-stage processing, dense crystal is sufficient to be called a "gemstone"</#64748B>
+  buckwheat:
+    name: "<white><b>Buckwheat</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Vibrant flowers that can be collected in the wild or cultivated in factories, usable for medicine or other material synthesis</#94A3B8>
+      <#64748B>During the early war, a Hongshan reconnaissance team first discovered this vibrantly colored plant and used it as an emergency hemostatic agent</#64748B>
+  buckwheat_seed:
+    name: "<white><b>Buckwheat Seed</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Seeds of buckwheat, usable for cultivating new buckwheat</#94A3B8>
+      <#64748B>Place buckwheat field blocks for seedling and watering, harvest to obtain buckwheat when mature</#64748B>
+  seed_extractor:
+    name: "<white><b>Seed Extractor</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Equipment module capable of collecting seeds from ordinary plants</#94A3B8>
+      <#64748B>Must be placed above a valid structure to operate</#64748B>
+  planter:
+    name: "<white><b>Planter</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Warehouse-shaped equipment module capable of cultivating various ordinary plants</#94A3B8>
+      <#64748B>Self-developed by Endfield Industry, real-time monitoring of internal lighting, temperature, and plant hormone status</#64748B>
+  relay_base:
+    name: "<white><b>Relay Base</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Basic component of power transmission network</#94A3B8>
+      <#64748B>Key node for long-distance energy transmission</#64748B>
+  relay_diffuser:
+    name: "<white><b>Relay Signal Diffuser</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Diffusion device used to expand signal coverage</#94A3B8>
+      <#64748B>Ensures stable energy field coverage of target area</#64748B>
+  power_station_base:
+    name: "<white><b>Power Station Base</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Core support component of power station structure</#94A3B8>
+      <#64748B>Foundation platform bearing high-voltage energy output</#64748B>
+  power_station_emitter:
+    name: "<white><b>Power Station Emitter</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Core device responsible for energy radiation and distribution</#94A3B8>
+      <#64748B>Must be paired with base to complete power network</#64748B>
+  protocol_core_controller:
+    name: "<white><b>Protocol Core Controller</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Core equipment of the power grid, providing 200 power capacity</#94A3B8>
+      <#64748B>5x5 iron block base + beacon construction</#64748B>
+  light_dim_stone:
+    name: "<white><b>Light Dim Stone</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>Purple Quality</#A78BFA>
+      <#94A3B8>Special mineral collected in the wild or cultivated in incubators</#94A3B8>
+      <#64748B>Dim stones are also known as "Ancient Stones", symbolizing a disappearance humans never witnessed</#64748B>
+  cartilage_fragment:
+    name: "<white><b>Cartilage Fragment</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Drops from defeating Bone-Flame Shamans, usable for refined food/medicine production</#94A3B8>
+      <#64748B>Crushed beast cartilage, fuel thrown by Bone-Flame Shamans into the Nest Sculpture</#64748B>
+  carbon_block:
+    name: "<white><b>Carbon Block</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Carbon material from plant burning, usable for other material synthesis</#94A3B8>
+      <#64748B>Endfield Industry completed optimization of exhaust gas treatment during the carbon production process as early as the war period</#64748B>
+  amethyst_fiber:
+    name: "<white><b>Amethyst Fiber</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Fiber refined from amethyst ore, usable for other material synthesis</#94A3B8>
+      <#64748B>After processing amethyst into fiber, its stretchability is greatly enhanced</#64748B>
+  blue_iron_block:
+    name: "<white><b>Blue Iron Block</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Metal blocks refined from blue iron ore, usable for other material synthesis</#94A3B8>
+      <#64748B>Derivative of Protocol Originium, can only be synthesized in extremely harsh environments</#64748B>
+  carbon_powder:
+    name: "<white><b>Carbon Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Carbon material powder, usable for other material synthesis</#94A3B8>
+      <#64748B>After crushing, carbon has acquired a more delicate texture</#64748B>
+  industrial_explosive:
+    name: "<white><b>Industrial Explosive</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>Blue Quality</#60A5FA>
+      <#94A3B8>Assembled explosive, can be used directly for attacks</#94A3B8>
+      <#64748B>This item has a high explosion risk, please carry and use with caution</#64748B>
+  gray_wheat_seed:
+    name: "<white><b>Gray Wheat Seed</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Seeds of wild gray wheat, can produce gray wheat through field modulation and refined cultivation</#94A3B8>
+      <#64748B>Strictly screened gray wheat, seeds are full and intact, with high vitality</#64748B>
+  gray_wheat:
+    name: "<white><b>Gray Wheat</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Crops that can only be cultivated through fine planting, usable directly for precious food/medicine production</#94A3B8>
+      <#64748B>Gray wheat is easy to plant and has sufficient yield, making it the staple food for residents in the development zone</#64748B>
+  ketone_tree_seed:
+    name: "<white><b>Ketone Tree Seed</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Seeds of ketone shrubs, usable for cultivating ketone shrubs</#94A3B8>
+      <#64748B>Most scholars believe that the reason ketone shrubs can extract nitrates is because they absorb excessive amounts of erosion-containing rainwater</#64748B>
+  citrus_seed:
+    name: "<white><b>Citrus Seed</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Seeds of citrus, usable for cultivating citrus</#94A3B8>
+      <#64748B>Plant enthusiasts in the Civilization Circle once voted for "Most Common Plants in the Wilderness", with buckwheat and citrus ranking in the top ten</#64748B>
+  blue_iron_ore:
+    name: "<white><b>Blue Iron Ore</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>A naturally occurring blue alloy that can be processed in industrial systems</#94A3B8>
+      <#64748B>The formation of blue iron is debated, but in the era before industrial metals appeared, it was the metal people relied on most</#64748B>
+  glow_shell_bug:
+    name: "<white><b>Glow Shell Bug</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Terra II creature affected by originium, extremely small but capable of emitting light</#94A3B8>
+      <#64748B>A tiny flying glow shell originium bug, usable for other material synthesis</#64748B>
+  amethyst_powder:
+    name: "<white><b>Amethyst Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Amethyst fiber powder after crushing, usable for other material synthesis</#94A3B8>
+      <#64748B>After crushing, the texture of amethyst secondary processed products becomes more uniform</#64748B>
+  grass_seed_powder:
+    name: "<white><b>Grass Seed Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Drops from defeating Bone-Plunderers, Bone-Shooters, and Bone-Infiltrators, usable for refined food/medicine production</#94A3B8>
+      <#64748B>Canned powder mixed with several grass seed shells, has certain toxicity</#64748B>
+  valley_dispatch_ticket:
+    name: "<white><b>Valley Dispatch Ticket</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#FBBF24>Gold Quality</#FBBF24>
+      <#94A3B8>Dispatch ticket issued for Valley No. 4, only usable in this location, with various rich uses</#94A3B8>
+      <#64748B>According to the relevant provisions of the "Circle Convention", contracting parties shall guarantee the normal circulation of gold tickets in the people's livelihood economy</#64748B>
+  crystal_shell:
+    name: "<white><b>Crystal Shell</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Outer shell portion separated during originium processing, usable for other material synthesis</#94A3B8>
+      <#64748B>The thickness of originium crystal shell is usually an important basis for judging the duration of an ore vein</#64748B>
+  beast_meat:
+    name: "<white><b>Beast Meat</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Drops from defeating wild toothed beasts and Bone-Shredders, usable for refined food/medicine production</#94A3B8>
+      <#64748B>Fresh beast meat, sufficiently fresh</#64748B>
+  high_energy_fragrant_stone:
+    name: "<white><b>High Energy Fragrant Stone</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Drops from defeating Thorn-Angels and Heavy-Angels, usable for refined food/medicine production</#94A3B8>
+      <#64748B>Occasionally collected from the "Energy Spike" part of angels, possessing a wonderful fragrance</#64748B>
+  hard_fragrant_stone:
+    name: "<white><b>Hard Fragrant Stone</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Drops from defeating Big-Horn Angels and Hard-Horn Angels, usable for refined food/medicine production</#94A3B8>
+      <#64748B>Occasionally collected from the "Horn" part of angels, possessing a wonderful fragrance</#64748B>
+  crystal_shell_powder:
+    name: "<white><b>Crystal Shell Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Crystal shell powder, usable for other material synthesis</#94A3B8>
+      <#64748B>After crushing, the texture of crystal shell secondary processed products becomes more uniform</#64748B>
+  light_red_pillar_fungus:
+    name: "<white><b>Light Red Pillar Fungus</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>Purple Quality</#A78BFA>
+      <#94A3B8>Special fungus collected in the wild or cultivated in incubators</#94A3B8>
+      <#64748B>When red pillar fungus grows to a certain stage and color reaches a certain depth, it becomes extremely toxic</#64748B>
+  crystalized_toothed_leaf:
+    name: "<white><b>Crystallized Toothed Leaf</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>Purple Quality</#A78BFA>
+      <#94A3B8>Special plant collected in the wild or cultivated in incubators</#94A3B8>
+      <#64748B>Toothed leaf extracts were once used to manufacture emergency medicines</#64748B>
+  fire_buckwheat:
+    name: "<white><b>Fire Buckwheat</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Special vibrantly colored flowers that can be collected in the wild, usable for treatment or refined food/medicine, seeds cannot be obtained</#94A3B8>
+      <#64748B>In mid-April is when buckwheat is in full bloom, and the most vibrantly colored ones are named "Fire"</#64748B>
+  dark_silver_citrus:
+    name: "<white><b>Dark Silver Citrus</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>Green Quality</#22C55E>
+      <#94A3B8>Special fruits that can be collected in the wild, usable for treatment or refined food/medicine, seeds cannot be obtained</#94A3B8>
+      <#64748B>In fact, according to juice content and sugar content, citrus appearing in the Civilization Circle market can be subdivided into twelve types</#64748B>
+  log:
+    name: "<white><b>Log</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic wood material</#94A3B8>
+      <#64748B>Can be used for construction and crafting</#64748B>
+  ketone_bush:
+    name: "<white><b>Ketone Bush</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  originium_powder:
+    name: "<white><b>Originium Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic mineral material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  amethyst_ore:
+    name: "<white><b>Amethyst Ore</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic mineral material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  blue_iron_powder:
+    name: "<white><b>Blue Iron Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic material powder</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  ketone_bush_powder:
+    name: "<white><b>Ketone Bush Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic material powder</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  amethyst_bottle:
+    name: "<white><b>Amethyst Bottle</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic container</#94A3B8>
+      <#64748B>Can be used for storing liquids</#64748B>
+  blue_iron_bottle:
+    name: "<white><b>Blue Iron Bottle</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic container</#94A3B8>
+      <#64748B>Can be used for storing liquids</#64748B>
+  iron_part:
+    name: "<white><b>Iron Part</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic material part</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  amethyst_equipment_part:
+    name: "<white><b>Amethyst Equipment Part</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic equipment part</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  blue_iron_equipment_part:
+    name: "<white><b>Blue Iron Equipment Part</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic equipment part</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  low_cap_valley_battery:
+    name: "<white><b>Low-Capacity Valley Battery</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic battery</#94A3B8>
+      <#64748B>Can be used for storing energy</#64748B>
+  amethyst_part:
+    name: "<white><b>Amethyst Part</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic material part</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  mid_cap_valley_battery:
+    name: "<white><b>Mid-Capacity Valley Battery</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic battery</#94A3B8>
+      <#64748B>Can be used for storing energy</#64748B>
+  buckwheat_powder:
+    name: "<white><b>Buckwheat Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic material powder</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  citrus_powder:
+    name: "<white><b>Citrus Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic material powder</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  mid_dim_stone:
+    name: "<white><b>Mid Dim Stone</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic mineral material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  buckwheat_medicine_powder:
+    name: "<white><b>Buckwheat Medicine Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic material powder</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  citrus_draft:
+    name: "<white><b>Citrus Draft</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic liquid</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  buckwheat_capsule:
+    name: "<white><b>Buckwheat Capsule</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic container</#94A3B8>
+      <#64748B>Can be used for storing materials</#64748B>
+  quality_buckwheat_capsule:
+    name: "<white><b>Quality Buckwheat Capsule</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic container</#94A3B8>
+      <#64748B>Can be used for storing materials</#64748B>
+  citrus_can:
+    name: "<white><b>Citrus Can</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic container</#94A3B8>
+      <#64748B>Can be used for storing liquids</#64748B>
+  quality_citrus_can:
+    name: "<white><b>Quality Citrus Can</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic container</#94A3B8>
+      <#64748B>Can be used for storing liquids</#64748B>
+  small_buckwheat_restoration_agent:
+    name: "<white><b>Small Buckwheat Restoration Agent</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic medicine</#94A3B8>
+      <#64748B>Can be used for healing</#64748B>
+  small_citrus_draft:
+    name: "<white><b>Small Citrus Draft</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic liquid</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  select_buckwheat_capsule:
+    name: "<white><b>Select Buckwheat Capsule</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic container</#94A3B8>
+      <#64748B>Can be used for storing materials</#64748B>
+  select_citrus_can:
+    name: "<white><b>Select Citrus Can</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic container</#94A3B8>
+      <#64748B>Can be used for storing liquids</#64748B>
+  heavy_red_pillar_fungus:
+    name: "<white><b>Heavy Red Pillar Fungus</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  pure_crystal_toothed_leaf:
+    name: "<white><b>Pure Crystal Toothed Leaf</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  select_citrus_draft:
+    name: "<white><b>Select Citrus Draft</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic liquid</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  select_buckwheat_restoration_agent:
+    name: "<white><b>Select Buckwheat Restoration Agent</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic medicine</#94A3B8>
+      <#64748B>Can be used for healing</#64748B>
+  jin_grass_seed:
+    name: "<white><b>Jin Grass Seed</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant seed</#94A3B8>
+      <#64748B>Can be used for planting</#64748B>
+  large_buckwheat_restoration_agent:
+    name: "<white><b>Large Buckwheat Restoration Agent</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic medicine</#94A3B8>
+      <#64748B>Can be used for healing</#64748B>
+  bud_needle_seed:
+    name: "<white><b>Bud Needle Seed</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant seed</#94A3B8>
+      <#64748B>Can be used for planting</#64748B>
+  fluffy_jin_grass:
+    name: "<white><b>Fluffy Jin Grass</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  thorn_bud_needle:
+    name: "<white><b>Thorn Bud Needle</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  gold_stone_rice:
+    name: "<white><b>Gold Stone Rice</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  gold_stone_rice_seed:
+    name: "<white><b>Gold Stone Rice Seed</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant seed</#94A3B8>
+      <#64748B>Can be used for planting</#64748B>
+  bud_needle:
+    name: "<white><b>Bud Needle</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  jade_leaf_ginseng:
+    name: "<white><b>Jade Leaf Ginseng</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  jade_leaf_ginseng_seed:
+    name: "<white><b>Jade Leaf Ginseng Seed</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant seed</#94A3B8>
+      <#64748B>Can be used for planting</#64748B>
+  jin_grass_powder:
+    name: "<white><b>Jin Grass Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic powder material</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  bud_needle_powder:
+    name: "<white><b>Bud Needle Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic powder material</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  fluffy_jin_grass_powder:
+    name: "<white><b>Fluffy Jin Grass Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic powder material</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  thorn_bud_needle_powder:
+    name: "<white><b>Thorn Bud Needle Powder</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic powder material</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  mid_red_pillar_fungus:
+    name: "<white><b>Mid Red Pillar Fungus</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic fungus material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  blood_fungus:
+    name: "<white><b>Blood Fungus</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic fungus material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  ultimate_crystal_toothed_leaf:
+    name: "<white><b>Ultimate Crystal Toothed Leaf</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  low_cap_wuling_battery:
+    name: "<white><b>Low Cap Wuling Battery</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic battery</#94A3B8>
+      <#64748B>Can be used for power storage</#64748B>
+  xi_rang:
+    name: "<white><b>Xi Rang</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic material</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  sand_leaf:
+    name: "<white><b>Sand Leaf</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  jin_grass:
+    name: "<white><b>Jin Grass</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  citrus:
+    name: "<white><b>Citrus</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  originium_ore:
+    name: "<white><b>Originium Ore</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic ore material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  high_crystal_equipment_part:
+    name: "<white><b>High Crystal Equipment Part</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic equipment part</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  xi_rang_equipment_part:
+    name: "<white><b>Xi Rang Equipment Part</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic equipment part</#94A3B8>
+      <#64748B>Can be used for crafting</#64748B>
+  sand_leaf_seed:
+    name: "<white><b>Sand Leaf Seed</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic plant seed</#94A3B8>
+      <#64748B>Can be used for planting</#64748B>
+  star_gate_fungus:
+    name: "<white><b>Star Gate Fungus</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic fungus material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  embedded_crystal_jade:
+    name: "<white><b>Embedded Crystal Jade</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic crystal material</#94A3B8>
+      <#64748B>Can be found in the wild</#64748B>
+  gold_ticket:
+    name: "<white><b>Gold Ticket</b>"
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>Gray Quality</#94A3B8>
+      <#94A3B8>Basic currency item</#94A3B8>
+      <#64748B>Can be used for trading</#64748B>
+
+message:
+  structure_incomplete: "<red>Structure incomplete</red>"
+  connection:
+    mode_started: "<green>Starting wire connection mode - Right click target device to connect</green>"
+    mode_ended: "<red>Exiting wire connection mode</red>"
+    already_connected: "<red>These devices are already connected!</red>"
+    cannot_connect: "<red>These device types cannot be connected</red>"
+    too_far: "<red>Too far! Exceeds: %distance%M</red>"
+    success: "<green>Connection successful! Distance: %distance%M</green>"
+    out_of_range: "<red>Out of connection range! Exceeds: %distance%M</red>"
+    remaining_distance: "<yellow>Wire connection mode - Remaining distance: %distance%M</yellow>"
+
+gui:
+  processing: "<white>Processing...</white>"
+  planter:
+    title: "<white>Planter</white>"
+  seed_extractor:
+    title: "<white>Seed Extractor</white>"
+  relay:
+    status_complete: "<green>Structure complete</green>"
+    status_incomplete: "<red>Structure incomplete</red>"
+  power_station:
+    status_complete: "<green>Structure complete</green>"
+    status_incomplete: "<red>Structure incomplete</red>"
+  protocol_core:
+    status_complete: "<green>Structure complete</green>"
+    status_incomplete: "<red>Structure incomplete</red>"
+  machine:
+    status_incomplete: "<red>Structure incomplete</red>"
+    not_connected: "<yellow>Not connected to power grid</yellow>"
+    need_power_station_range: "<gray>Must be within 11x11 range of power station</gray>"
+    power_low: "<gold>Insufficient power</gold>"
+    grid_overloaded: "<gray>Grid overloaded, waiting for recovery</gray>"
+    running: "<green>Running</green>"
+    power_consumption: "<gray>Power consumption: %value%</gray>"
+  power_grid:
+    status_display: "<white>Grid status: %status%</white>"
+    status_normal: "<green>Normal</green>"
+    status_overloaded: "<red>Overloaded</red>"
+    total_capacity: "<gray>Total capacity: <yellow>%value%</yellow></gray>"
+    used_capacity: "<gray>Used: <red>%value%</red></gray>"
+    available_capacity: "<gray>Available: <green>%value%</green></gray>"
+    not_connected: "<gray>Not connected to power grid</gray>"
+    grid_id: "<white>Grid ID: <yellow>%id%</yellow></white>"
+    grid_id_not_connected: "<gray>Grid ID: Not connected</gray>"
+    devices: "<gold>Grid devices</gold>"
+    supply_devices: "<gray>Supply devices: <yellow>%count%</yellow></gray>"
+    consumer_devices: "<gray>Consumer devices: <yellow>%count%</yellow></gray>"
+    no_devices: "<gray>No devices connected</gray>"
+
+waila:
+  structure_incomplete: " <red>(Structure incomplete)</red>"
+  not_connected: " <yellow>(Not connected to power grid)</yellow>"
+  power_low: " <gold>(Insufficient power)</gold>"

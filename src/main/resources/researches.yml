@@ -1,0 +1,56 @@
+plants_basic:
+  item: poppy
+  cost: 5
+  unlocks:
+    - endfield_industry:buckwheat
+    - endfield_industry:buckwheat_seed
+
+materials_basic:
+  item: iron_ingot
+  cost: 10
+  unlocks:
+    - endfield_industry:dense_carbon_powder
+    - endfield_industry:dense_blue_iron_powder
+    - endfield_industry:dense_crystal_powder
+    - endfield_industry:dense_originium_powder
+    - endfield_industry:high_crystal_powder
+    - endfield_industry:sand_leaf_powder
+    - endfield_industry:fine_ground_buckwheat_powder
+    - endfield_industry:fine_ground_citrus_powder
+
+materials_advanced:
+  item: iron_block
+  cost: 30
+  unlocks:
+    - endfield_industry:stable_carbon_block
+    - endfield_industry:steel_block
+    - endfield_industry:dense_crystal
+    - endfield_industry:high_crystal_fiber
+
+components_basic:
+  item: quartz
+  cost: 15
+  unlocks:
+    - endfield_industry:high_crystal_part
+    - endfield_industry:steel_part
+    - endfield_industry:high_crystal_bottle
+    - endfield_industry:steel_bottle
+
+machines_basic:
+  item: furnace
+  cost: 20
+  unlocks:
+    - endfield_industry:seed_extractor
+    - endfield_industry:planter
+
+medicines_basic:
+  item: potion
+  cost: 25
+  unlocks:
+    - endfield_industry:large_bud_spray
+
+products_basic:
+  item: redstone_block
+  cost: 40
+  unlocks:
+    - endfield_industry:high_cap_valley_battery

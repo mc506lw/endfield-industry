@@ -1,0 +1,854 @@
+addon: 终末地工业
+guide:
+  page:
+    endfield_industry: <#60A5FA>终末地工业</#60A5FA>
+    plants: <#34D399>植物</#34D399>
+    materials: <#A78BFA>原料</#A78BFA>
+    components: <#60A5FA>组件</#60A5FA>
+    machines: <#94A3B8>机器</#94A3B8>
+    medicines: <#22D3EE>药品</#22D3EE>
+    products: <#FBBF24>产品</#FBBF24>
+    multiblock_structures: <#A78BFA>多方块结构</#A78BFA>
+    seed_extractor_structure: <#34D399>采种机结构</#34D399>
+    planter_structure: <#34D399>种植机结构</#34D399>
+    power_system: <#F59E0B>电力系统</#F59E0B>
+    relay_structure: <#F59E0B>中继器结构</#F59E0B>
+    power_station_structure: <#F59E0B>供电庄结构</#F59E0B>
+  button:
+    endfield_industry:
+      lore: <#94A3B8>终末地工业模组 - 工业设备与机器</#94A3B8>
+    plants:
+      lore: <#94A3B8>农作物及种子</#94A3B8>
+    materials:
+      lore: <#94A3B8>基础原材料</#94A3B8>
+    components:
+      lore: <#94A3B8>加工零件</#94A3B8>
+    machines:
+      lore: <#94A3B8>工业设备</#94A3B8>
+    medicines:
+      lore: <#94A3B8>医疗物品</#94A3B8>
+    products:
+      lore: <#94A3B8>成品道具</#94A3B8>
+    multiblock_structures:
+      lore: <#94A3B8>多方块机器的结构搭建指南</#94A3B8>
+    seed_extractor:
+      layer1:
+        name: <yellow>第一层（底座）
+        lore: |-
+          <arrow> 俯视图：
+
+          <white>石砖 石砖 石砖 石砖</white>
+          <white>石砖 铁砧  石砖 铁砧  石砖</white>
+          <white>石砖 石砖 石砖 石砖 石砖</white>
+      layer2:
+        name: <yellow>第二层
+        lore: |-
+          <arrow> 俯视图：
+
+          <white>铁块 铁块 铁块</white>
+          <white>铁块 <blue>控制器</blue> 铁块</white>
+          <white>铁块 铁块 铁块</white>
+    planter:
+      layer1:
+        name: <yellow>第一层（底座）
+        lore: |-
+          <arrow> 俯视图：
+
+          <white>石砖 石砖 石砖 石砖</white>
+          <white>石砖 泥土  石砖 泥土  石砖</white>
+          <white>石砖 石砖 石砖 石砖 石砖</white>
+      layer2:
+        name: <yellow>第二层
+        lore: |-
+          <arrow> 俯视图：
+
+          <white>铁块 铁块 铁块</white>
+          <white>铁块 <blue>控制器</blue> 铁块</white>
+          <white>铁块 铁块 铁块</white>
+    relay:
+      layer1:
+        name: <yellow>第一层（底座）
+        lore: |-
+          <arrow> 俯视图：
+
+          <white>石砖 石砖 石砖</white>
+          <white>石砖 石砖 石砖</white>
+          <white>石砖 石砖 石砖</white>
+      layer2:
+        name: <yellow>第二层（基座）
+        lore: |-
+          <arrow> 俯视图：
+
+          <white>空气 空气 空气</white>
+          <white>空气 <blue>基座</blue> 空气</white>
+          <white>空气 空气 空气</white>
+      layer3:
+        name: <yellow>第三层（扩散器）
+        lore: |-
+          <arrow> 俯视图：
+
+          <white>空气 空气 空气</white>
+          <white>空气 <blue>扩散器</blue> 空气</white>
+          <white>空气 空气 空气</white>
+    power_station:
+      layer1:
+        name: <yellow>第一层（基座）
+        lore: |-
+          <arrow> 俯视图：
+
+          <white>空气 空气 空气</white>
+          <white>空气 <blue>基座</blue> 空气</white>
+          <white>空气 空气 空气</white>
+      layer2:
+        name: <yellow>第二层（辐射装置）
+        lore: |-
+          <arrow> 俯视图：
+
+          <white>空气 空气 空气</white>
+          <white>空气 <blue>辐射装置</blue> 空气</white>
+          <white>空气 空气 空气</white>
+research:
+  plants_basic: <#87dd87>基础植物培育
+  materials_basic: <#a8a8a8>基础材料加工
+  components_basic: <#5555ff>基础组件制造
+  machines_basic: <#5555ff>基础工业设备
+  medicines_basic: <#ff5555>基础药品制造
+  products_basic: <#aa00aa>基础产品封装
+item:
+  high_crystal_part:
+    name: <white><b>高晶零件</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>高晶纤维经加工后成型的零件，可用于其他材料合成或设备制造</#94A3B8>
+      <#64748B>具备一定通用性的高品零件</#64748B>
+  steel_part:
+    name: <white><b>钢制零件</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>钢块经加工后成型的零件，可用于其他材料合成或设备制造</#94A3B8>
+      <#64748B>具备一定通用性的钢制零件</#64748B>
+  stable_carbon_block:
+    name: <white><b>稳定碳块</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>致密碳粉末精炼融合后的高级材料</#94A3B8>
+      <#64748B>多级加工后，碳块在碳元素状态上获得了微妙且稳定的平衡</#64748B>
+  sand_leaf_powder:
+    name: <white><b>砂叶粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>砂叶粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在经过粉碎处理后，砂叶中粗砺的部分得到了充分利用</#64748B>
+  dense_originium_powder:
+    name: <white><b>致密源石粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>源矿粉末研磨后的细粉，状态稳定</#94A3B8>
+      <#64748B>工团在源石培植项目初期尝试过"粉末培植法"</#64748B>
+  dense_crystal_powder:
+    name: <white><b>致密晶体粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>晶体外壳粉末研磨后的细粉</#94A3B8>
+      <#64748B>经过精细研磨后，致密晶体粉末中的颗粒将通透细腻至几乎不可见</#64748B>
+  high_crystal_powder:
+    name: <white><b>高晶粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>紫晶粉末研磨后的细粉</#94A3B8>
+      <#64748B>经过精细研磨后，未妥善保存的高精粉末会在非密封容器中"流动"</#64748B>
+  dense_blue_iron_powder:
+    name: <white><b>致密蓝铁粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>蓝铁粉末研磨后的细粉</#94A3B8>
+      <#64748B>经过精细研磨后，致密蓝铁粉末广受绘画爱好者欢迎</#64748B>
+  dense_carbon_powder:
+    name: <white><b>致密碳粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>碳粉末研磨后的细粉</#94A3B8>
+      <#64748B>经过精细研磨后，碳粉已拥有了独特的细腻质地</#64748B>
+  high_cap_valley_battery:
+    name: <white><b>高容谷地电池</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>通过设备封装获得的电池</#94A3B8>
+      <#64748B>回收废弃电池是许多荒地居民的主业</#64748B>
+  large_bud_spray:
+    name: <white><b>大瓶芽针喷剂</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>简单灌瓶制成的喷剂。必要时可内服</#64748B>
+  high_crystal_bottle:
+    name: <white><b>高晶质瓶</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>由高晶纤维加工后得来的金属瓶</#94A3B8>
+      <#64748B>部分特殊化学试剂仅能以高品质瓶储存</#64748B>
+  steel_bottle:
+    name: <white><b>钢质瓶</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>由钢块加工后得来的金属瓶</#94A3B8>
+      <#64748B>市面上最为常见的钢瓶</#64748B>
+  fine_ground_buckwheat_powder:
+    name: <white><b>细磨荞花粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>荞花粉末研磨后的细粉</#94A3B8>
+      <#64748B>经过精细研磨后，荞花提取物表现出了"异常"活性</#64748B>
+  fine_ground_citrus_powder:
+    name: <white><b>细磨柑实粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>柑实粉末研磨后的细粉</#94A3B8>
+      <#64748B>经过精细研磨后，细磨柑实粉末的味道极度苦涩</#64748B>
+  steel_block:
+    name: <white><b>钢块</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>致密蓝铁粉末精炼融合后的高级材料</#94A3B8>
+      <#64748B>终末地工业生产的钢材已被列为《塔卫二工业金属侵蚀耐受标准》二级标准参考物</#64748B>
+  high_crystal_fiber:
+    name: <white><b>高晶纤维</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>高晶粉末精炼融合后的高级材料</#94A3B8>
+      <#64748B>多级加工后，高晶纤维已经能够应用于多种信号传输场景</#64748B>
+  dense_crystal:
+    name: <white><b>密制晶体</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>致密晶体粉末精炼融合后的高级材料</#94A3B8>
+      <#64748B>多级加工后，密制晶体足以被称为"宝石"</#64748B>
+  buckwheat:
+    name: <white><b>荞花</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>可在野外采集或在工厂培育出的艳丽花朵，粉碎后可用于药品或其他材料合成</#94A3B8>
+      <#64748B>战争初期，一支宏山侦查队首先发现了这种色彩艳丽的植物，并在紧急状况下将其作为止血药物使用</#64748B>
+  buckwheat_seed:
+    name: <white><b>荞花种子</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>荞花的种子，可用于种植新的荞花</#94A3B8>
+      <#64748B>放置荞花田块并进行育苗和浇水，等待其成熟时收获可以获取荞花</#64748B>
+  seed_extractor:
+    name: <white><b>采种机</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>能够采集普通植物种子的设备模块</#94A3B8>
+      <#64748B>需放置在有效结构上方可运行</#64748B>
+  planter:
+    name: <white><b>种植机</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>能够培育各类普通植物的仓形设备模块</#94A3B8>
+      <#64748B>终末地工业自研，实时监控内部光照与温度</#64748B>
+  relay_base:
+    name: <white><b>中继器基座</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>电力传输网络的基础组件</#94A3B8>
+      <#64748B>远距离传导能量的关键节点</#64748B>
+  relay_diffuser:
+    name: <white><b>中继器信号扩散器</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>用于扩大信号覆盖范围的扩散装置</#94A3B8>
+      <#64748B>确保能量场稳定覆盖目标区域</#64748B>
+  power_station_base:
+    name: <white><b>供电庄基座</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>供电庄结构的核心支撑组件</#94A3B8>
+      <#64748B>承载高压能量输出的基础平台</#64748B>
+  power_station_emitter:
+    name: <white><b>供电庄辐射装置</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>负责能量辐射与分配的核心装置</#94A3B8>
+      <#64748B>需配合基座完成完整供电网络</#64748B>
+  protocol_core_controller:
+    name: <white><b>协议核心控制器</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>电网的核心设备，提供 200 点电力容量</#94A3B8>
+      <#64748B>5x5 铁块底座 + 信标构建</#64748B>
+  light_dim_stone:
+    name: <white><b>轻黯石</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>采集自野外或培养舱培养的特殊矿物</#94A3B8>
+      <#64748B>黯石又被称为"古老之石"，它象征着一段人类从未见证过的消亡</#64748B>
+  cartilage_fragment:
+    name: <white><b>软骨碎屑</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>击败碾骨焰术师的掉落物，可用于精制食药制作</#94A3B8>
+      <#64748B>被碾碎的野兽软骨，是碾骨焰术师投入巢雕中的"燃料"</#64748B>
+  carbon_block:
+    name: <white><b>碳块</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>植物烧制的碳材料，可用于其他材料合成</#94A3B8>
+      <#64748B>终末地工业在战争时期就已完成了对制碳过程中废气处理的相关技术的优化</#64748B>
+  amethyst_fiber:
+    name: <white><b>紫晶纤维</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>由紫晶矿精炼得来的纤维，可用于其他材料合成</#94A3B8>
+      <#64748B>将紫晶加工成纤维后，其拉伸度获得了极大的增强</#64748B>
+  blue_iron_block:
+    name: <white><b>蓝铁块</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>由蓝铁矿石精炼得来的金属块，可用于其他材料合成</#94A3B8>
+      <#64748B>协议源石的衍生物，在极严苛的环境中才能够合成</#64748B>
+  carbon_powder:
+    name: <white><b>碳粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>碳材料的粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在经过粉碎处理后，碳拥有了更细腻的质地</#64748B>
+  industrial_explosive:
+    name: <white><b>工业爆炸物</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>组装出的爆炸物，可直接使用进行攻击</#94A3B8>
+      <#64748B>该物品爆炸风险较高，请谨慎携带及使用</#64748B>
+  gray_wheat_seed:
+    name: <white><b>灰芦麦种子</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>野生灰芦麦的种子，通过调制成田块并进行精细化培育，可产出灰芦麦</#94A3B8>
+      <#64748B>经严格筛选的灰芦麦，其种子饱满完整，活力较高</#64748B>
+  gray_wheat:
+    name: <white><b>灰芦麦</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>通过精细种植才能培育的作物，可直接用于珍贵食药的制作</#94A3B8>
+      <#64748B>灰芦麦易于种植，产量较足，是开拓区民众的主粮</#64748B>
+  ketone_tree_seed:
+    name: <white><b>酮化树种</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>酮化灌木的种子，可用于培育酮化灌木</#94A3B8>
+      <#64748B>大部分学者认为，酮化灌木中之所以能提取到硝化物，是因为它吸收了过量含有侵蚀物质的雨水</#64748B>
+  citrus_seed:
+    name: <white><b>柑实种子</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>柑实的种子，可用于培育柑实</#94A3B8>
+      <#64748B>文明环带的植物爱好者曾评选出"荒野上最常见的植物"，荞花、柑实位处排行榜前十</#64748B>
+  blue_iron_ore:
+    name: <white><b>蓝铁矿</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>一种天然存在的蓝色合金，可在工业系统中进行加工</#94A3B8>
+      <#64748B>蓝铁的形成原因众说纷纭，在工业金属尚未出现的时代，它是人们最为依赖的金属</#64748B>
+  glow_shell_bug:
+    name: <white><b>萤壳虫</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>受源石感染的塔卫二生物，身形极小，但能够发出光芒</#94A3B8>
+      <#64748B>一种微型会飞的萤壳源石虫，可用于其他材料合成</#64748B>
+  amethyst_powder:
+    name: <white><b>紫晶粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>紫晶纤维粉碎后的粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在结果粉碎处理后，紫晶二级加工品的质地更加均匀</#64748B>
+  grass_seed_powder:
+    name: <white><b>草籽干粉</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>击败碾骨劫掠者、碾骨射手、碾骨渗透者的掉落物，可用于精制食药制作</#94A3B8>
+      <#64748B>掺杂了数片草籽外壳的罐装干粉，存在一定毒性</#64748B>
+  valley_dispatch_ticket:
+    name: <white><b>谷地调度券</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#FBBF24>金色品质</#FBBF24>
+      <#94A3B8>对四号谷地发行调度券，仅限此地使用，有各种丰富的用途</#94A3B8>
+      <#64748B>依据《环带公约》的相关条款，缔约各方应保证折金票在民生经济中正常流通</#64748B>
+  crystal_shell:
+    name: <white><b>晶体外壳</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>源石加工时剥离的外壳部分，可用于其他材料合成</#94A3B8>
+      <#64748B>源石晶体外壳的厚度通常可以作为判断一条矿脉存续时间的重要依据</#64748B>
+  beast_meat:
+    name: <white><b>兽肉</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>击败野生牙兽、碾骨撕裂牙兽的掉落物，可用于精制食药制作</#94A3B8>
+      <#64748B>新鲜的兽肉，足够新鲜</#64748B>
+  high_energy_fragrant_stone:
+    name: <white><b>高能异香石</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>击败钉刺天使、重刺天使的掉落物，可用于精制食药制作</#94A3B8>
+      <#64748B>偶尔能在天使"聚能刺"部位采集到的奇异岩石，拥有奇妙香气</#64748B>
+  hard_fragrant_stone:
+    name: <white><b>坚硬异香石</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>击败大角天使、刚角天使的掉落物，可用于精制食药制作</#94A3B8>
+      <#64748B>偶尔能在天使"撞角"部位采集到的奇异岩石，拥有奇妙香气</#64748B>
+  crystal_shell_powder:
+    name: <white><b>晶体外壳粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>晶体外壳的粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在经过粉碎处理后，晶体外壳二级加工品的质地更加均匀</#64748B>
+  light_red_pillar_fungus:
+    name: <white><b>轻红柱状菌</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>采集自野外或培养舱培养的特殊菌类</#94A3B8>
+      <#64748B>当红柱状菌生长到一定阶段，颜色到达一定深度后，它会拥有极高的毒性</#64748B>
+  crystalized_toothed_leaf:
+    name: <white><b>晶化多齿叶</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>采集自野外或培养舱培养的特殊植物</#94A3B8>
+      <#64748B>多齿叶的提取物曾被用于制造急救药物</#64748B>
+  fire_buckwheat:
+    name: <white><b>映火荞花</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>可在野外采集的特殊艳丽花朵，可用于治疗或精制食药，无法获取种子</#94A3B8>
+      <#64748B>四月中旬正是荞花盛放之时，其中色彩最为炽烈者，会被冠以"映火"之名</#64748B>
+  dark_silver_citrus:
+    name: <white><b>黯银柑实</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>可在野外采集的特殊果实，可用于治疗或精制食药，无法获取种子</#94A3B8>
+      <#64748B>实际上，依照汁水程度及含糖量，出现在文明环带市场中的柑实可以被细分为十二种品类</#64748B>
+  log:
+    name: <white><b>原木</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>在野外可采集的普通木材，可用于其他材料合成</#94A3B8>
+      <#64748B>总之，先砍树吧</#64748B>
+  ketone_bush:
+    name: <white><b>酮化灌木</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>可在野外采集或在工厂培育出的植物，内含易燃易爆成分，常用于制造工业爆炸物</#94A3B8>
+      <#64748B>酮化灌木是塔卫二的本土植物，它往往生长于土壤成分较为特殊的环境中</#64748B>
+  originium_powder:
+    name: <white><b>源石粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>稳定的源石粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>终末地利用协议技术对源石粉末进行了特殊的稳定化处理</#64748B>
+  amethyst_ore:
+    name: <white><b>紫晶矿</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>内蕴紫色晶体的岩石，可在工业系统中进行加工</#94A3B8>
+      <#64748B>紫晶在精密工业等领域的使用较为广泛，是塔卫二电子工业的基础材料之一</#64748B>
+  blue_iron_powder:
+    name: <white><b>蓝铁粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>蓝铁块粉碎后的粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在经过粉碎处理后，蓝铁二级加工品的质地更加均匀</#64748B>
+  ketone_bush_powder:
+    name: <white><b>酮化灌木粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>酮化灌木粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在经过粉碎处理后，酮化灌木的成分提取过程将更加便利</#64748B>
+  amethyst_bottle:
+    name: <white><b>紫晶质瓶</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>由紫晶纤维加工后得来的瓶子</#94A3B8>
+      <#64748B>市面上较为常见的紫晶瓶</#64748B>
+  blue_iron_bottle:
+    name: <white><b>蓝铁瓶</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>由蓝铁块加工后得来的瓶子</#94A3B8>
+      <#64748B>市面上较为常见的蓝铁瓶</#64748B>
+  iron_part:
+    name: <white><b>铁制零件</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>蓝铁块经加工后成型的零件，可用于其他材料合成或设备制造</#94A3B8>
+      <#64748B>具备一定通用性的铁制零件</#64748B>
+  amethyst_equipment_part:
+    name: <white><b>紫晶装备原件</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>紫晶纤维经加工后成型的装备原件</#94A3B8>
+      <#64748B>具备一定通用性的紫晶装备原件</#64748B>
+  blue_iron_equipment_part:
+    name: <white><b>蓝铁装备原件</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>蓝铁块经加工后成型的装备原件</#94A3B8>
+      <#64748B>具备一定通用性的蓝铁装备原件</#64748B>
+  low_cap_valley_battery:
+    name: <white><b>低容谷地电池</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>通过设备封装获得的电池</#94A3B8>
+      <#64748B>回收废弃电池是许多荒地居民的主业</#64748B>
+  amethyst_part:
+    name: <white><b>紫晶零件</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>紫晶纤维经加工后成型的零件，可用于其他材料合成或设备制造</#94A3B8>
+      <#64748B>具备一定通用性的紫晶零件</#64748B>
+  mid_cap_valley_battery:
+    name: <white><b>中容谷地电池</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>通过设备封装获得的电池</#94A3B8>
+      <#64748B>回收废弃电池是许多荒地居民的主业</#64748B>
+  buckwheat_powder:
+    name: <white><b>荞花粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>荞花粉碎后的粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在经过粉碎处理后，荞花拥有了更细腻的质地</#64748B>
+  citrus_powder:
+    name: <white><b>柑实粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>柑实粉碎后的粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在经过粉碎处理后，柑实拥有了更细腻的质地</#64748B>
+  mid_dim_stone:
+    name: <white><b>中黯石</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>采集自野外或培养舱培养的特殊矿物</#94A3B8>
+      <#64748B>黯石又被称为"古老之石"，它象征着一段人类从未见证过的消亡</#64748B>
+  buckwheat_medicine_powder:
+    name: <white><b>荞愈药粉</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>简单调制的映火荞花药粉。应急使用问题不大，但属实有些浪费药性</#64748B>
+  citrus_draft:
+    name: <white><b>柑实冲剂</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>简单调制的黯银柑实冲剂。应急使用问题不大，但属实有些浪费药性</#64748B>
+  buckwheat_capsule:
+    name: <white><b>荞愈胶囊</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>制作手段简单的胶囊，外出颠簸中或许会撒漏药粉导致药效降低</#64748B>
+  quality_buckwheat_capsule:
+    name: <white><b>优质荞愈胶囊</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>制作手段精良的胶囊，药效稳定可靠</#64748B>
+  citrus_can:
+    name: <white><b>柑实罐头</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>制作手段简单的罐头，外出颠簸中或许会撒漏药粉导致药效降低</#64748B>
+  quality_citrus_can:
+    name: <white><b>优质柑实罐头</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>制作手段精良的罐头，药效稳定可靠</#64748B>
+  small_buckwheat_restoration_agent:
+    name: <white><b>小瓶荞复锭剂</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>简单灌瓶制成的锭剂。必要时可内服</#64748B>
+  small_citrus_draft:
+    name: <white><b>小瓶柑实冲剂</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>简单灌瓶制成的冲剂。必要时可内服</#64748B>
+  select_buckwheat_capsule:
+    name: <white><b>精选荞愈胶囊</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>制作手段精良的胶囊，药效稳定可靠</#64748B>
+  select_citrus_can:
+    name: <white><b>精选柑实罐头</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>制作手段精良的罐头，药效稳定可靠</#64748B>
+  heavy_red_pillar_fungus:
+    name: <white><b>重红柱状菌</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>采集自野外或培养舱培养的特殊菌类</#94A3B8>
+      <#64748B>当红柱状菌生长到一定阶段，颜色到达一定深度后，它会拥有极高的毒性</#64748B>
+  pure_crystal_toothed_leaf:
+    name: <white><b>纯晶多齿叶</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>采集自野外或培养舱培养的特殊植物</#94A3B8>
+      <#64748B>多齿叶的提取物曾被用于制造急救药物</#64748B>
+  select_citrus_draft:
+    name: <white><b>精选柑实冲剂</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>制作手段精良的冲剂，药效稳定可靠</#64748B>
+  select_buckwheat_restoration_agent:
+    name: <white><b>精选荞复锭剂</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>制作手段精良的锭剂，药效稳定可靠</#64748B>
+  jin_grass_seed:
+    name: <white><b>锦草种子</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>锦草的种子，可用于培育锦草</#94A3B8>
+      <#64748B>锦草又称锦星草，因其春夏之际星星点点长于山阴处而获此名</#64748B>
+  large_buckwheat_restoration_agent:
+    name: <white><b>大瓶荞复锭剂</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>使用后可以回复干员生命值的战术物品</#94A3B8>
+      <#64748B>简单灌瓶制成的锭剂。必要时可内服</#64748B>
+  bud_needle_seed:
+    name: <white><b>芽针种子</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>芽针的种子，可用于培育芽针</#94A3B8>
+      <#64748B>芽针是武陵生存能力最强的草本植物，会在盛夏时节开放出极其绚丽的花朵</#64748B>
+  fluffy_jin_grass:
+    name: <white><b>蓬茸锦草</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>可在野外采集的特殊植物，可用于治疗或精制食药，无法获取种子</#94A3B8>
+      <#64748B>锦草又称锦星草，因其春夏之际星星点点长于山阴处而获此名</#64748B>
+  thorn_bud_needle:
+    name: <white><b>荆刺芽针</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>可在野外采集的特殊植物，可用于治疗或精制食药，无法获取种子</#94A3B8>
+      <#64748B>芽针是武陵生存能力最强的草本植物，会在盛夏时节开放出极其绚丽的花朵</#64748B>
+  gold_stone_rice:
+    name: <white><b>金石稻</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>通过精细种植才能培育的作物，可直接用于珍贵食药的制作</#94A3B8>
+      <#64748B>金石稻是武陵地区的重要粮食作物</#64748B>
+  gold_stone_rice_seed:
+    name: <white><b>金石稻种子</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>金石稻的种子，可用于培育金石稻</#94A3B8>
+      <#64748B>金石稻是武陵地区的重要粮食作物</#64748B>
+  bud_needle:
+    name: <white><b>芽针</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>可在野外采集或在工厂培育出的花朵，粉碎后可用于药品或其他材料合成</#94A3B8>
+      <#64748B>芽针是武陵生存能力最强的草本植物，会在盛夏时节开放出极其绚丽的花朵</#64748B>
+  jade_leaf_ginseng:
+    name: <white><b>琼叶参</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>通过精细种植才能培育的作物，可直接用于珍贵食药的制作</#94A3B8>
+      <#64748B>琼叶参是武陵地区的珍贵药材</#64748B>
+  jade_leaf_ginseng_seed:
+    name: <white><b>琼叶参种子</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>琼叶参的种子，可用于培育琼叶参</#94A3B8>
+      <#64748B>琼叶参是武陵地区的珍贵药材</#64748B>
+  jin_grass_powder:
+    name: <white><b>锦草粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>锦草粉碎后的粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在经过粉碎处理后，锦草拥有了更细腻的质地</#64748B>
+  bud_needle_powder:
+    name: <white><b>芽针粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>芽针粉碎后的粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在经过粉碎处理后，芽针拥有了更细腻的质地</#64748B>
+  fluffy_jin_grass_powder:
+    name: <white><b>蓬茸锦草粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>蓬茸锦草粉碎后的粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在经过粉碎处理后，蓬茸锦草拥有了更细腻的质地</#64748B>
+  thorn_bud_needle_powder:
+    name: <white><b>荆刺芽针粉末</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>荆刺芽针粉碎后的粉末，可用于其他材料合成</#94A3B8>
+      <#64748B>在经过粉碎处理后，荆刺芽针拥有了更细腻的质地</#64748B>
+  mid_red_pillar_fungus:
+    name: <white><b>中红柱状菌</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>采集自野外或培养舱培养的特殊菌类</#94A3B8>
+      <#64748B>当红柱状菌生长到一定阶段，颜色到达一定深度后，它会拥有极高的毒性</#64748B>
+  blood_fungus:
+    name: <white><b>血菌</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>采集自野外或培养舱培养的特殊菌类</#94A3B8>
+      <#64748B>血菌是塔卫二最为珍贵的菌类之一</#64748B>
+  ultimate_crystal_toothed_leaf:
+    name: <white><b>至晶多齿叶</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>采集自野外或培养舱培养的特殊植物</#94A3B8>
+      <#64748B>多齿叶的提取物曾被用于制造急救药物</#64748B>
+  low_cap_wuling_battery:
+    name: <white><b>低容武陵电池</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>通过设备封装获得的电池</#94A3B8>
+      <#64748B>回收废弃电池是许多荒地居民的主业</#64748B>
+  xi_rang:
+    name: <white><b>息壤</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#22C55E>绿色品质</#22C55E>
+      <#94A3B8>通过特殊设备获得的材料，可用于特殊设施修复或与据点进行交易</#94A3B8>
+      <#64748B>将源石与巨兽力量结合于一处后诞生出的新型源石材料。它撑起了武陵的万家灯火</#64748B>
+  sand_leaf:
+    name: <white><b>砂叶</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>可在野外采集或在工厂培育出的叶片粗粝的植物，粉碎后可用于精细研磨</#94A3B8>
+      <#64748B>众生长地是"荒地手工业"领域中的翘楚，他们善于使用各种天然材料在艰苦环境中生存</#64748B>
+  jin_grass:
+    name: <white><b>锦草</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>可在野外采集或在工厂培育出的植物，粉碎后可用于食品或其他材料合成</#94A3B8>
+      <#64748B>锦草又称锦星草，因其春夏之际星星点点长于山阴处而获此名</#64748B>
+  citrus:
+    name: <white><b>柑实</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>可在野外采集或在工厂培育出的果实，粉碎后可用于药品或其他材料合成</#94A3B8>
+      <#64748B>塔卫二的柑橘属植物主要起源于大陆中部地区，传播至文明环带的品种大多具有果实大，果皮韧性高等特点</#64748B>
+  originium_ore:
+    name: <white><b>源矿</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>工业生产活动所必需的基础型矿物</#94A3B8>
+      <#64748B>以最粗粝的状态被挖掘出来的源石，可在工业系统中进行加工</#64748B>
+  high_crystal_equipment_part:
+    name: <white><b>高晶装备原件</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>高晶纤维经加工后成型的装备原件</#94A3B8>
+      <#64748B>具备一定通用性的高晶装备原件</#64748B>
+  xi_rang_equipment_part:
+    name: <white><b>息壤装备原件</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>息壤经加工后成型的装备原件</#94A3B8>
+      <#64748B>具备一定通用性的息壤装备原件</#64748B>
+  sand_leaf_seed:
+    name: <white><b>砂叶种子</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>砂叶的种子，可用于培育砂叶</#94A3B8>
+      <#64748B>众生长地是"荒地手工业"领域中的翘楚，他们善于使用各种天然材料在艰苦环境中生存</#64748B>
+  star_gate_fungus:
+    name: <white><b>星门菌</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#94A3B8>灰色品质</#94A3B8>
+      <#94A3B8>可在野外采集的菌类</#94A3B8>
+      <#64748B>星门菌是塔卫二特有的菌类，因其形状酷似星门而得名</#64748B>
+  embedded_crystal_jade:
+    name: <white><b>嵌晶玉</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#F59E0B>橙色品质</#F59E0B>
+      <#94A3B8>由衍质源石加工来的特殊产物，因其瑰丽的外观和广泛的用途而倍受欢迎</#94A3B8>
+      <#64748B>合成物质，常用于招募干员</#64748B>
+  gold_ticket:
+    name: <white><b>折金票</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#A78BFA>紫色品质</#A78BFA>
+      <#94A3B8>广泛流通的货币，防伪技术极为高超。能买到东西的钞票才是好钞票</#94A3B8>
+      <#64748B>广泛流通的货币，用途广泛</#64748B>
+block:
+  seed_extractor_controller:
+    name: <white><b>采种机</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>能够采集普通植物种子的多方块设备</#94A3B8>
+      <#64748B>在塔卫二，丰收是令人格外欣喜的事情</#64748B>
+  planter_controller:
+    name: <white><b>种植机</b>
+    lore: |-
+      <#F59E0B>◈</#F59E0B> <#60A5FA>蓝色品质</#60A5FA>
+      <#94A3B8>能够培育各类普通植物的仓形多方块设备</#94A3B8>
+      <#64748B>终末地工业自研，实时监控内部光照、温度以及植物激素状态</#64748B>
+message:
+  structure_incomplete: <red>结构未完成</red>
+  connection:
+    mode_started: <green>开始拉电线模式 - 右键点击目标设备连接</green>
+    mode_ended: <red>退出拉电线模式</red>
+    already_connected: <red>这两个设备已经连接!</red>
+    cannot_connect: <red>这些设备类型无法连接</red>
+    too_far: '<red>距离过远! 超出: %distance%M</red>'
+    success: '<green>连接成功! 距离: %distance%M</green>'
+    out_of_range: '<red>超出连接范围! 超出: %distance%M</red>'
+    remaining_distance: '<yellow>拉电线模式 - 剩余距离: %distance%M</yellow>'
+gui:
+  processing: <white>处理中...</white>
+  planter:
+    title: <white>种植机</white>
+  seed_extractor:
+    title: <white>采种机</white>
+  relay:
+    status_complete: <green>结构已完成</green>
+    status_incomplete: <red>结构未完成</red>
+  power_station:
+    status_complete: <green>结构已完成</green>
+    status_incomplete: <red>结构未完成</red>
+  protocol_core:
+    status_complete: <green>结构已完成</green>
+    status_incomplete: <red>结构未完成</red>
+  machine:
+    status_incomplete: <red>结构未完成</red>
+    not_connected: <yellow>未连接电网</yellow>
+    need_power_station_range: <gray>需要在供电庄11x11范围内</gray>
+    power_low: <gold>电量不足</gold>
+    grid_overloaded: <gray>电网过载，等待恢复</gray>
+    running: <green>运行中</green>
+    power_consumption: '<gray>耗电量: %value%</gray>'
+  power_grid:
+    status_display: '<white>电网状态: %status%</white>'
+    status_normal: <green>正常</green>
+    status_overloaded: <red>过载</red>
+    total_capacity: '<gray>总电容: <yellow>%value%</yellow></gray>'
+    used_capacity: '<gray>已用: <red>%value%</red></gray>'
+    available_capacity: '<gray>剩余: <green>%value%</green></gray>'
+    not_connected: <gray>未连接电网</gray>
+    grid_id: '<white>电网ID: <yellow>%id%</yellow></white>'
+    grid_id_not_connected: '<gray>电网ID: 未连接</gray>'
+    devices: <gold>电网设备</gold>
+    supply_devices: '<gray>供电设备: <yellow>%count%</yellow></gray>'
+    consumer_devices: '<gray>用电设备: <yellow>%count%</yellow></gray>'
+    no_devices: <gray>无设备连接</gray>
+waila:
+  structure_incomplete: ' <red>(结构未完成)</red>'
+  not_connected: ' <yellow>(未连接电网)</yellow>'
+  power_low: ' <gold>(电量不足)</gold>'
