@@ -5,6 +5,9 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
 import top.mc506lw.rebar.endfield_industry.content.powersystem.PowerSystem
+import top.mc506lw.rebar.endfield_industry.content.cloudstorage.CloudStorage
+import top.mc506lw.rebar.endfield_industry.content.cloudstorage.CloudStorageGui
+import top.mc506lw.rebar.endfield_industry.content.cloudstorage.CloudStorageCommand
 import top.mc506lw.rebar.endfield_industry.recipes.EndfieldIndustryRecipeTypes
 
 class EndfieldIndustry : JavaPlugin(), RebarAddon {
@@ -34,10 +37,15 @@ class EndfieldIndustry : JavaPlugin(), RebarAddon {
         EndfieldIndustryRecipes.initialize()
         EndfieldIndustryRecipeTypes.initialize()
         EndfieldIndustryPages.initialize()
+        
+        CloudStorage.initialize()
+        CloudStorageGui.initialize()
+        CloudStorageCommand.register()
     }
     
     override fun onDisable() {
         PowerSystem.shutdown()
+        CloudStorage.shutdown()
     }
 
     override val javaPlugin: JavaPlugin

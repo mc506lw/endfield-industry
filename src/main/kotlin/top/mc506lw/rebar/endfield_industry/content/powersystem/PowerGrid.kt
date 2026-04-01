@@ -46,6 +46,18 @@ class PowerGrid(val gridId: UUID = UUID.randomUUID()) {
     fun removeDevice(device: PowerDevice) {
         if (devices.remove(device)) {
             totalCapacity -= device.getPreviousPowerContribution()
+            
+            if (devices.isEmpty()) {
+                val consumersCopy = consumers.toList()
+                consumers.clear()
+                for (consumer in consumersCopy) {
+                    consumer.onGridDestroyed()
+                }
+                usedCapacity = 0
+                
+                PowerGridManager.getInstance().removeGrid(gridId)
+            }
+            
             checkOverloadState()
             markDirty()
         }

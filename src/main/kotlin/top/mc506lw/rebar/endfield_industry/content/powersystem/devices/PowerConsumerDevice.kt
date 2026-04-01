@@ -5,10 +5,12 @@ import io.github.pylonmc.rebar.block.base.RebarBreakHandler
 import io.github.pylonmc.rebar.block.base.RebarSimpleMultiblock
 import io.github.pylonmc.rebar.block.context.BlockBreakContext
 import io.github.pylonmc.rebar.block.context.BlockCreateContext
+import org.bukkit.Bukkit
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
+import top.mc506lw.rebar.endfield_industry.EndfieldIndustry
 import top.mc506lw.rebar.endfield_industry.EndfieldIndustryKeys
 import top.mc506lw.rebar.endfield_industry.content.machines.MachineComponent
 import top.mc506lw.rebar.endfield_industry.content.powersystem.PowerConsumer
@@ -19,7 +21,11 @@ import java.util.UUID
 
 abstract class PowerConsumerDevice : MachineComponent, PowerConsumer, RebarBreakHandler {
     
-    constructor(block: Block, context: BlockCreateContext) : super(block, context)
+    constructor(block: Block, context: BlockCreateContext) : super(block, context) {
+        Bukkit.getScheduler().runTaskLater(EndfieldIndustry.instance, Runnable {
+            tryConnectToNearbyPowerStation()
+        }, 5L)
+    }
     
     @Suppress("unused")
     constructor(block: Block, pdc: PersistentDataContainer) : super(block, pdc) {
@@ -28,6 +34,16 @@ abstract class PowerConsumerDevice : MachineComponent, PowerConsumer, RebarBreak
         if (gridIdMost != null && gridIdLeast != null) {
             val gridId = UUID(gridIdMost, gridIdLeast)
             pendingGridId = gridId
+        }
+    }
+    
+    override fun postLoad() {
+        super.postLoad()
+        
+        if (connectedGrid == null && pendingGridId == null) {
+            Bukkit.getScheduler().runTaskLater(EndfieldIndustry.instance, Runnable {
+                tryConnectToNearbyPowerStation()
+            }, 20L)
         }
     }
 
@@ -56,6 +72,11 @@ abstract class PowerConsumerDevice : MachineComponent, PowerConsumer, RebarBreak
             it.removeConsumer(this)
             connectedGrid = null
         }
+    }
+    
+    override fun onGridDestroyed() {
+        super.onGridDestroyed()
+        connectedGrid = null
     }
     
     override fun write(pdc: PersistentDataContainer) {

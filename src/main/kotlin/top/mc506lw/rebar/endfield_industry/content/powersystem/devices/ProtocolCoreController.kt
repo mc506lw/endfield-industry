@@ -1,5 +1,6 @@
 package top.mc506lw.rebar.endfield_industry.content.powersystem.devices
 
+import io.github.pylonmc.rebar.block.BlockStorage
 import io.github.pylonmc.rebar.block.RebarBlock
 import io.github.pylonmc.rebar.block.base.RebarGuiBlock
 import io.github.pylonmc.rebar.block.base.RebarSimpleMultiblock
@@ -14,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.persistence.PersistentDataContainer
 import org.joml.Vector3i
 import top.mc506lw.rebar.endfield_industry.content.powersystem.PowerSystem
+import top.mc506lw.rebar.endfield_industry.content.powersystem.gui.ProtocolCoreGui
 import xyz.xenondevs.invui.gui.Gui
 
 class ProtocolCoreController : PowerDevice, RebarGuiBlock, RebarSimpleMultiblock {
@@ -53,33 +55,7 @@ class ProtocolCoreController : PowerDevice, RebarGuiBlock, RebarSimpleMultiblock
     }
 
     override fun createGui(): Gui {
-        return xyz.xenondevs.invui.gui.Gui.builder()
-            .setStructure(
-                "# # # # # # # # #",
-                "# f # # # # # # #",
-                "# # # # # # # # #"
-            )
-            .addIngredient('#', io.github.pylonmc.rebar.util.gui.GuiItems.background())
-            .addIngredient('f', object : xyz.xenondevs.invui.item.AbstractItem() {
-                override fun getItemProvider(viewer: Player): xyz.xenondevs.invui.item.ItemProvider {
-                    val formed = isFormedAndFullyLoaded()
-                    return if (formed) {
-                        io.github.pylonmc.rebar.item.builder.ItemStackBuilder.of(Material.GREEN_STAINED_GLASS_PANE)
-                            .name(Component.translatable("endfield-industry.gui.protocol_core.status_complete"))
-                    } else {
-                        io.github.pylonmc.rebar.item.builder.ItemStackBuilder.of(Material.RED_STAINED_GLASS_PANE)
-                            .name(Component.translatable("endfield-industry.gui.protocol_core.status_incomplete"))
-                    }
-                }
-
-                override fun handleClick(
-                    clickType: org.bukkit.event.inventory.ClickType,
-                    player: Player,
-                    click: xyz.xenondevs.invui.Click
-                ) {
-                }
-            })
-            .build()
+        return ProtocolCoreGui(this).createGui()
     }
 
     override fun getPowerContribution(): Int = if (isFormedAndFullyLoaded()) 200 else 0

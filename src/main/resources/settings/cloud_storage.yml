@@ -1,0 +1,53 @@
+settings:
+  default_max_capacity: 1000000
+  items_per_page: 45
+
+item_limits:
+  minecraft:COBBLESTONE: 10000
+  minecraft:STONE: 10000
+  minecraft:DIRT: 5000
+  minecraft:GRAVEL: 5000
+  minecraft:SAND: 5000
+  minecraft:OAK_LOG: 5000
+  minecraft:SPRUCE_LOG: 5000
+  minecraft:BIRCH_LOG: 5000
+  minecraft:IRON_INGOT: 10000
+  minecraft:GOLD_INGOT: 5000
+  minecraft:DIAMOND: 1000
+  minecraft:EMERALD: 500
+
+whitelist:
+  - minecraft:COBBLESTONE
+  - minecraft:STONE
+  - minecraft:DIRT
+  - minecraft:GRAVEL
+  - minecraft:SAND
+  - minecraft:OAK_LOG
+  - minecraft:SPRUCE_LOG
+  - minecraft:BIRCH_LOG
+  - minecraft:JUNGLE_LOG
+  - minecraft:ACACIA_LOG
+  - minecraft:DARK_OAK_LOG
+  - minecraft:IRON_INGOT
+  - minecraft:GOLD_INGOT
+  - minecraft:DIAMOND
+  - minecraft:EMERALD
+  - minecraft:REDSTONE
+  - minecraft:LAPIS_LAZULI
+  - minecraft:COAL
+  - minecraft:CHARCOAL
+  - minecraft:IRON_BLOCK
+  - minecraft:GOLD_BLOCK
+  - minecraft:DIAMOND_BLOCK
+  - minecraft:EMERALD_BLOCK
+  - minecraft:REDSTONE_BLOCK
+  - minecraft:LAPIS_BLOCK
+  - minecraft:COAL_BLOCK
+  - minecraft:COPPER_BLOCK
+  - minecraft:STICK
+  - minecraft:OAK_PLANKS
+  - minecraft:SPRUCE_PLANKS
+  - minecraft:BIRCH_PLANKS
+  - minecraft:JUNGLE_PLANKS
+  - minecraft:ACACIA_PLANKS
+  - minecraft:DARK_OAK_PLANKS

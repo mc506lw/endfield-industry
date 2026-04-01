@@ -31,6 +31,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:$minecraftVersion-R0.1-SNAPSHOT")
     compileOnly("io.github.pylonmc:rebar:$rebarVersion")
     compileOnly(kotlin("stdlib"))
+    implementation("com.h2database:h2:2.2.224")
 }
 
 idea {

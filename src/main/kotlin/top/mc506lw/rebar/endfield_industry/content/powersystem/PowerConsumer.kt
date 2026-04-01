@@ -11,4 +11,8 @@ interface PowerConsumer {
     fun onPowerDisconnected() {
         isPowered = false
     }
+    
+    fun onGridDestroyed() {
+        isPowered = false
+    }
 }

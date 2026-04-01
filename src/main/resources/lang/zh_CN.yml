@@ -859,7 +859,71 @@ gui:
     device_count: '<gray>连接设备: <yellow>%count%</yellow></gray>'
     connection_status: '<gray>连接状态: 已连接 (<yellow>%id%</yellow>)</gray>'
     connection_status_not_connected: '<gray>连接状态: 未连接</gray>'
+    power_data: <dark_green>电力数据</dark_green>
+    device_status: <gold>设备状态</gold>
+    grid_status: <red>电网状态</red>
+    output_data: <green>产出数据</green>
+    base_storage: <dark_purple>基地仓库</dark_purple>
+    coming_soon: <gray>敬请期待...</gray>
+    click_to_view_chart: '<yellow>点击查看电力图表</yellow>'
+    click_to_view_devices: '<yellow>点击查看设备列表</yellow>'
+    structure_status: '<gray>结构状态: %status%</gray>'
+    structure_complete: <green>完整</green>
+    structure_incomplete: <red>不完整</red>
+    device_power_station: <gold>供电庄</gold>
+    device_relay: <yellow>中继器</yellow>
+    device_protocol_core: <light_purple>协议核心</light_purple>
+    chart_consumption: '<blue>当前消耗: %value%</blue>'
+    chart_total: '<yellow>总容量: %value%</yellow>'
+    chart_available: '<green>可用容量: %value%</green>'
+    chart_capacity: '<yellow>容量: %value%</yellow>'
+    chart_used: '<red>已用: %value%</red>'
+    chart_empty_slot: '<gray>空</gray>'
+    chart_now: '<green>现在</green>'
+    chart_seconds_ago: '<yellow>%seconds%秒前</yellow>'
+    chart_no_data: '<gray>无数据</gray>'
+    device_seed_extractor: <gold>采种机</gold>
+    device_planter: <green>种植机</green>
+    click_to_view_storage: <yellow>点击查看云仓库</yellow>
 waila:
   structure_incomplete: ' <red>(结构未完成)</red>'
   not_connected: ' <yellow>(未连接电网)</yellow>'
   power_low: ' <gold>(电量不足)</gold>'
+gui:
+  cloud_storage:
+    info: <light_purple>仓库信息</light_purple>
+    prev_page: <yellow>上一页</yellow>
+    next_page: <yellow>下一页</yellow>
+    click_to_prev: <gray>点击翻到上一页</gray>
+    click_to_next: <gray>点击翻到下一页</gray>
+    first_page: <gray>已经是第一页</gray>
+    last_page: <gray>已经是最后一页</gray>
+    page_info: '<white>页码: <yellow>%current%</yellow>/<yellow>%total%</yellow></white>'
+    total_items: '<gray>物品种类: <yellow>%value%</yellow></gray>'
+    total_amount: '<gray>总数量: <yellow>%value%</yellow></gray>'
+    max_capacity: '<gray>最大容量: <yellow>%value%</yellow></gray>'
+    amount: '<gray>数量: <yellow>%value%</yellow></gray>'
+    shift_to_deposit: '<yellow>Shift+点击背包物品存入</yellow>'
+    left_click_to_extract_one: '<yellow>左键取出1个</yellow>'
+    right_click_to_extract_stack: '<yellow>右键取出1组</yellow>'
+    shift_click_to_extract_all: '<yellow>Shift+点击全部取出</yellow>'
+    not_in_whitelist: <red>该物品不在白名单中</red>
+    capacity_full: <red>仓库容量已满</red>
+    storage_not_found: <red>仓库不存在</red>
+    item_not_found: <red>物品不存在</red>
+    over_limit: <red>已达存储上限，无法存入</red>
+    need_item_in_hand: <red>请手持物品</red>
+    need_target_container: <red>请看向一个容器</red>
+    whitelist_added: '<green>已添加 %value% 到白名单</green>'
+    whitelist_removed: '<green>已从白名单移除</green>'
+    whitelist_already_exists: <yellow>白名单中已存在该物品</yellow>
+    whitelist_not_found: <yellow>白名单中不存在该物品</yellow>
+    whitelist_empty: <gray>白名单为空</gray>
+    whitelist_list: '<white>白名单列表 (%value% 项):</white>'
+    whitelist_imported: '<green>已导入 %value% 个物品到白名单</green>'
+    whitelist_cleared: '<green>白名单已清空</green>'
+    storage_created: '<green>仓库已创建，ID: %value%</green>'
+    storage_deleted: '<green>仓库已删除</green>'
+    storage_info_header: '<white>仓库信息: %value%</white>'
+    global_whitelist_added: '<green>已添加 %value% 到全局白名单</green>'
+    global_whitelist_list: '<white>全局白名单列表 (%value% 项):</white>'

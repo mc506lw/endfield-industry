@@ -5,6 +5,7 @@ import io.github.pylonmc.rebar.block.base.*
 import io.github.pylonmc.rebar.block.context.BlockBreakContext
 import io.github.pylonmc.rebar.block.context.BlockCreateContext
 import io.github.pylonmc.rebar.util.position.position
+import io.github.pylonmc.rebar.i18n.RebarArgument
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
 import io.github.pylonmc.rebar.logistics.LogisticGroupType
 import io.github.pylonmc.rebar.util.MachineUpdateReason
@@ -145,7 +146,7 @@ class SeedExtractorController : PowerConsumerDevice,
                     ItemStackBuilder.of(Material.GREEN_STAINED_GLASS_PANE)
                         .name(Component.translatable("endfield-industry.gui.machine.running"))
                         .lore(listOf(Component.translatable("endfield-industry.gui.machine.power_consumption")
-                            .arguments(Component.text(powerConsumption))))
+                            .arguments(RebarArgument.of("value", powerConsumption))))
                 }
             }
         }

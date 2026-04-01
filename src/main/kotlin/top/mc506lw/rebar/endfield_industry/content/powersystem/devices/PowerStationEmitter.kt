@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.persistence.PersistentDataContainer
 import org.joml.Vector3i
 import top.mc506lw.rebar.endfield_industry.EndfieldIndustryKeys
+import top.mc506lw.rebar.endfield_industry.content.powersystem.PowerGrid
 import top.mc506lw.rebar.endfield_industry.content.powersystem.PowerSystem
 import top.mc506lw.rebar.endfield_industry.content.powersystem.gui.PowerStationGui
 import xyz.xenondevs.invui.gui.Gui
@@ -52,6 +53,8 @@ class PowerStationEmitter : PowerDevice, RebarGuiBlock, RebarSimpleMultiblock {
         val halfRange = range / 2
         val center = getMultiblockBlock(Vector3i(0, -1, 0))
 
+        var myGrid: PowerGrid? = getGrid()
+        
         for (x in -halfRange..halfRange) {
             for (z in -halfRange..halfRange) {
                 if (x == 0 && z == 0) {
@@ -63,13 +66,21 @@ class PowerStationEmitter : PowerDevice, RebarGuiBlock, RebarSimpleMultiblock {
                 val rebarBlock = BlockStorage.get(pos)
                 if (rebarBlock is PowerDevice) {
                     val device = rebarBlock
-                    if (device.getGrid() == null) {
-                        var grid = getGrid()
-                        if (grid == null) {
-                            grid = PowerSystem.gridManager.createGrid()
-                            connectToGrid(grid)
+                    val deviceGrid = device.getGrid()
+                    
+                    if (deviceGrid == null) {
+                        if (myGrid == null) {
+                            myGrid = PowerSystem.gridManager.createGrid()
+                            connectToGrid(myGrid)
                         }
-                        device.connectToGrid(grid)
+                        device.connectToGrid(myGrid)
+                    } else if (deviceGrid != myGrid) {
+                        if (myGrid == null) {
+                            connectToGrid(deviceGrid)
+                            myGrid = deviceGrid
+                        } else {
+                            PowerSystem.gridManager.mergeGrids(myGrid.gridId, deviceGrid.gridId)
+                        }
                     }
                 }
             }
