@@ -31,7 +31,7 @@ object CloudStorageCommand {
             )
             .then(Commands.literal("storage")
                 .then(Commands.literal("info")
-                    .then(Commands.argument("gridId", StringArgumentType.word())
+                    .then(Commands.argument("locationKey", StringArgumentType.greedyString())
                         .executes(this::handleStorageInfo)
                     )
                 )
@@ -122,17 +122,11 @@ object CloudStorageCommand {
     
     private fun handleStorageInfo(context: CommandContext<CommandSourceStack>): Int {
         val sender = context.source.sender
-        val gridIdStr = StringArgumentType.getString(context, "gridId")
-        val gridId = try {
-            java.util.UUID.fromString(gridIdStr)
-        } catch (e: IllegalArgumentException) {
-            sender.sendMessage(Component.text("无效的电网ID格式"))
-            return Command.SINGLE_SUCCESS
-        }
+        val locationKey = StringArgumentType.getString(context, "locationKey")
         
-        val info = CloudStorage.getStorageInfo(gridId)
+        val info = CloudStorage.getStorageInfo(locationKey)
         sender.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.storage_info_header")
-            .arguments(Component.text(gridIdStr)))
+            .arguments(Component.text(locationKey)))
         sender.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.total_items")
             .arguments(Component.text(info.totalItems.toString())))
         sender.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.total_amount")

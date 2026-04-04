@@ -10,17 +10,17 @@ import org.bukkit.event.world.WorldSaveEvent
 import top.mc506lw.rebar.endfield_industry.EndfieldIndustry
 import java.io.File
 import java.sql.*
-import java.util.UUID
 import java.util.concurrent.atomic.AtomicLong
 
 object CloudStorageDatabase : Listener {
     
     private val logger = EndfieldIndustry.instance.logger
     
-    private const val DB_VERSION = 1
+    private const val DB_VERSION = 2
     private var connection: Connection? = null
     private var primaryWorldName: String? = null
     private var dataLoaded = false
+    private var saveTaskId: Int = -1
     
     fun initialize() {
         logger.info("[CloudStorageDatabase] 初始化数据库系统")
@@ -33,6 +33,7 @@ object CloudStorageDatabase : Listener {
             logger.info("[CloudStorageDatabase] 主世界: $primaryWorldName，立即加载数据库")
             initDatabase()
             dataLoaded = true
+            startAutoSave()
         } else {
             logger.info("[CloudStorageDatabase] 世界未加载，等待WorldLoadEvent")
         }
@@ -47,6 +48,7 @@ object CloudStorageDatabase : Listener {
             logger.info("[CloudStorageDatabase] 检测到世界加载: ${event.world.name}，开始初始化数据库")
             initDatabase()
             dataLoaded = true
+            startAutoSave()
         }
     }
     
@@ -55,6 +57,33 @@ object CloudStorageDatabase : Listener {
         if (event.world.name == primaryWorldName) {
             logger.info("[CloudStorageDatabase] 世界保存事件触发，执行保存")
             CloudStorage.saveAllData()
+        }
+    }
+    
+    private fun startAutoSave() {
+        if (saveTaskId != -1) return
+        
+        saveTaskId = Bukkit.getScheduler().runTaskTimer(
+            EndfieldIndustry.instance,
+            Runnable {
+                try {
+                    CloudStorage.saveAllData()
+                } catch (e: Exception) {
+                    logger.warning("[CloudStorageDatabase] 自动保存异常: ${e.message}")
+                }
+            },
+            1200L,
+            1200L
+        ).taskId
+        
+        logger.info("[CloudStorageDatabase] 自动保存任务已启动，任务ID: $saveTaskId，间隔: 60秒")
+    }
+    
+    private fun stopAutoSave() {
+        if (saveTaskId != -1) {
+            Bukkit.getScheduler().cancelTask(saveTaskId)
+            logger.info("[CloudStorageDatabase] 自动保存任务已停止，任务ID: $saveTaskId")
+            saveTaskId = -1
         }
     }
     
@@ -81,17 +110,34 @@ object CloudStorageDatabase : Listener {
         return File(getDataFolder(), "cloud_storage")
     }
     
+    @Synchronized
     private fun getConnection(): Connection {
-        val conn = connection
-        if (conn != null && !conn.isClosed) {
-            return conn
+        val existing = connection
+        if (existing != null && !existing.isClosed) {
+            return existing
         }
         
         val dbFile = getDatabaseFile()
-        val url = "jdbc:h2:${dbFile.absolutePath};MODE=MySQL;AUTO_SERVER=TRUE"
+        val absolutePath = dbFile.absolutePath.replace("\\", "/")
+        val url = "jdbc:h2:$absolutePath;MODE=MySQL;AUTO_SERVER=TRUE"
         
-        Class.forName("org.h2.Driver")
-        connection = DriverManager.getConnection(url, "sa", "")
+        logger.info("[CloudStorageDatabase] 连接数据库: $url")
+        
+        try {
+            Class.forName("org.h2.Driver")
+        } catch (e: ClassNotFoundException) {
+            logger.severe("[CloudStorageDatabase] H2驱动未找到，请确认依赖已正确添加: ${e.message}")
+            throw e
+        }
+        
+        try {
+            connection = DriverManager.getConnection(url, "sa", "")
+            logger.info("[CloudStorageDatabase] 数据库连接成功")
+        } catch (e: SQLException) {
+            logger.severe("[CloudStorageDatabase] 数据库连接失败: ${e.message}")
+            throw e
+        }
+        
         return connection!!
     }
     
@@ -102,16 +148,16 @@ object CloudStorageDatabase : Listener {
             conn.createStatement().use { stmt ->
                 stmt.execute("""
                     CREATE TABLE IF NOT EXISTS storage_items (
-                        grid_id UUID NOT NULL,
+                        location_key VARCHAR(128) NOT NULL,
                         item_key VARCHAR(512) NOT NULL,
                         amount BIGINT NOT NULL DEFAULT 0,
-                        PRIMARY KEY (grid_id, item_key)
+                        PRIMARY KEY (location_key, item_key)
                     )
                 """)
                 
                 stmt.execute("""
                     CREATE TABLE IF NOT EXISTS storage_meta (
-                        grid_id UUID PRIMARY KEY,
+                        location_key VARCHAR(128) PRIMARY KEY,
                         total_capacity BIGINT NOT NULL DEFAULT 0,
                         max_capacity BIGINT NOT NULL DEFAULT 1000000
                     )
@@ -123,111 +169,223 @@ object CloudStorageDatabase : Listener {
                     )
                 """)
                 
-                val rs = stmt.executeQuery("SELECT version FROM db_version LIMIT 1")
-                if (!rs.next()) {
-                    stmt.execute("INSERT INTO db_version (version) VALUES ($DB_VERSION)")
+                val rs = stmt.executeQuery("SELECT COUNT(*) AS cnt FROM db_version")
+                rs.next()
+                val currentVersion = if (rs.getInt("cnt") == 0) {
+                    0
+                } else {
+                    val versionRs = stmt.executeQuery("SELECT version FROM db_version")
+                    if (versionRs.next()) versionRs.getInt("version") else 0
+                }
+                
+                if (currentVersion < DB_VERSION) {
+                    migrateDatabase(conn, currentVersion, DB_VERSION)
                 }
             }
             
-            logger.info("[CloudStorageDatabase] 数据库表初始化完成")
+            val itemCount = queryItemCount(conn)
+            logger.info("[CloudStorageDatabase] 数据库表初始化完成，当前存储记录数: $itemCount")
         } catch (e: Exception) {
             logger.severe("[CloudStorageDatabase] 数据库初始化失败: ${e.message}")
             e.printStackTrace()
         }
     }
     
-    fun loadStorageData(gridId: UUID, storage: CloudStorage.CloudStorageData) {
+    private fun migrateDatabase(conn: Connection, fromVersion: Int, toVersion: Int) {
+        logger.info("[CloudStorageDatabase] 执行数据库迁移: $fromVersion -> $toVersion")
+        
+        if (fromVersion < 2) {
+            try {
+                conn.createStatement().use { stmt ->
+                    stmt.execute("DROP TABLE IF EXISTS storage_items")
+                    stmt.execute("DROP TABLE IF EXISTS storage_meta")
+                    
+                    stmt.execute("""
+                        CREATE TABLE IF NOT EXISTS storage_items (
+                            location_key VARCHAR(128) NOT NULL,
+                            item_key VARCHAR(512) NOT NULL,
+                            amount BIGINT NOT NULL DEFAULT 0,
+                            PRIMARY KEY (location_key, item_key)
+                        )
+                    """)
+                    
+                    stmt.execute("""
+                        CREATE TABLE IF NOT EXISTS storage_meta (
+                            location_key VARCHAR(128) PRIMARY KEY,
+                            total_capacity BIGINT NOT NULL DEFAULT 0,
+                            max_capacity BIGINT NOT NULL DEFAULT 1000000
+                        )
+                    """)
+                }
+                logger.info("[CloudStorageDatabase] 数据库结构已更新为v2（使用位置键）")
+            } catch (e: Exception) {
+                logger.warning("[CloudStorageDatabase] 数据库迁移失败: ${e.message}")
+            }
+        }
+        
+        conn.createStatement().use { stmt ->
+            stmt.execute("DELETE FROM db_version")
+            stmt.executeUpdate("INSERT INTO db_version (version) VALUES ($toVersion)")
+        }
+        
+        logger.info("[CloudStorageDatabase] 数据库迁移完成")
+    }
+    
+    private fun queryItemCount(conn: Connection): Int {
+        conn.prepareStatement("SELECT COUNT(*) AS cnt FROM storage_items").use { stmt ->
+            val rs = stmt.executeQuery()
+            return if (rs.next()) rs.getInt("cnt") else 0
+        }
+    }
+    
+    fun loadStorageData(locationKey: String, storage: CloudStorage.CloudStorageData) {
         try {
             val conn = getConnection()
             
-            conn.prepareStatement("SELECT total_capacity, max_capacity FROM storage_meta WHERE grid_id = ?").use { stmt ->
-                stmt.setString(1, gridId.toString())
+            conn.prepareStatement("SELECT total_capacity, max_capacity FROM storage_meta WHERE location_key = ?").use { stmt ->
+                stmt.setString(1, locationKey)
                 val rs = stmt.executeQuery()
                 if (rs.next()) {
-                    storage.totalCapacity.set(rs.getLong("total_capacity"))
-                    storage.maxCapacity = rs.getLong("max_capacity")
+                    val totalCap = rs.getLong("total_capacity")
+                    val maxCap = rs.getLong("max_capacity")
+                    storage.totalCapacity.set(totalCap)
+                    storage.maxCapacity = maxCap
+                    logger.info("[CloudStorageDatabase] 加载仓库元数据: location=$locationKey, totalCapacity=$totalCap, maxCapacity=$maxCap")
+                } else {
+                    logger.info("[CloudStorageDatabase] 仓库无元数据记录(新仓库): location=$locationKey")
                 }
             }
             
-            conn.prepareStatement("SELECT item_key, amount FROM storage_items WHERE grid_id = ?").use { stmt ->
-                stmt.setString(1, gridId.toString())
+            conn.prepareStatement("SELECT item_key, amount FROM storage_items WHERE location_key = ?").use { stmt ->
+                stmt.setString(1, locationKey)
                 val rs = stmt.executeQuery()
+                var itemCount = 0
+                var totalAmount = 0L
                 while (rs.next()) {
                     val itemKey = rs.getString("item_key")
                     val amount = rs.getLong("amount")
                     if (amount > 0) {
                         storage.items[itemKey] = AtomicLong(amount)
+                        itemCount++
+                        totalAmount += amount
                     }
                 }
+                if (itemCount > 0) {
+                    logger.info("[CloudStorageDatabase] 加载仓库物品: location=$locationKey, 物品种类=$itemCount, 总数量=$totalAmount")
+                }
             }
-            
-            logger.info("[CloudStorageDatabase] 加载仓库 $gridId 数据: ${storage.items.size} 种物品, 总量 ${storage.totalCapacity.get()}")
         } catch (e: Exception) {
-            logger.warning("[CloudStorageDatabase] 加载仓库 $gridId 失败: ${e.message}")
+            logger.warning("[CloudStorageDatabase] 加载仓库 $locationKey 失败: ${e.message}")
+            e.printStackTrace()
         }
     }
     
-    fun saveStorageData(gridId: UUID, storage: CloudStorage.CloudStorageData) {
+    fun saveStorageData(locationKey: String, storage: CloudStorage.CloudStorageData) {
         try {
             val conn = getConnection()
             
-            conn.prepareStatement(
-                "MERGE INTO storage_meta (grid_id, total_capacity, max_capacity) VALUES (?, ?, ?)"
-            ).use { stmt ->
-                stmt.setString(1, gridId.toString())
-                stmt.setLong(2, storage.totalCapacity.get())
-                stmt.setLong(3, storage.maxCapacity)
-                stmt.execute()
-            }
+            conn.autoCommit = false
             
-            conn.prepareStatement("DELETE FROM storage_items WHERE grid_id = ?").use { stmt ->
-                stmt.setString(1, gridId.toString())
-                stmt.execute()
-            }
-            
-            conn.prepareStatement(
-                "INSERT INTO storage_items (grid_id, item_key, amount) VALUES (?, ?, ?)"
-            ).use { stmt ->
-                for ((itemKey, amount) in storage.items) {
-                    val amt = amount.get()
-                    if (amt > 0) {
-                        stmt.setString(1, gridId.toString())
-                        stmt.setString(2, itemKey)
-                        stmt.setLong(3, amt)
-                        stmt.addBatch()
+            try {
+                conn.prepareStatement(
+                    "MERGE INTO storage_meta (location_key, total_capacity, max_capacity) VALUES (?, ?, ?)"
+                ).use { stmt ->
+                    stmt.setString(1, locationKey)
+                    stmt.setLong(2, storage.totalCapacity.get())
+                    stmt.setLong(3, storage.maxCapacity)
+                    stmt.executeUpdate()
+                }
+                
+                conn.prepareStatement("DELETE FROM storage_items WHERE location_key = ?").use { stmt ->
+                    stmt.setString(1, locationKey)
+                    stmt.executeUpdate()
+                }
+                
+                var savedItems = 0
+                var savedAmount = 0L
+                
+                conn.prepareStatement(
+                    "INSERT INTO storage_items (location_key, item_key, amount) VALUES (?, ?, ?)"
+                ).use { stmt ->
+                    for ((itemKey, amount) in storage.items) {
+                        val amt = amount.get()
+                        if (amt > 0) {
+                            stmt.setString(1, locationKey)
+                            stmt.setString(2, itemKey)
+                            stmt.setLong(3, amt)
+                            stmt.addBatch()
+                            savedItems++
+                            savedAmount += amt
+                        }
+                    }
+                    if (savedItems > 0) {
+                        stmt.executeBatch()
                     }
                 }
-                stmt.executeBatch()
+                
+                conn.commit()
+                logger.info("[CloudStorageDatabase] 保存仓库成功: location=$locationKey, 物品=$savedItems, 总量=$savedAmount")
+            } catch (e: Exception) {
+                try {
+                    conn.rollback()
+                } catch (ex: SQLException) {
+                    // ignore rollback failure
+                }
+                throw e
+            } finally {
+                conn.autoCommit = true
             }
-            
-            logger.fine("[CloudStorageDatabase] 保存仓库 $gridId 数据完成")
         } catch (e: Exception) {
-            logger.warning("[CloudStorageDatabase] 保存仓库 $gridId 失败: ${e.message}")
+            logger.warning("[CloudStorageDatabase] 保存仓库 $locationKey 失败: ${e.message}")
+            e.printStackTrace()
         }
     }
     
-    fun deleteStorageData(gridId: UUID) {
+    fun deleteStorageData(locationKey: String) {
         try {
             val conn = getConnection()
             
-            conn.prepareStatement("DELETE FROM storage_meta WHERE grid_id = ?").use { stmt ->
-                stmt.setString(1, gridId.toString())
-                stmt.execute()
-            }
+            conn.autoCommit = false
             
-            conn.prepareStatement("DELETE FROM storage_items WHERE grid_id = ?").use { stmt ->
-                stmt.setString(1, gridId.toString())
-                stmt.execute()
+            try {
+                conn.prepareStatement("DELETE FROM storage_meta WHERE location_key = ?").use { stmt ->
+                    stmt.setString(1, locationKey)
+                    stmt.executeUpdate()
+                }
+                
+                conn.prepareStatement("DELETE FROM storage_items WHERE location_key = ?").use { stmt ->
+                    stmt.setString(1, locationKey)
+                    stmt.executeUpdate()
+                }
+                
+                conn.commit()
+                logger.info("[CloudStorageDatabase] 删除仓库数据成功: location=$locationKey")
+            } catch (e: Exception) {
+                try {
+                    conn.rollback()
+                } catch (ex: SQLException) {
+                    // ignore
+                }
+                throw e
+            } finally {
+                conn.autoCommit = true
             }
-            
-            logger.info("[CloudStorageDatabase] 删除仓库 $gridId 数据完成")
         } catch (e: Exception) {
-            logger.warning("[CloudStorageDatabase] 删除仓库 $gridId 失败: ${e.message}")
+            logger.warning("[CloudStorageDatabase] 删除仓库 $locationKey 失败: ${e.message}")
         }
     }
     
     fun shutdown() {
         logger.info("[CloudStorageDatabase] 关闭数据库连接")
+        stopAutoSave()
+        
+        try {
+            CloudStorage.saveAllData()
+            logger.info("[CloudStorageDatabase] 最终保存完成")
+        } catch (e: Exception) {
+            logger.warning("[CloudStorageDatabase] 最终保存失败: ${e.message}")
+        }
+        
         try {
             connection?.close()
             connection = null

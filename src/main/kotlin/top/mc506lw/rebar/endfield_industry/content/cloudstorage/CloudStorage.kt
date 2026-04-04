@@ -1,6 +1,7 @@
 package top.mc506lw.rebar.endfield_industry.content.cloudstorage
 
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.configuration.file.YamlConfiguration
@@ -20,19 +21,33 @@ object CloudStorage {
     
     const val ITEMS_PER_PAGE = 45
     
-    private val storageLocks = ConcurrentHashMap<UUID, ReentrantLock>()
-    private val storageData = ConcurrentHashMap<UUID, CloudStorageData>()
+    private val storageLocks = ConcurrentHashMap<String, ReentrantLock>()
+    private val storageData = ConcurrentHashMap<String, CloudStorageData>()
     
     private var defaultMaxCapacity: Long = 1000000L
     private val itemLimits = ConcurrentHashMap<String, Long>()
     private val globalWhitelist = ConcurrentHashMap.newKeySet<String>()
     
     data class CloudStorageData(
-        val gridId: UUID,
+        val locationKey: String,
         val items: ConcurrentHashMap<String, AtomicLong> = ConcurrentHashMap(),
         val totalCapacity: AtomicLong = AtomicLong(0),
         var maxCapacity: Long = 1000000L
     )
+    
+    fun generateLocationKey(location: Location): String {
+        return "${location.world?.name ?: "unknown"}:${location.blockX}:${location.blockY}:${location.blockZ}"
+    }
+    
+    fun parseLocationKey(key: String): Location? {
+        val parts = key.split(":")
+        if (parts.size != 4) return null
+        val world = Bukkit.getWorld(parts[0]) ?: return null
+        val x = parts[1].toIntOrNull() ?: return null
+        val y = parts[2].toIntOrNull() ?: return null
+        val z = parts[3].toIntOrNull() ?: return null
+        return Location(world, x.toDouble(), y.toDouble(), z.toDouble())
+    }
     
     fun initialize() {
         logger.info("[CloudStorage] 初始化云仓库系统")
@@ -109,24 +124,24 @@ object CloudStorage {
         logger.info("[CloudStorage] 云仓库系统已关闭")
     }
     
-    private fun getLock(gridId: UUID): ReentrantLock {
-        return storageLocks.computeIfAbsent(gridId) { ReentrantLock() }
+    private fun getLock(locationKey: String): ReentrantLock {
+        return storageLocks.computeIfAbsent(locationKey) { ReentrantLock() }
     }
     
-    fun getOrCreateStorage(gridId: UUID): CloudStorageData {
-        return storageData.computeIfAbsent(gridId) { 
-            CloudStorageData(gridId, maxCapacity = defaultMaxCapacity).also { data ->
-                CloudStorageDatabase.loadStorageData(gridId, data)
+    fun getOrCreateStorage(locationKey: String): CloudStorageData {
+        return storageData.computeIfAbsent(locationKey) { 
+            CloudStorageData(locationKey, maxCapacity = defaultMaxCapacity).also { data ->
+                CloudStorageDatabase.loadStorageData(locationKey, data)
             }
         }
     }
     
-    fun getStorage(gridId: UUID): CloudStorageData? {
-        return storageData[gridId]
+    fun getStorage(locationKey: String): CloudStorageData? {
+        return storageData[locationKey]
     }
     
-    fun hasStorage(gridId: UUID): Boolean {
-        return storageData.containsKey(gridId)
+    fun hasStorage(locationKey: String): Boolean {
+        return storageData.containsKey(locationKey)
     }
     
     fun generateItemKey(item: ItemStack): String {
@@ -144,25 +159,25 @@ object CloudStorage {
         return itemLimits[itemKey] ?: Long.MAX_VALUE
     }
     
-    fun isOverLimit(gridId: UUID, itemKey: String): Boolean {
-        val storage = getStorage(gridId) ?: return false
+    fun isOverLimit(locationKey: String, itemKey: String): Boolean {
+        val storage = getOrCreateStorage(locationKey)
         val currentAmount = storage.items[itemKey]?.get() ?: 0
         val limit = getItemLimit(itemKey)
         return currentAmount >= limit
     }
     
-    fun insertItem(gridId: UUID, item: ItemStack, amount: Long = item.amount.toLong()): InsertResult {
+    fun insertItem(locationKey: String, item: ItemStack, amount: Long = item.amount.toLong()): InsertResult {
         val itemKey = generateItemKey(item)
         
         if (!isAllowed(item)) {
             return InsertResult.NOT_IN_WHITELIST
         }
         
-        val lock = getLock(gridId)
+        val lock = getLock(locationKey)
         return lock.withLock {
-            val storage = getOrCreateStorage(gridId)
+            val storage = getOrCreateStorage(locationKey)
             
-            if (isOverLimit(gridId, itemKey)) {
+            if (isOverLimit(locationKey, itemKey)) {
                 return@withLock InsertResult.OVER_LIMIT
             }
             
@@ -192,10 +207,10 @@ object CloudStorage {
         }
     }
     
-    fun extractItem(gridId: UUID, itemKey: String, amount: Long): ExtractResult {
-        val lock = getLock(gridId)
+    fun extractItem(locationKey: String, itemKey: String, amount: Long): ExtractResult {
+        val lock = getLock(locationKey)
         return lock.withLock {
-            val storage = getStorage(gridId) ?: return@withLock ExtractResult.STORAGE_NOT_FOUND
+            val storage = getStorage(locationKey) ?: return@withLock ExtractResult.STORAGE_NOT_FOUND
             
             val currentAmount = storage.items[itemKey] ?: return@withLock ExtractResult.ITEM_NOT_FOUND
             val available = currentAmount.get()
@@ -217,13 +232,13 @@ object CloudStorage {
         }
     }
     
-    fun getItemAmount(gridId: UUID, itemKey: String): Long {
-        val storage = getStorage(gridId) ?: return 0
+    fun getItemAmount(locationKey: String, itemKey: String): Long {
+        val storage = getOrCreateStorage(locationKey)
         return storage.items[itemKey]?.get() ?: 0
     }
     
-    fun getItemsPage(gridId: UUID, page: Int): List<Pair<String, Long>> {
-        val storage = getStorage(gridId) ?: return emptyList()
+    fun getItemsPage(locationKey: String, page: Int): List<Pair<String, Long>> {
+        val storage = getOrCreateStorage(locationKey)
         
         val allItems = storage.items.entries
             .map { it.key to it.value.get() }
@@ -239,14 +254,14 @@ object CloudStorage {
         return allItems.subList(startIndex, endIndex)
     }
     
-    fun getTotalPages(gridId: UUID): Int {
-        val storage = getStorage(gridId) ?: return 0
+    fun getTotalPages(locationKey: String): Int {
+        val storage = getOrCreateStorage(locationKey)
         val itemCount = storage.items.entries.count { it.value.get() > 0 }
         return (itemCount + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE
     }
     
-    fun getStorageInfo(gridId: UUID): StorageInfo {
-        val storage = getStorage(gridId) ?: return StorageInfo(0, 0, 0)
+    fun getStorageInfo(locationKey: String): StorageInfo {
+        val storage = getOrCreateStorage(locationKey)
         return StorageInfo(
             totalItems = storage.items.entries.count { it.value.get() > 0 },
             totalAmount = storage.totalCapacity.get(),
@@ -272,25 +287,37 @@ object CloudStorage {
     }
     
     fun saveAllData() {
-        logger.info("[CloudStorage] 开始保存所有数据")
+        val dataCount = storageData.size
+        logger.info("[CloudStorage] 开始保存所有数据，仓库数量: $dataCount")
         
-        for ((gridId, storage) in storageData) {
+        if (dataCount == 0) {
+            logger.info("[CloudStorage] 没有需要保存的仓库数据")
+            return
+        }
+        
+        var successCount = 0
+        for ((locationKey, storage) in storageData) {
             try {
-                CloudStorageDatabase.saveStorageData(gridId, storage)
+                val itemCount = storage.items.size
+                val totalAmount = storage.totalCapacity.get()
+                CloudStorageDatabase.saveStorageData(locationKey, storage)
+                successCount++
+                logger.fine("[CloudStorage] 仓库 $locationKey 保存成功: $itemCount 种物品, 总量 $totalAmount")
             } catch (e: Exception) {
-                logger.severe("[CloudStorage] 保存仓库 $gridId 失败: ${e.message}")
+                logger.severe("[CloudStorage] 保存仓库 $locationKey 失败: ${e.message}")
+                e.printStackTrace()
             }
         }
         
-        logger.info("[CloudStorage] 所有数据保存完成")
+        logger.info("[CloudStorage] 所有数据保存完成: $successCount/$dataCount 个仓库")
     }
     
-    fun deleteStorage(gridId: UUID) {
-        val lock = getLock(gridId)
+    fun deleteStorage(locationKey: String) {
+        val lock = getLock(locationKey)
         lock.withLock {
-            storageData.remove(gridId)
-            storageLocks.remove(gridId)
-            CloudStorageDatabase.deleteStorageData(gridId)
+            storageData.remove(locationKey)
+            storageLocks.remove(locationKey)
+            CloudStorageDatabase.deleteStorageData(locationKey)
         }
     }
     

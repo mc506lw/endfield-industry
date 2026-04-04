@@ -192,7 +192,24 @@ abstract class PowerGridGuiBase(
         
         internal fun initPlayerGui(player: Player, gui: Gui, guiBase: PowerGridGuiBase) {
             ensureListenerRegistered()
-            registerPlayer(player, gui, guiBase)
+            playerGuiData[player.uniqueId] = mutableMapOf(
+                "gui" to gui,
+                "guiBase" to guiBase
+            )
+        }
+        
+        fun ensurePlayerRegistered(player: Player) {
+            for ((gui, base) in guiToBase) {
+                for (window in gui.windows) {
+                    if (window.viewer == player) {
+                        val existing = playerGuiData[player.uniqueId]
+                        if (existing == null || existing["gui"] !== gui) {
+                            initPlayerGui(player, gui, base)
+                        }
+                        return
+                    }
+                }
+            }
         }
     }
     
@@ -374,8 +391,9 @@ abstract class PowerGridGuiBase(
             return items
         }
         
+        val locationKey = CloudStorage.generateLocationKey(device.block.location)
         val page = CloudStorageGui.getPlayerPage(playerId)
-        return CloudStorageGui.createStorageItems(grid.gridId, page)
+        return CloudStorageGui.createStorageItems(locationKey, page)
     }
     
     private fun createDeviceTypeDisplayItem(typeName: String, count: Int): ItemStack {
@@ -490,10 +508,11 @@ abstract class PowerGridGuiBase(
             PowerGridDisplayMode.CLOUD_STORAGE -> {
                 val grid = device.getGrid()
                 if (grid != null) {
+                    val locationKey = CloudStorage.generateLocationKey(device.block.location)
                     val page = CloudStorageGui.getPlayerPage(playerId)
-                    gui.setItem(45, CloudStorageGui.createPrevPageItem(grid.gridId, page))
-                    gui.setItem(49, CloudStorageGui.createInfoItem(grid.gridId, page))
-                    gui.setItem(53, CloudStorageGui.createNextPageItem(grid.gridId, page))
+                    gui.setItem(45, CloudStorageGui.createPrevPageItem(locationKey, page))
+                    gui.setItem(49, CloudStorageGui.createInfoItem(locationKey, page))
+                    gui.setItem(53, CloudStorageGui.createNextPageItem(locationKey, page))
                 }
             }
             else -> {
@@ -528,6 +547,8 @@ abstract class PowerGridGuiBase(
         private val guiBase: PowerGridGuiBase
     ) : AbstractBoundItem() {
         override fun getItemProvider(viewer: Player): ItemProvider {
+            ensurePlayerRegistered(viewer)
+            
             val grid = device.getGrid()
             return if (grid != null) {
                 val cachedData = PowerGridCacheManager.getCachedDataOrCompute(grid)
@@ -659,7 +680,8 @@ abstract class PowerGridGuiBase(
         override fun getItemProvider(viewer: Player): ItemProvider {
             val grid = device.getGrid()
             return if (grid != null) {
-                val info = CloudStorage.getStorageInfo(grid.gridId)
+                val locationKey = CloudStorage.generateLocationKey(device.block.location)
+                val info = CloudStorage.getStorageInfo(locationKey)
                 ItemStackBuilder.of(Material.PURPLE_STAINED_GLASS_PANE)
                     .name(Component.translatable("endfield-industry.gui.power_grid.base_storage"))
                     .lore(listOf(
@@ -682,9 +704,10 @@ abstract class PowerGridGuiBase(
         override fun handleClick(clickType: ClickType, player: Player, click: Click) {
             val grid = device.getGrid()
             if (grid != null) {
+                val locationKey = CloudStorage.generateLocationKey(device.block.location)
                 PowerGridGuiBase.setPlayerMode(player.uniqueId, PowerGridDisplayMode.CLOUD_STORAGE)
                 CloudStorageGui.setPlayerPage(player.uniqueId, 0)
-                CloudStorageGui.setPlayerGridId(player.uniqueId, grid.gridId)
+                CloudStorageGui.setPlayerLocationKey(player.uniqueId, locationKey)
                 val gui = getGui()
                 if (gui != null) {
                     CloudStorageGui.setPlayerGui(player.uniqueId, gui)
