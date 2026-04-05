@@ -45,13 +45,13 @@ abstract class PowerGridGuiBase(
         private const val TOTAL_CHART_SLOTS = CHART_ROWS * CHART_COLS
         private const val HISTORY_SIZE = 9
         
-        private val playerModes = ConcurrentHashMap<UUID, PowerGridDisplayMode>()
-        private val playerGuiData = ConcurrentHashMap<UUID, MutableMap<String, Any>>()
         private var updateTaskId = -1
         private var listenerRegistered = false
         
         private val gridHistory = ConcurrentHashMap<UUID, ConcurrentLinkedDeque<PowerDataPoint>>()
         private val guiToBase = ConcurrentHashMap<Gui, PowerGridGuiBase>()
+        
+        private var highlightColumn = 0
         
         data class PowerDataPoint(
             val timestamp: LocalDateTime,
@@ -69,26 +69,17 @@ abstract class PowerGridGuiBase(
         }
         
         fun getPlayerMode(playerId: UUID): PowerGridDisplayMode {
-            return playerModes.getOrDefault(playerId, PowerGridDisplayMode.POWER_DATA)
+            return PlayerGuiSessionManager.getMode(playerId)
         }
         
         fun setPlayerMode(playerId: UUID, mode: PowerGridDisplayMode) {
-            playerModes[playerId] = mode
-        }
-        
-        private fun registerPlayer(player: Player, gui: Gui, guiBase: PowerGridGuiBase) {
-            playerGuiData[player.uniqueId] = mutableMapOf(
-                "gui" to gui,
-                "guiBase" to guiBase
-            )
-            ensureUpdateTaskRunning()
+            PlayerGuiSessionManager.updateMode(playerId, mode)
         }
         
         private fun unregisterPlayer(playerId: UUID) {
-            playerGuiData.remove(playerId)
-            playerModes.remove(playerId)
+            PlayerGuiSessionManager.clearSession(playerId)
             CloudStorageGui.clearPlayerPage(playerId)
-            if (playerGuiData.isEmpty()) {
+            if (PlayerGuiSessionManager.getAllSessions().isEmpty()) {
                 stopUpdateTask()
             }
         }
@@ -100,10 +91,8 @@ abstract class PowerGridGuiBase(
             Bukkit.getPluginManager().registerEvents(object : Listener {
                 @EventHandler(priority = EventPriority.MONITOR)
                 fun onInventoryClose(event: InventoryCloseEvent) {
-                    val player = event.player
-                    if (player is Player && playerGuiData.containsKey(player.uniqueId)) {
-                        unregisterPlayer(player.uniqueId)
-                    }
+                    // 不再清除session，保留用户的mode选择
+                    // session只会在PlayerQuitEvent时清除
                 }
                 
                 @EventHandler(priority = EventPriority.MONITOR)
@@ -115,16 +104,11 @@ abstract class PowerGridGuiBase(
                 fun onPluginDisable(event: PluginDisableEvent) {
                     if (event.plugin == EndfieldIndustry.instance) {
                         stopUpdateTask()
-                        playerGuiData.clear()
-                        playerModes.clear()
+                        PlayerGuiSessionManager.clearAll()
                         guiToBase.clear()
                     }
                 }
             }, EndfieldIndustry.instance)
-        }
-        
-        private fun isPowerGridGuiHolder(holder: InventoryHolder): Boolean {
-            return holder is VirtualInventory || holder::class.qualifiedName?.contains("InvUI") == true
         }
         
         private fun ensureUpdateTaskRunning() {
@@ -134,11 +118,11 @@ abstract class PowerGridGuiBase(
                 EndfieldIndustry.instance,
                 Runnable {
                     updateAllGridHistories()
-                    for ((playerId, data) in playerGuiData) {
+                    for ((playerId, session) in PlayerGuiSessionManager.getAllSessions()) {
                         try {
-                            val gui = data["gui"] as? Gui ?: continue
-                            val guiBase = data["guiBase"] as? PowerGridGuiBase ?: continue
-                            val mode = getPlayerMode(playerId)
+                            val gui = session.gui ?: continue
+                            val guiBase = session.guiBase ?: continue
+                            val mode = session.mode
                             if (mode != PowerGridDisplayMode.CLOUD_STORAGE) {
                                 Bukkit.getScheduler().runTask(EndfieldIndustry.instance, Runnable {
                                     guiBase.updateChartArea(gui, mode)
@@ -191,21 +175,52 @@ abstract class PowerGridGuiBase(
         }
         
         internal fun initPlayerGui(player: Player, gui: Gui, guiBase: PowerGridGuiBase) {
-            ensureListenerRegistered()
-            playerGuiData[player.uniqueId] = mutableMapOf(
-                "gui" to gui,
-                "guiBase" to guiBase
-            )
+        ensureListenerRegistered()
+        val existingSession = PlayerGuiSessionManager.getSession(player.uniqueId)
+        if (existingSession != null && existingSession.guiBase !== guiBase) {
+            PlayerGuiSessionManager.updateMode(player.uniqueId, PowerGridDisplayMode.POWER_DATA)
+            PlayerGuiSessionManager.updatePage(player.uniqueId, 0)
+        }
+        PlayerGuiSessionManager.createSession(player, gui, guiBase)
+        ensureUpdateTaskRunning()
+        
+        val currentMode = PlayerGuiSessionManager.getMode(player.uniqueId)
+        
+        Bukkit.getScheduler().runTaskLater(EndfieldIndustry.instance, Runnable {
+            val items = guiBase.createChartItemsForMode(currentMode, player.uniqueId)
+            for (i in items.indices) {
+                if (i < TOTAL_CHART_SLOTS) {
+                    gui.setItem(i, items[i])
+                }
+            }
+            
+            if (currentMode == PowerGridDisplayMode.CLOUD_STORAGE) {
+                guiBase.updateControlBar(gui, currentMode, player.uniqueId)
+            }
+        }, 1L)
+    }
+        
+        fun getCurrentPlayerId(gui: Gui): UUID? {
+            for ((playerId, session) in PlayerGuiSessionManager.getAllSessions()) {
+                if (session.gui === gui) return playerId
+            }
+            for (window in gui.windows) {
+                val viewer = window.viewer
+                if (viewer != null) return viewer.uniqueId
+            }
+            return null
         }
         
         fun ensurePlayerRegistered(player: Player) {
             for ((gui, base) in guiToBase) {
                 for (window in gui.windows) {
                     if (window.viewer == player) {
-                        val existing = playerGuiData[player.uniqueId]
-                        if (existing == null || existing["gui"] !== gui) {
-                            initPlayerGui(player, gui, base)
+                        val existingSession = PlayerGuiSessionManager.getSession(player.uniqueId)
+                        if (existingSession != null && existingSession.gui === gui && existingSession.guiBase === base) {
+                            return
                         }
+                        
+                        initPlayerGui(player, gui, base)
                         return
                     }
                 }
@@ -301,7 +316,7 @@ abstract class PowerGridGuiBase(
                 val (material, lore) = when {
                     blueHeight > 0 && heightFromBottom <= blueHeight -> {
                         Pair(
-                            Material.BLUE_STAINED_GLASS_PANE,
+                            if (col == highlightColumn) Material.CYAN_STAINED_GLASS_PANE else Material.BLUE_STAINED_GLASS_PANE,
                             listOf(
                                 timeLabel,
                                 Component.translatable("endfield-industry.gui.power_grid.chart_consumption")
@@ -315,7 +330,7 @@ abstract class PowerGridGuiBase(
                     }
                     yellowHeight > 0 && heightFromBottom <= yellowHeight -> {
                         Pair(
-                            Material.YELLOW_STAINED_GLASS_PANE,
+                            if (col == highlightColumn) Material.ORANGE_STAINED_GLASS_PANE else Material.YELLOW_STAINED_GLASS_PANE,
                             listOf(
                                 timeLabel,
                                 Component.translatable("endfield-industry.gui.power_grid.chart_capacity")
@@ -381,7 +396,7 @@ abstract class PowerGridGuiBase(
     }
     
     private fun createCloudStorageItems(playerId: UUID): List<AbstractItem> {
-        val grid = device.getGrid()
+    val grid = device.getGrid()
         val items = mutableListOf<AbstractItem>()
         
         if (grid == null) {
@@ -391,8 +406,16 @@ abstract class PowerGridGuiBase(
             return items
         }
         
-        val locationKey = CloudStorage.generateLocationKey(device.block.location)
-        val page = CloudStorageGui.getPlayerPage(playerId)
+        val protocolCoreLocation = grid.getProtocolCoreLocation()
+        if (protocolCoreLocation == null) {
+            for (i in 0 until TOTAL_CHART_SLOTS) {
+                items.add(SimpleChartItem(ItemStack(Material.GRAY_STAINED_GLASS_PANE)))
+            }
+            return items
+        }
+        
+        val locationKey = CloudStorage.generateLocationKey(protocolCoreLocation)
+        val page = PlayerGuiSessionManager.getPage(playerId)
         return CloudStorageGui.createStorageItems(locationKey, page)
     }
     
@@ -431,7 +454,7 @@ abstract class PowerGridGuiBase(
             .build()
     }
     
-    fun createGui(): Gui {
+    fun createGui(initialMode: PowerGridDisplayMode = PowerGridDisplayMode.POWER_DATA): Gui {
         ensureListenerRegistered()
         
         val grid = device.getGrid()
@@ -470,18 +493,33 @@ abstract class PowerGridGuiBase(
         
         guiToBase[gui] = this
         
-        val initialItems = createChartItemsForMode(PowerGridDisplayMode.POWER_DATA, UUID.randomUUID())
-        for (i in initialItems.indices) {
-            if (i < TOTAL_CHART_SLOTS) {
-                gui.setItem(i, initialItems[i])
-            }
+        for (i in 0 until TOTAL_CHART_SLOTS) {
+            gui.setItem(i, PlaceholderItem())
         }
+        
+        Bukkit.getScheduler().runTaskLater(EndfieldIndustry.instance, Runnable {
+            val playerId = getCurrentPlayerId(gui)
+            val currentMode = playerId?.let { PlayerGuiSessionManager.getMode(it) } ?: initialMode
+            
+            val items = createChartItemsForMode(currentMode, playerId ?: UUID.randomUUID())
+            for (i in items.indices) {
+                if (i < TOTAL_CHART_SLOTS) {
+                    gui.setItem(i, items[i])
+                }
+            }
+            
+            if (currentMode == PowerGridDisplayMode.CLOUD_STORAGE && playerId != null) {
+                updateControlBar(gui, currentMode, playerId)
+            }
+        }, 1L)
         
         if (grid == null) {
             Bukkit.getScheduler().runTaskLater(EndfieldIndustry.instance, Runnable {
                 val newGrid = device.getGrid()
                 if (newGrid != null) {
-                    val newItems = createChartItemsForMode(PowerGridDisplayMode.POWER_DATA, UUID.randomUUID())
+                    val playerId = getCurrentPlayerId(gui)
+                    val currentMode = playerId?.let { PlayerGuiSessionManager.getMode(it) } ?: initialMode
+                    val newItems = createChartItemsForMode(currentMode, playerId ?: UUID.randomUUID())
                     for (i in newItems.indices) {
                         if (i < TOTAL_CHART_SLOTS) {
                             gui.setItem(i, newItems[i])
@@ -495,7 +533,10 @@ abstract class PowerGridGuiBase(
     }
     
     fun updateChartArea(gui: Gui, mode: PowerGridDisplayMode, playerId: UUID? = null) {
+        highlightColumn = (highlightColumn + 1) % CHART_COLS
+        
         val chartItems = createChartItemsForMode(mode, playerId ?: UUID.randomUUID())
+        
         for (i in chartItems.indices) {
             if (i < TOTAL_CHART_SLOTS) {
                 gui.setItem(i, chartItems[i])
@@ -508,11 +549,14 @@ abstract class PowerGridGuiBase(
             PowerGridDisplayMode.CLOUD_STORAGE -> {
                 val grid = device.getGrid()
                 if (grid != null) {
-                    val locationKey = CloudStorage.generateLocationKey(device.block.location)
-                    val page = CloudStorageGui.getPlayerPage(playerId)
-                    gui.setItem(45, CloudStorageGui.createPrevPageItem(locationKey, page))
-                    gui.setItem(49, CloudStorageGui.createInfoItem(locationKey, page))
-                    gui.setItem(53, CloudStorageGui.createNextPageItem(locationKey, page))
+                    val protocolCoreLocation = grid.getProtocolCoreLocation()
+                    if (protocolCoreLocation != null) {
+                        val locationKey = CloudStorage.generateLocationKey(protocolCoreLocation)
+                        val page = PlayerGuiSessionManager.getPage(playerId)
+                        gui.setItem(45, CloudStorageGui.createPrevPageItem(locationKey, page))
+                        gui.setItem(49, CloudStorageGui.createInfoItem(locationKey, page))
+                        gui.setItem(53, CloudStorageGui.createNextPageItem(locationKey, page))
+                    }
                 }
             }
             else -> {
@@ -537,6 +581,14 @@ abstract class PowerGridGuiBase(
                 builder.lore(customLore)
             }
             return ItemWrapper(builder.build())
+        }
+
+        override fun handleClick(clickType: ClickType, player: Player, click: Click) {}
+    }
+    
+    class PlaceholderItem : AbstractItem() {
+        override fun getItemProvider(viewer: Player): ItemProvider {
+            return ItemWrapper(ItemStack(Material.AIR))
         }
 
         override fun handleClick(clickType: ClickType, player: Player, click: Click) {}
@@ -680,8 +732,17 @@ abstract class PowerGridGuiBase(
         override fun getItemProvider(viewer: Player): ItemProvider {
             val grid = device.getGrid()
             return if (grid != null) {
-                val locationKey = CloudStorage.generateLocationKey(device.block.location)
-                val info = CloudStorage.getStorageInfo(locationKey)
+                val protocolCoreLocation = grid.getProtocolCoreLocation()
+                val locationKey = if (protocolCoreLocation != null) {
+                    CloudStorage.generateLocationKey(protocolCoreLocation)
+                } else {
+                    null
+                }
+                val info = if (locationKey != null) {
+                    CloudStorage.getStorageInfo(locationKey)
+                } else {
+                    CloudStorage.StorageInfo(0, 0, 0)
+                }
                 ItemStackBuilder.of(Material.PURPLE_STAINED_GLASS_PANE)
                     .name(Component.translatable("endfield-industry.gui.power_grid.base_storage"))
                     .lore(listOf(
@@ -704,15 +765,20 @@ abstract class PowerGridGuiBase(
         override fun handleClick(clickType: ClickType, player: Player, click: Click) {
             val grid = device.getGrid()
             if (grid != null) {
-                val locationKey = CloudStorage.generateLocationKey(device.block.location)
-                PowerGridGuiBase.setPlayerMode(player.uniqueId, PowerGridDisplayMode.CLOUD_STORAGE)
-                CloudStorageGui.setPlayerPage(player.uniqueId, 0)
-                CloudStorageGui.setPlayerLocationKey(player.uniqueId, locationKey)
+                val protocolCoreLocation = grid.getProtocolCoreLocation()
+                if (protocolCoreLocation == null) {
+                    player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.no_protocol_core"))
+                    return
+                }
+                val locationKey = CloudStorage.generateLocationKey(protocolCoreLocation)
+                setPlayerMode(player.uniqueId, PowerGridDisplayMode.CLOUD_STORAGE)
+                PlayerGuiSessionManager.updatePage(player.uniqueId, 0)
+                PlayerGuiSessionManager.updateLocationKey(player.uniqueId, locationKey)
                 val gui = getGui()
                 if (gui != null) {
                     CloudStorageGui.setPlayerGui(player.uniqueId, gui)
                 }
-                PowerGridGuiBase.initPlayerGui(player, getGui()!!, guiBase)
+                initPlayerGui(player, getGui()!!, guiBase)
                 val gui2 = getGui()
                 if (gui2 != null) {
                     guiBase.updateChartArea(gui2, PowerGridDisplayMode.CLOUD_STORAGE, player.uniqueId)

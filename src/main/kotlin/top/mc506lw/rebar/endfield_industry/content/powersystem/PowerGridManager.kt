@@ -1,6 +1,7 @@
 package top.mc506lw.rebar.endfield_industry.content.powersystem
 
-import top.mc506lw.rebar.endfield_industry.content.powersystem.devices.PowerDevice
+import top.mc506lw.rebar.endfield_industry.content.powersystem.event.PowerDeviceConnectEvent
+import top.mc506lw.rebar.endfield_industry.content.powersystem.event.PowerGridMergeEvent
 import top.mc506lw.rebar.endfield_industry.content.powersystem.event.PowerGridOverloadEvent
 import top.mc506lw.rebar.endfield_industry.content.powersystem.event.PowerGridStableEvent
 import top.mc506lw.rebar.endfield_industry.content.powersystem.storage.PowerSystemStorage
@@ -57,6 +58,9 @@ class PowerGridManager(private val config: PowerSystemConfig) {
             
             grids.remove(gridId2)
             PowerSystemStorage.markGridDirty(gridId2)
+            
+            val event = PowerGridMergeEvent(grid1, grid2)
+            event.callEvent()
         }
     }
 

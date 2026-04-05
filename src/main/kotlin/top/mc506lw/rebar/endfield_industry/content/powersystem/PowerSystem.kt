@@ -3,6 +3,7 @@ package top.mc506lw.rebar.endfield_industry.content.powersystem
 import top.mc506lw.rebar.endfield_industry.EndfieldIndustry
 import top.mc506lw.rebar.endfield_industry.content.powersystem.connection.ConnectionManager
 import top.mc506lw.rebar.endfield_industry.content.powersystem.storage.ChunkLoadConnectionRestorer
+import top.mc506lw.rebar.endfield_industry.content.powersystem.storage.ConnectionRestoreScheduler
 import top.mc506lw.rebar.endfield_industry.content.powersystem.storage.PowerSystemStorage
 
 object PowerSystem {
@@ -30,6 +31,7 @@ object PowerSystem {
         PowerSystemStorage.initialize()
         
         ChunkLoadConnectionRestorer.register()
+        ConnectionRestoreScheduler.initialize()
         
         PowerSystemMoveListener(EndfieldIndustry.instance)
         PowerSystemInteractListener(EndfieldIndustry.instance)

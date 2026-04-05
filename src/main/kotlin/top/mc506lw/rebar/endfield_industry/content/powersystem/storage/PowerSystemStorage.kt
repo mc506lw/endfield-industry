@@ -199,6 +199,15 @@ object PowerSystemStorage : Listener {
                     allGrids.filterKeys { it in dirtyGridIds }.values.toList()
                 }
                 
+                val nonEmptyGrids = gridsToSave.filter { grid ->
+                    grid.getDevices().isNotEmpty() || grid.getConsumers().isNotEmpty()
+                }
+                
+                val emptyGridCount = gridsToSave.size - nonEmptyGrids.size
+                if (emptyGridCount > 0) {
+                    logger.info("[PowerSystemStorage] 过滤掉 $emptyGridCount 个空电网")
+                }
+                
                 val connectionsToSave = if (dirtyConnections == null) {
                     PowerSystem.connectionManager.getAllConnections()
                 } else {
@@ -209,13 +218,13 @@ object PowerSystemStorage : Listener {
                     .flatten()
                     .distinctBy { "${it.sourceLocation}-${it.targetLocation}" }
                 
-                if (gridsToSave.isEmpty() && connectionList.isEmpty() && !file.exists()) {
+                if (nonEmptyGrids.isEmpty() && connectionList.isEmpty() && !file.exists()) {
                     return
                 }
                 
                 rotateBackups()
                 
-                val gridDataList = gridsToSave.map { createGridData(it) }
+                val gridDataList = nonEmptyGrids.map { createGridData(it) }
                 val connectionDataList = connectionList.map { createConnectionData(it) }
                 
                 val tempFile = File(file.parentFile, "power_system.dat.tmp")

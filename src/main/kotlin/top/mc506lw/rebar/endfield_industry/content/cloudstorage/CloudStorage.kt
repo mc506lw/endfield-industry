@@ -203,6 +203,8 @@ object CloudStorage {
             currentAmountAtomic.addAndGet(canAdd)
             storage.totalCapacity.addAndGet(canAdd)
             
+            CloudStorageDatabase.markDirty()
+            
             InsertResult.SUCCESS(canAdd)
         }
     }
@@ -227,6 +229,8 @@ object CloudStorage {
             if (currentAmount.get() <= 0) {
                 storage.items.remove(itemKey)
             }
+            
+            CloudStorageDatabase.markDirty()
             
             ExtractResult.SUCCESS(toExtract)
         }

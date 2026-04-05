@@ -20,7 +20,13 @@ object CloudStorageDatabase : Listener {
     private var connection: Connection? = null
     private var primaryWorldName: String? = null
     private var dataLoaded = false
-    private var saveTaskId: Int = -1
+    
+    @Volatile
+    private var isDirty = false
+    
+    fun markDirty() {
+        isDirty = true
+    }
     
     fun initialize() {
         logger.info("[CloudStorageDatabase] 初始化数据库系统")
@@ -33,7 +39,6 @@ object CloudStorageDatabase : Listener {
             logger.info("[CloudStorageDatabase] 主世界: $primaryWorldName，立即加载数据库")
             initDatabase()
             dataLoaded = true
-            startAutoSave()
         } else {
             logger.info("[CloudStorageDatabase] 世界未加载，等待WorldLoadEvent")
         }
@@ -48,43 +53,19 @@ object CloudStorageDatabase : Listener {
             logger.info("[CloudStorageDatabase] 检测到世界加载: ${event.world.name}，开始初始化数据库")
             initDatabase()
             dataLoaded = true
-            startAutoSave()
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     fun onWorldSave(event: WorldSaveEvent) {
-        if (event.world.name == primaryWorldName) {
-            logger.info("[CloudStorageDatabase] 世界保存事件触发，执行保存")
+        if (event.world.name == primaryWorldName && isDirty) {
+            logger.info("[CloudStorageDatabase] 世界保存事件触发，执行保存（数据已更改）")
             CloudStorage.saveAllData()
+            isDirty = false
         }
-    }
-    
-    private fun startAutoSave() {
-        if (saveTaskId != -1) return
-        
-        saveTaskId = Bukkit.getScheduler().runTaskTimer(
-            EndfieldIndustry.instance,
-            Runnable {
-                try {
-                    CloudStorage.saveAllData()
-                } catch (e: Exception) {
-                    logger.warning("[CloudStorageDatabase] 自动保存异常: ${e.message}")
-                }
-            },
-            1200L,
-            1200L
-        ).taskId
-        
-        logger.info("[CloudStorageDatabase] 自动保存任务已启动，任务ID: $saveTaskId，间隔: 60秒")
     }
     
     private fun stopAutoSave() {
-        if (saveTaskId != -1) {
-            Bukkit.getScheduler().cancelTask(saveTaskId)
-            logger.info("[CloudStorageDatabase] 自动保存任务已停止，任务ID: $saveTaskId")
-            saveTaskId = -1
-        }
     }
     
     private fun getPrimaryWorld(): World? {
@@ -377,7 +358,6 @@ object CloudStorageDatabase : Listener {
     
     fun shutdown() {
         logger.info("[CloudStorageDatabase] 关闭数据库连接")
-        stopAutoSave()
         
         try {
             CloudStorage.saveAllData()

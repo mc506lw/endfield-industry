@@ -904,8 +904,8 @@ gui:
     max_capacity: '<gray>最大容量: <yellow>%value%</yellow></gray>'
     amount: '<gray>数量: <yellow>%value%</yellow></gray>'
     shift_to_deposit: '<yellow>Shift+点击背包物品存入</yellow>'
-    left_click_to_extract_one: '<yellow>左键取出1个</yellow>'
-    right_click_to_extract_stack: '<yellow>右键取出1组</yellow>'
+    left_click_to_extract_stack: '<yellow>左键取出1组</yellow>'
+    right_click_to_extract_one: '<yellow>右键取出1个</yellow>'
     shift_click_to_extract_all: '<yellow>Shift+点击全部取出</yellow>'
     not_in_whitelist: <red>该物品不在白名单中</red>
     capacity_full: <red>仓库容量已满</red>

@@ -45,6 +45,10 @@ abstract class PowerDevice : MachineComponent, RebarBreakHandler {
         }, 20L)
     }
     
+    fun triggerConnectionRestore() {
+        restoreConnectionsFromStorage()
+    }
+    
     private fun restoreConnectionsFromStorage() {
         if (connectionRestored) {
             return

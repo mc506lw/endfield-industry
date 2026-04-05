@@ -31,16 +31,24 @@ object CloudStorageGui : Listener {
     
     private val logger = EndfieldIndustry.instance.logger
     
-    private val playerPages = ConcurrentHashMap<UUID, Int>()
-    private val playerLocationKeys = ConcurrentHashMap<UUID, String>()
-    private val playerGuis = ConcurrentHashMap<UUID, Gui>()
     private val itemKeyCache = ConcurrentHashMap<String, CachedItem>()
+    private val actionCooldowns = ConcurrentHashMap<UUID, Long>()
+    private const val COOLDOWN_MS = 200L
     
     data class CachedItem(
         val stack: ItemStack,
         val displayName: Component,
         val isRebarItem: Boolean
     )
+    
+    private fun isOnCooldown(playerId: UUID): Boolean {
+        val lastAction = actionCooldowns[playerId] ?: 0L
+        return System.currentTimeMillis() - lastAction < COOLDOWN_MS
+    }
+    
+    private fun setCooldown(playerId: UUID) {
+        actionCooldowns[playerId] = System.currentTimeMillis()
+    }
     
     fun initialize() {
         logger.info("[CloudStorageGui] 初始化GUI系统")
@@ -57,7 +65,7 @@ object CloudStorageGui : Listener {
                 val (itemKey, amount) = items[i]
                 result.add(StorageItem(locationKey, itemKey, amount))
             } else {
-                result.add(SimpleItem(ItemStack(Material.AIR)))
+                result.add(EmptyStorageItem(locationKey))
             }
         }
         
@@ -81,11 +89,11 @@ object CloudStorageGui : Listener {
             override fun handleClick(clickType: ClickType, player: Player, click: Click) {
                 if (canPrev) {
                     val newPage = currentPage - 1
-                    playerPages[player.uniqueId] = newPage
-                    playerLocationKeys[player.uniqueId] = locationKey
+                    setPlayerPage(player.uniqueId, newPage)
+                    setPlayerLocationKey(player.uniqueId, locationKey)
                     player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
                     
-                    val gui = playerGuis[player.uniqueId]
+                    val gui = getGuiForPlayer(player.uniqueId)
                     if (gui != null) {
                         refreshStorageView(gui, locationKey, newPage)
                     }
@@ -112,11 +120,11 @@ object CloudStorageGui : Listener {
             override fun handleClick(clickType: ClickType, player: Player, click: Click) {
                 if (canNext) {
                     val newPage = currentPage + 1
-                    playerPages[player.uniqueId] = newPage
-                    playerLocationKeys[player.uniqueId] = locationKey
+                    setPlayerPage(player.uniqueId, newPage)
+                    setPlayerLocationKey(player.uniqueId, locationKey)
                     player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
                     
-                    val gui = playerGuis[player.uniqueId]
+                    val gui = getGuiForPlayer(player.uniqueId)
                     if (gui != null) {
                         refreshStorageView(gui, locationKey, newPage)
                     }
@@ -166,33 +174,34 @@ object CloudStorageGui : Listener {
     }
     
     fun getPlayerPage(playerId: UUID): Int {
-        return playerPages.getOrDefault(playerId, 0)
+        return top.mc506lw.rebar.endfield_industry.content.powersystem.gui.PlayerGuiSessionManager.getPage(playerId)
     }
     
     fun setPlayerPage(playerId: UUID, page: Int) {
-        playerPages[playerId] = page
+        top.mc506lw.rebar.endfield_industry.content.powersystem.gui.PlayerGuiSessionManager.updatePage(playerId, page)
     }
     
     fun setPlayerLocationKey(playerId: UUID, locationKey: String) {
-        playerLocationKeys[playerId] = locationKey
+        top.mc506lw.rebar.endfield_industry.content.powersystem.gui.PlayerGuiSessionManager.updateLocationKey(playerId, locationKey)
     }
     
     fun setPlayerGui(playerId: UUID, gui: Gui) {
-        playerGuis[playerId] = gui
+        val session = top.mc506lw.rebar.endfield_industry.content.powersystem.gui.PlayerGuiSessionManager.getSession(playerId)
+        if (session != null) {
+            session.gui = gui
+        }
     }
     
     fun clearPlayerPage(playerId: UUID) {
-        playerPages.remove(playerId)
-        playerLocationKeys.remove(playerId)
-        playerGuis.remove(playerId)
+        // 不再清除，由 PlayerGuiSessionManager 统一管理
     }
     
     fun getLocationKeyForPlayer(playerId: UUID): String? {
-        return playerLocationKeys[playerId]
+        return top.mc506lw.rebar.endfield_industry.content.powersystem.gui.PlayerGuiSessionManager.getLocationKey(playerId)
     }
     
     fun getGuiForPlayer(playerId: UUID): Gui? {
-        return playerGuis[playerId]
+        return top.mc506lw.rebar.endfield_industry.content.powersystem.gui.PlayerGuiSessionManager.getGui(playerId)
     }
     
     private fun resolveItemFromKey(itemKey: String): CachedItem {
@@ -229,14 +238,17 @@ object CloudStorageGui : Listener {
             val keyStr = itemKey.substring("rebar:".length)
             try {
                 val key = org.bukkit.NamespacedKey.fromString(keyStr)
-                if (key != null) {
+                if (key == null) {
+                    logger.warning("[CloudStorageGui] 无法解析NamespacedKey: $keyStr")
+                } else {
                     val schema = io.github.pylonmc.rebar.registry.RebarRegistry.ITEMS.get(key)
-                    if (schema != null) {
+                    if (schema == null) {
+                        logger.warning("[CloudStorageGui] 物品不在注册表中: $key")
+                    } else {
                         val stack = schema.getItemStack()
-                        val translationKey = "${key.namespace}.${key.key}.name"
                         val result = CachedItem(
                             stack = stack,
-                            displayName = Component.translatable(translationKey),
+                            displayName = stack.displayName(),
                             isRebarItem = true
                         )
                         itemKeyCache[itemKey] = result
@@ -244,7 +256,7 @@ object CloudStorageGui : Listener {
                     }
                 }
             } catch (e: Exception) {
-                // Ignore
+                logger.warning("[CloudStorageGui] 解析Rebar物品异常: ${e.message}")
             }
         }
         
@@ -267,18 +279,29 @@ object CloudStorageGui : Listener {
         }
     }
     
-    class SimpleItem(private val item: ItemStack) : AbstractItem() {
+    class EmptyStorageItem(private val locationKey: String) : AbstractItem() {
         override fun getItemProvider(viewer: Player): ItemProvider {
-            return ItemWrapper(item)
+            return ItemWrapper(ItemStack(Material.AIR))
         }
 
-        override fun handleClick(clickType: ClickType, player: Player, click: Click) {}
+        override fun handleClick(clickType: ClickType, player: Player, click: Click) {
+            if (isOnCooldown(player.uniqueId)) return
+            
+            val cursorItem = player.itemOnCursor
+            val hasCursorItem = cursorItem != null && cursorItem.type != Material.AIR
+            
+            if (hasCursorItem && (clickType == ClickType.LEFT || clickType == ClickType.RIGHT)) {
+                setCooldown(player.uniqueId)
+                val insertAmount = if (clickType == ClickType.LEFT) cursorItem.amount.toLong() else 1L
+                handleInsertItem(player, locationKey, cursorItem, insertAmount, isCursorItem = true)
+            }
+        }
     }
     
     class StorageItem(
-        private val locationKey: String,
-        private val itemKey: String,
-        private val amount: Long
+        internal val locationKey: String,
+        internal val itemKey: String,
+        internal val amount: Long
     ) : AbstractItem() {
         override fun getItemProvider(viewer: Player): ItemProvider {
             val cached = resolveItemFromKey(itemKey)
@@ -294,132 +317,243 @@ object CloudStorageGui : Listener {
             }
             
             lore.add(Component.empty())
-            lore.add(Component.translatable("endfield-industry.gui.cloud_storage.left_click_to_extract_one"))
-            lore.add(Component.translatable("endfield-industry.gui.cloud_storage.right_click_to_extract_stack"))
+            lore.add(Component.translatable("endfield-industry.gui.cloud_storage.left_click_to_extract_stack"))
+            lore.add(Component.translatable("endfield-industry.gui.cloud_storage.right_click_to_extract_one"))
             lore.add(Component.translatable("endfield-industry.gui.cloud_storage.shift_click_to_extract_all"))
             
-            return ItemStackBuilder.of(cached.stack.type)
-                .name(cached.displayName)
-                .lore(lore)
+            if (cached.isRebarItem) {
+                val displayStack = cached.stack.clone()
+                val meta = displayStack.itemMeta
+                if (meta != null) {
+                    meta.lore(lore)
+                    displayStack.itemMeta = meta
+                }
+                return ItemWrapper(displayStack)
+            } else {
+                return ItemStackBuilder.of(cached.stack)
+                    .name(cached.displayName)
+                    .lore(lore)
+            }
         }
 
         override fun handleClick(clickType: ClickType, player: Player, click: Click) {
-            val extractAmount = when (clickType) {
-                ClickType.LEFT -> 1L
-                ClickType.RIGHT -> 64L
-                ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT -> amount
-                else -> return
-            }
+            if (isOnCooldown(player.uniqueId)) return
             
-            Bukkit.getScheduler().runTaskAsynchronously(EndfieldIndustry.instance, Runnable {
-                val result = CloudStorage.extractItem(locationKey, itemKey, extractAmount)
-                
-                Bukkit.getScheduler().runTask(EndfieldIndustry.instance, Runnable {
-                    when (result) {
-                        is CloudStorage.ExtractResult.SUCCESS -> {
-                            val cached = resolveItemFromKey(itemKey)
-                            val giveAmount = minOf(result.amount, Int.MAX_VALUE.toLong()).toInt()
-                            val giveStack = cached.stack.clone()
-                            giveStack.amount = giveAmount
-                            
-                            val leftover = player.inventory.addItem(giveStack)
-                            if (leftover.isNotEmpty()) {
-                                player.world.dropItem(player.location, leftover.values.first())
-                            }
-                            
-                            player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, 1.0f, 1.0f)
-                            
-                            val page = getPlayerPage(player.uniqueId)
-                            val gui = getGuiForPlayer(player.uniqueId)
-                            if (gui != null) {
-                                refreshStorageView(gui, locationKey, page)
-                            }
-                        }
-                        is CloudStorage.ExtractResult.STORAGE_NOT_FOUND -> {
-                            player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.storage_not_found"))
-                        }
-                        is CloudStorage.ExtractResult.ITEM_NOT_FOUND -> {
-                            player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.item_not_found"))
-                        }
+            val cursorItem = player.itemOnCursor
+            val hasCursorItem = cursorItem != null && cursorItem.type != Material.AIR
+            
+            when (clickType) {
+                ClickType.LEFT, ClickType.RIGHT -> {
+                    if (hasCursorItem) {
+                        setCooldown(player.uniqueId)
+                        val insertAmount = if (clickType == ClickType.LEFT) cursorItem.amount.toLong() else 1L
+                        handleInsertItem(player, locationKey, cursorItem, insertAmount, isCursorItem = true)
+                    } else {
+                        setCooldown(player.uniqueId)
+                        handleExtractToCursor(player, locationKey, itemKey, amount, clickType)
                     }
-                })
-            })
+                }
+                ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT -> {
+                    if (!hasCursorItem) {
+                        setCooldown(player.uniqueId)
+                        handleExtractToInventory(player, locationKey, itemKey, amount)
+                    }
+                }
+                else -> {}
+            }
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     fun onInventoryClose(event: InventoryCloseEvent) {
-        val player = event.player
-        if (player is Player) {
-            clearPlayerPage(player.uniqueId)
-        }
+        // 不再清除，由 PlayerGuiSessionManager 统一管理
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     fun onPlayerQuit(event: PlayerQuitEvent) {
-        clearPlayerPage(event.player.uniqueId)
+        // 不再清除，由 PowerGridGuiBase 的 PlayerQuitEvent 处理
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     fun onPluginDisable(event: PluginDisableEvent) {
         if (event.plugin == EndfieldIndustry.instance) {
-            playerPages.clear()
-            playerLocationKeys.clear()
-            playerGuis.clear()
+            itemKeyCache.clear()
         }
     }
     
     @EventHandler(priority = EventPriority.LOWEST)
     fun onInventoryClick(event: InventoryClickEvent) {
         val player = event.whoClicked as? Player ?: return
-        val mode = PowerGridGuiBase.getPlayerMode(player.uniqueId)
-        if (mode != PowerGridDisplayMode.CLOUD_STORAGE) return
+        
+        val playerGui = getGuiForPlayer(player.uniqueId) ?: return
+        
+        val isPlayerViewingCloudStorage = playerGui.windows.any { it.viewer == player }
+        if (!isPlayerViewingCloudStorage) return
         
         val locationKey = getLocationKeyForPlayer(player.uniqueId) ?: return
         
-        if (event.clickedInventory == player.inventory) {
-            val clickedItem = event.currentItem
-            if (clickedItem != null && clickedItem.type != Material.AIR) {
-                if (event.click == ClickType.SHIFT_LEFT || event.click == ClickType.SHIFT_RIGHT) {
-                    event.isCancelled = true
-                    
-                    Bukkit.getScheduler().runTaskAsynchronously(EndfieldIndustry.instance, Runnable {
-                        val result = CloudStorage.insertItem(locationKey, clickedItem, clickedItem.amount.toLong())
-                        
-                        Bukkit.getScheduler().runTask(EndfieldIndustry.instance, Runnable {
-                            when (result) {
-                                is CloudStorage.InsertResult.SUCCESS -> {
-                                    val actualAmount = result.amount.toInt()
-                                    if (actualAmount >= clickedItem.amount) {
-                                        event.currentItem = null
-                                    } else {
-                                        clickedItem.amount -= actualAmount
-                                    }
-                                    player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, 1.0f, 1.0f)
-                                    
-                                    val page = getPlayerPage(player.uniqueId)
-                                    val gui = getGuiForPlayer(player.uniqueId)
-                                    if (gui != null) {
-                                        refreshStorageView(gui, locationKey, page)
-                                    }
-                                }
-                                is CloudStorage.InsertResult.NOT_IN_WHITELIST -> {
-                                    player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.not_in_whitelist"))
-                                    player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f)
-                                }
-                                is CloudStorage.InsertResult.CAPACITY_FULL -> {
-                                    player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.capacity_full"))
-                                    player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f)
-                                }
-                                is CloudStorage.InsertResult.OVER_LIMIT -> {
-                                    player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.over_limit"))
-                                    player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f)
-                                }
-                            }
-                        })
-                    })
-                }
+        val topInventory = event.view.topInventory
+        val topInventorySize = topInventory.size
+        val rawSlot = event.rawSlot
+        
+        val isPlayerInventoryClick = rawSlot >= topInventorySize
+        
+        if (!isPlayerInventoryClick) return
+        
+        val clickedItem = event.currentItem
+        if (clickedItem == null || clickedItem.type == Material.AIR) return
+        
+        val isShiftClick = event.click == ClickType.SHIFT_LEFT || event.click == ClickType.SHIFT_RIGHT
+        val isDropKey = event.click == ClickType.DROP || event.click == ClickType.CONTROL_DROP
+        
+        if (isShiftClick || isDropKey) {
+            event.isCancelled = true
+            
+            val amountToInsert = when (event.click) {
+                ClickType.CONTROL_DROP -> clickedItem.amount.toLong()
+                else -> clickedItem.amount.toLong()
             }
+            
+            handleInsertItem(player, locationKey, clickedItem, amountToInsert)
         }
+    }
+    
+    private fun handleInsertItem(player: Player, locationKey: String, item: ItemStack, amount: Long, isCursorItem: Boolean = false) {
+        Bukkit.getScheduler().runTaskAsynchronously(EndfieldIndustry.instance, Runnable {
+            val result = CloudStorage.insertItem(locationKey, item, amount)
+            
+            Bukkit.getScheduler().runTask(EndfieldIndustry.instance, Runnable {
+                when (result) {
+                    is CloudStorage.InsertResult.SUCCESS -> {
+                        val actualAmount = result.amount.toInt()
+                        
+                        if (isCursorItem) {
+                            if (actualAmount >= item.amount) {
+                                player.setItemOnCursor(null)
+                            } else {
+                                val newAmount = item.amount - actualAmount
+                                item.amount = newAmount
+                                player.setItemOnCursor(item)
+                            }
+                        } else {
+                            if (actualAmount >= item.amount) {
+                                item.amount = 0
+                            } else {
+                                item.amount -= actualAmount
+                            }
+                        }
+                        
+                        player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, 1.0f, 1.0f)
+                        
+                        val page = getPlayerPage(player.uniqueId)
+                        val gui = getGuiForPlayer(player.uniqueId)
+                        if (gui != null) {
+                            refreshStorageView(gui, locationKey, page)
+                        }
+                    }
+                    is CloudStorage.InsertResult.NOT_IN_WHITELIST -> {
+                        player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.not_in_whitelist"))
+                        player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f)
+                    }
+                    is CloudStorage.InsertResult.CAPACITY_FULL -> {
+                        player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.capacity_full"))
+                        player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f)
+                    }
+                    is CloudStorage.InsertResult.OVER_LIMIT -> {
+                        player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.over_limit"))
+                        player.playSound(player.location, Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f)
+                    }
+                }
+            })
+        })
+    }
+    
+    private fun handleExtractToCursor(player: Player, locationKey: String, itemKey: String, currentAmount: Long, clickType: ClickType) {
+        val extractAmount = when (clickType) {
+            ClickType.LEFT -> minOf(currentAmount, 64L)
+            ClickType.RIGHT -> 1L
+            else -> return
+        }
+        
+        Bukkit.getScheduler().runTaskAsynchronously(EndfieldIndustry.instance, Runnable {
+            val result = CloudStorage.extractItem(locationKey, itemKey, extractAmount)
+            
+            Bukkit.getScheduler().runTask(EndfieldIndustry.instance, Runnable {
+                when (result) {
+                    is CloudStorage.ExtractResult.SUCCESS -> {
+                        val cached = resolveItemFromKey(itemKey)
+                        val giveAmount = minOf(result.amount, Int.MAX_VALUE.toLong()).toInt()
+                        val giveStack = cached.stack.clone()
+                        giveStack.amount = giveAmount
+                        
+                        if (player.itemOnCursor == null || player.itemOnCursor!!.type == Material.AIR) {
+                            player.setItemOnCursor(giveStack)
+                        } else {
+                            val leftover = player.inventory.addItem(giveStack)
+                            if (leftover.isNotEmpty()) {
+                                player.world.dropItem(player.location, leftover.values.first())
+                            }
+                        }
+                        
+                        player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, 1.0f, 1.0f)
+                        
+                        val page = getPlayerPage(player.uniqueId)
+                        val refreshGui = getGuiForPlayer(player.uniqueId)
+                        if (refreshGui != null) {
+                            refreshStorageView(refreshGui, locationKey, page)
+                        }
+                    }
+                    is CloudStorage.ExtractResult.STORAGE_NOT_FOUND -> {
+                        player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.storage_not_found"))
+                    }
+                    is CloudStorage.ExtractResult.ITEM_NOT_FOUND -> {
+                        player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.item_not_found"))
+                    }
+                }
+            })
+        })
+    }
+    
+    private fun handleExtractToInventory(player: Player, locationKey: String, itemKey: String, currentAmount: Long) {
+        Bukkit.getScheduler().runTaskAsynchronously(EndfieldIndustry.instance, Runnable {
+            val result = CloudStorage.extractItem(locationKey, itemKey, currentAmount)
+            
+            Bukkit.getScheduler().runTask(EndfieldIndustry.instance, Runnable {
+                when (result) {
+                    is CloudStorage.ExtractResult.SUCCESS -> {
+                        val cached = resolveItemFromKey(itemKey)
+                        var remaining = minOf(result.amount, Int.MAX_VALUE.toLong()).toInt()
+                        
+                        while (remaining > 0) {
+                            val giveStack = cached.stack.clone()
+                            giveStack.amount = minOf(remaining, giveStack.maxStackSize)
+                            remaining -= giveStack.amount
+                            
+                            val leftover = player.inventory.addItem(giveStack)
+                            if (leftover.isNotEmpty()) {
+                                for (dropItem in leftover.values) {
+                                    player.world.dropItem(player.location, dropItem)
+                                }
+                                break
+                            }
+                        }
+                        
+                        player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, 1.0f, 1.0f)
+                        
+                        val page = getPlayerPage(player.uniqueId)
+                        val refreshGui = getGuiForPlayer(player.uniqueId)
+                        if (refreshGui != null) {
+                            refreshStorageView(refreshGui, locationKey, page)
+                        }
+                    }
+                    is CloudStorage.ExtractResult.STORAGE_NOT_FOUND -> {
+                        player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.storage_not_found"))
+                    }
+                    is CloudStorage.ExtractResult.ITEM_NOT_FOUND -> {
+                        player.sendMessage(Component.translatable("endfield-industry.gui.cloud_storage.item_not_found"))
+                    }
+                }
+            })
+        })
     }
 }

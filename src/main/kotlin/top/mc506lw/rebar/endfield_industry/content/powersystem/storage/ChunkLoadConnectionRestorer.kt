@@ -8,10 +8,14 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import top.mc506lw.rebar.endfield_industry.EndfieldIndustry
 import top.mc506lw.rebar.endfield_industry.content.powersystem.devices.PowerDevice
+import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 class ChunkLoadConnectionRestorer : Listener {
     
     private val logger = EndfieldIndustry.instance.logger
+    
+    private val restoredDevices = ConcurrentHashMap.newKeySet<String>()
     
     @EventHandler(priority = EventPriority.MONITOR)
     fun onChunkBlocksLoad(event: RebarChunkBlocksLoadEvent) {
@@ -23,11 +27,11 @@ class ChunkLoadConnectionRestorer : Listener {
         }
         
         Bukkit.getScheduler().runTaskLater(EndfieldIndustry.instance, Runnable {
-            checkDevicesInChunk(chunk.x, chunk.z, world.uid)
+            restoreConnectionsInChunk(chunk.x, chunk.z, world.uid)
         }, 10L)
     }
     
-    private fun checkDevicesInChunk(chunkX: Int, chunkZ: Int, worldUid: java.util.UUID) {
+    private fun restoreConnectionsInChunk(chunkX: Int, chunkZ: Int, worldUid: UUID) {
         val world = Bukkit.getWorld(worldUid) ?: return
         
         val startX = chunkX shl 4
@@ -45,6 +49,10 @@ class ChunkLoadConnectionRestorer : Listener {
                         val pendingConns = PowerSystemStorage.getPendingConnectionsForDevice(rebarBlock)
                         if (pendingConns.isNotEmpty()) {
                             devicesWithPending++
+                            val deviceKey = "${worldUid}:${x}:${y}:${z}"
+                            if (restoredDevices.add(deviceKey)) {
+                                rebarBlock.triggerConnectionRestore()
+                            }
                         }
                     }
                 }

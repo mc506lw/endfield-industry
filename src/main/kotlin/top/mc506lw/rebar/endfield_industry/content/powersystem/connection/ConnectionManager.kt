@@ -112,7 +112,8 @@ class ConnectionManager(private val config: PowerSystemConfig) {
 
     private fun getDeviceKey(device: PowerDevice): String {
         val loc = device.block.location
-        return "${loc.world?.name}:${loc.blockX}:${loc.blockY}:${loc.blockZ}"
+        val world = loc.world ?: return "unknown:0:0:0"
+        return "${world.uid}:${loc.blockX}:${loc.blockY}:${loc.blockZ}"
     }
 
     private fun getMaxDistance(source: PowerDevice, target: PowerDevice): Int {
