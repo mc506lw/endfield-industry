@@ -1,9 +1,9 @@
 package top.mc506lw.rebar.endfield_industry.content.powersystem.devices
 
 import io.github.pylonmc.rebar.block.BlockStorage
-import io.github.pylonmc.rebar.block.base.RebarBreakHandler
 import io.github.pylonmc.rebar.block.context.BlockBreakContext
 import io.github.pylonmc.rebar.block.context.BlockCreateContext
+import io.github.pylonmc.rebar.block.interfaces.BlockBreakRebarBlockHandler
 import org.bukkit.Bukkit
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
@@ -19,7 +19,7 @@ import top.mc506lw.rebar.endfield_industry.content.powersystem.event.PowerDevice
 import top.mc506lw.rebar.endfield_industry.content.powersystem.storage.PowerSystemStorage
 import java.util.UUID
 
-abstract class PowerDevice : MachineComponent, RebarBreakHandler {
+abstract class PowerDevice : MachineComponent, BlockBreakRebarBlockHandler {
     
     private var grid: PowerGrid? = null
     private var previousPowerContribution: Int = 0
@@ -272,7 +272,7 @@ abstract class PowerDevice : MachineComponent, RebarBreakHandler {
         }
     }
 
-    override fun onBreak(drops: MutableList<ItemStack>, context: BlockBreakContext) {
+    override fun onBlockBreak(drops: MutableList<ItemStack>, context: BlockBreakContext) {
         val connections = PowerSystem.connectionManager.getConnections(this).toList()
         for (conn in connections) {
             PowerSystem.connectionManager.removeConnection(conn)

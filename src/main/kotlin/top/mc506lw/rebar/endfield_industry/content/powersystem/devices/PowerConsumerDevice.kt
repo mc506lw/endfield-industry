@@ -1,10 +1,9 @@
 package top.mc506lw.rebar.endfield_industry.content.powersystem.devices
 
 import io.github.pylonmc.rebar.block.BlockStorage
-import io.github.pylonmc.rebar.block.base.RebarBreakHandler
-import io.github.pylonmc.rebar.block.base.RebarSimpleMultiblock
 import io.github.pylonmc.rebar.block.context.BlockBreakContext
 import io.github.pylonmc.rebar.block.context.BlockCreateContext
+import io.github.pylonmc.rebar.block.interfaces.BlockBreakRebarBlockHandler
 import org.bukkit.Bukkit
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
@@ -19,7 +18,7 @@ import top.mc506lw.rebar.endfield_industry.content.powersystem.PowerSystem
 import top.mc506lw.rebar.endfield_industry.content.powersystem.event.PowerDeviceDisconnectEvent
 import java.util.UUID
 
-abstract class PowerConsumerDevice : MachineComponent, PowerConsumer, RebarBreakHandler {
+abstract class PowerConsumerDevice : MachineComponent, PowerConsumer, BlockBreakRebarBlockHandler {
     
     constructor(block: Block, context: BlockCreateContext) : super(block, context) {
         Bukkit.getScheduler().runTaskLater(EndfieldIndustry.instance, Runnable {
@@ -110,7 +109,7 @@ abstract class PowerConsumerDevice : MachineComponent, PowerConsumer, RebarBreak
         return false
     }
 
-    override fun onBreak(drops: MutableList<ItemStack>, context: BlockBreakContext) {
+    override fun onBlockBreak(drops: MutableList<ItemStack>, context: BlockBreakContext) {
         disconnectFromGrid()
         
         val disconnectEvent = PowerDeviceDisconnectEvent(this)

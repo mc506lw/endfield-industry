@@ -1,6 +1,6 @@
 package top.mc506lw.rebar.endfield_industry.content.powersystem.gui
 
-import io.github.pylonmc.rebar.block.base.RebarMultiblock
+import io.github.pylonmc.rebar.block.interfaces.RebarMultiblock
 import io.github.pylonmc.rebar.i18n.RebarArgument
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
 import io.github.pylonmc.rebar.util.gui.GuiItems

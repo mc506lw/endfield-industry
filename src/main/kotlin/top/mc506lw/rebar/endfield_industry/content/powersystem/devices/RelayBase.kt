@@ -19,6 +19,6 @@ class RelayBase : PowerDevice {
     override fun getPowerContribution(): Int = 0
 
     override fun getWaila(player: Player): WailaDisplay {
-        return WailaDisplay(defaultWailaTranslationKey)
+        return WailaDisplay.of(this, player)
     }
 }

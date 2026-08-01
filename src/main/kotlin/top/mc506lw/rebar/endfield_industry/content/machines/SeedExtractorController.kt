@@ -1,10 +1,12 @@
 package top.mc506lw.rebar.endfield_industry.content.machines
 
-import io.github.pylonmc.rebar.block.RebarBlock
-import io.github.pylonmc.rebar.block.base.*
 import io.github.pylonmc.rebar.block.context.BlockBreakContext
 import io.github.pylonmc.rebar.block.context.BlockCreateContext
-import io.github.pylonmc.rebar.util.position.position
+import io.github.pylonmc.rebar.block.interfaces.CargoRebarBlock
+import io.github.pylonmc.rebar.block.interfaces.GuiRebarBlock
+import io.github.pylonmc.rebar.block.interfaces.SimpleRebarMultiblock
+import io.github.pylonmc.rebar.block.interfaces.TickingRebarBlock
+import io.github.pylonmc.rebar.block.interfaces.VirtualInventoryRebarBlock
 import io.github.pylonmc.rebar.i18n.RebarArgument
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
 import io.github.pylonmc.rebar.logistics.LogisticGroupType
@@ -28,7 +30,7 @@ import xyz.xenondevs.invui.item.AbstractItem
 import xyz.xenondevs.invui.item.ItemProvider
 
 class SeedExtractorController : PowerConsumerDevice,
-    RebarGuiBlock, RebarSimpleMultiblock, RebarTickingBlock, RebarVirtualInventoryBlock, RebarCargoBlock {
+    GuiRebarBlock, SimpleRebarMultiblock, TickingRebarBlock, VirtualInventoryRebarBlock, CargoRebarBlock {
 
     constructor(block: Block, context: BlockCreateContext) : super(block, context)
     
@@ -42,36 +44,25 @@ class SeedExtractorController : PowerConsumerDevice,
 
     private val statusItem = StatusItem()
 
-    override val components: Map<Vector3i, RebarSimpleMultiblock.MultiblockComponent>
+    override val components: Map<Vector3i, SimpleRebarMultiblock.MultiblockComponent>
         get() {
-            val map = mutableMapOf<Vector3i, RebarSimpleMultiblock.MultiblockComponent>()
+            val map = mutableMapOf<Vector3i, SimpleRebarMultiblock.MultiblockComponent>()
             
             for (x in -2..2) {
                 for (z in -2..2) {
-                    map[Vector3i(x, -1, z)] = RebarSimpleMultiblock.VanillaMultiblockComponent(Material.STONE_BRICKS)
+                    map[Vector3i(x, -1, z)] = SimpleRebarMultiblock.MultiblockComponent.of(Material.STONE_BRICKS)
                 }
             }
             
             for (x in -1..1) {
                 for (z in -1..1) {
                     if (x == 0 && z == 0) continue
-                    map[Vector3i(x, 0, z)] = RebarSimpleMultiblock.VanillaMultiblockComponent(Material.IRON_BLOCK)
+                    map[Vector3i(x, 0, z)] = SimpleRebarMultiblock.MultiblockComponent.of(Material.IRON_BLOCK)
                 }
             }
             
             return map
         }
-
-    override fun checkFormed(): Boolean {
-        val block = (this as RebarBlock).block
-        val formed = validStructures().any { struct ->
-            struct.all { (offset, component) ->
-                component.matches((block.position + offset).block)
-            }
-        }
-        updateGhostBlockColors()
-        return formed
-    }
 
     override fun postInitialise() {
         createLogisticGroup("input", LogisticGroupType.INPUT, inputInventory)
@@ -79,7 +70,7 @@ class SeedExtractorController : PowerConsumerDevice,
     }
     
     override fun onMultiblockFormed() {
-        super<RebarSimpleMultiblock>.onMultiblockFormed()
+        super<SimpleRebarMultiblock>.onMultiblockFormed()
         tryConnectToNearbyPowerStation()
     }
 
@@ -107,8 +98,8 @@ class SeedExtractorController : PowerConsumerDevice,
         }
     }
     
-    override fun onBreak(drops: MutableList<ItemStack>, context: BlockBreakContext) {
-        super<PowerConsumerDevice>.onBreak(drops, context)
+    override fun onBlockBreak(drops: MutableList<ItemStack>, context: BlockBreakContext) {
+        super<PowerConsumerDevice>.onBlockBreak(drops, context)
     }
 
     override fun createGui(): Gui {
@@ -162,9 +153,10 @@ class SeedExtractorController : PowerConsumerDevice,
             else -> null
         }
         return if (suffixKey != null) {
-            WailaDisplay(defaultWailaTranslationKey.append(Component.translatable(suffixKey)))
+            WailaDisplay.of(this, player)
+                .addWithoutSeperator(Component.translatable(suffixKey))
         } else {
-            WailaDisplay(defaultWailaTranslationKey)
+            WailaDisplay.of(this, player)
         }
     }
 }

@@ -1,10 +1,9 @@
 package top.mc506lw.rebar.endfield_industry.content.powersystem.devices
 
 import io.github.pylonmc.rebar.block.BlockStorage
-import io.github.pylonmc.rebar.block.RebarBlock
-import io.github.pylonmc.rebar.block.base.RebarGuiBlock
-import io.github.pylonmc.rebar.block.base.RebarSimpleMultiblock
 import io.github.pylonmc.rebar.block.context.BlockCreateContext
+import io.github.pylonmc.rebar.block.interfaces.GuiRebarBlock
+import io.github.pylonmc.rebar.block.interfaces.SimpleRebarMultiblock
 import io.github.pylonmc.rebar.util.position.position
 import io.github.pylonmc.rebar.waila.WailaDisplay
 import net.kyori.adventure.text.Component
@@ -19,31 +18,20 @@ import top.mc506lw.rebar.endfield_industry.content.powersystem.PowerSystem
 import top.mc506lw.rebar.endfield_industry.content.powersystem.gui.PowerStationGui
 import xyz.xenondevs.invui.gui.Gui
 
-class PowerStationEmitter : PowerDevice, RebarGuiBlock, RebarSimpleMultiblock {
+class PowerStationEmitter : PowerDevice, GuiRebarBlock, SimpleRebarMultiblock {
     
     constructor(block: Block, context: BlockCreateContext) : super(block, context)
     
     @Suppress("unused")
     constructor(block: Block, pdc: PersistentDataContainer) : super(block, pdc)
 
-    override val components: Map<Vector3i, RebarSimpleMultiblock.MultiblockComponent>
+    override val components: Map<Vector3i, SimpleRebarMultiblock.MultiblockComponent>
         get() = mapOf(
-            Vector3i(0, -1, 0) to RebarSimpleMultiblock.RebarMultiblockComponent(EndfieldIndustryKeys.POWER_STATION_BASE)
+            Vector3i(0, -1, 0) to SimpleRebarMultiblock.MultiblockComponent.of(EndfieldIndustryKeys.POWER_STATION_BASE)
         )
 
-    override fun checkFormed(): Boolean {
-        val block = (this as RebarBlock).block
-        val formed = validStructures().any { struct ->
-            struct.all { (offset, component) ->
-                component.matches((block.position + offset).block)
-            }
-        }
-        updateGhostBlockColors()
-        return formed
-    }
-
     override fun onMultiblockFormed() {
-        super<RebarSimpleMultiblock>.onMultiblockFormed()
+        super<SimpleRebarMultiblock>.onMultiblockFormed()
         connectNearbyDevices()
         notifyNearbyConsumers()
     }
@@ -119,9 +107,10 @@ class PowerStationEmitter : PowerDevice, RebarGuiBlock, RebarSimpleMultiblock {
 
     override fun getWaila(player: Player): WailaDisplay {
         return if (isFormedAndFullyLoaded()) {
-            WailaDisplay(defaultWailaTranslationKey)
+            WailaDisplay.of(this, player)
         } else {
-            WailaDisplay(defaultWailaTranslationKey.append(Component.translatable("endfield-industry.message.structure_incomplete")))
+            WailaDisplay.of(this, player)
+                .addWithoutSeperator(Component.translatable("endfield-industry.message.structure_incomplete"))
         }
     }
 
