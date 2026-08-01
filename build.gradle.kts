@@ -43,11 +43,7 @@ kotlin {
 
     sourceSets {
         main {
-            kotlin.exclude(
-                // TODO(重构): 以下模块尚未迁移到 Rebar 0.42.1 的新 API。
-                // 每完成一个模块的迁移，就从该列表中移除对应的排除项。
-                "**/EndfieldIndustryPages.kt",
-            )
+            kotlin.exclude()
         }
     }
 }
