@@ -4,1013 +4,536 @@ import io.github.pylonmc.rebar.item.RebarItem
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
 import io.papermc.paper.datacomponent.DataComponentTypes
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 
+/**
+ * 插件全部物品的定义与注册。
+ *
+ * 每个物品以模板 [ItemStack] 形式定义（名称/描述来自语言文件，纹理通过 ITEM_MODEL 数据组件指定），
+ * 在 [initialize] 中统一注册为 Rebar 物品；机器物品额外绑定对应方块键。
+ * 手册页面的展示由 Pages 模块另行添加。
+ */
 object EndfieldIndustryItems {
 
-    @JvmField
-    val HIGH_CRYSTAL_PART: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CRYSTAL_PART)
-        .set(DataComponentTypes.ITEM_MODEL, Material.QUARTZ.key)
-        .build()
+    private fun item(material: Material, key: NamespacedKey): ItemStack =
+        ItemStackBuilder.rebar(ItemStack.of(material), key).build()
 
-    @JvmField
-    val STEEL_PART: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.STEEL_PART)
-        .set(DataComponentTypes.ITEM_MODEL, Material.IRON_NUGGET.key)
-        .build()
+    private fun item(material: Material, key: NamespacedKey, model: Material): ItemStack =
+        ItemStackBuilder.rebar(ItemStack.of(material), key)
+            .set(DataComponentTypes.ITEM_MODEL, model.key)
+            .build()
 
-    @JvmField
-    val STABLE_CARBON_BLOCK: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.STABLE_CARBON_BLOCK)
-        .set(DataComponentTypes.ITEM_MODEL, Material.COAL_BLOCK.key)
-        .build()
+    // region 机器（同时作为方块物品，注册时绑定方块键）
 
     @JvmField
-    val SAND_LEAF_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.SAND_LEAF_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SAND.key)
-        .build()
+    val SEED_EXTRACTOR: ItemStack = item(Material.FURNACE, EndfieldIndustryKeys.SEED_EXTRACTOR)
 
     @JvmField
-    val DENSE_ORIGINIUM_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.DENSE_ORIGINIUM_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.GLOWSTONE_DUST.key)
-        .build()
+    val PLANTER: ItemStack = item(Material.SMOKER, EndfieldIndustryKeys.PLANTER)
 
     @JvmField
-    val DENSE_CRYSTAL_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.DENSE_CRYSTAL_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.DIAMOND.key)
-        .build()
+    val RELAY_BASE: ItemStack = item(Material.FURNACE, EndfieldIndustryKeys.RELAY_BASE)
 
     @JvmField
-    val HIGH_CRYSTAL_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CRYSTAL_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.AMETHYST_SHARD.key)
-        .build()
+    val RELAY_DIFFUSER: ItemStack = item(Material.FURNACE, EndfieldIndustryKeys.RELAY_DIFFUSER)
 
     @JvmField
-    val DENSE_BLUE_IRON_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.DENSE_BLUE_IRON_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.LAPIS_LAZULI.key)
-        .build()
+    val POWER_STATION_BASE: ItemStack = item(Material.FURNACE, EndfieldIndustryKeys.POWER_STATION_BASE)
 
     @JvmField
-    val DENSE_CARBON_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.DENSE_CARBON_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.GUNPOWDER.key)
-        .build()
+    val POWER_STATION_EMITTER: ItemStack = item(Material.FURNACE, EndfieldIndustryKeys.POWER_STATION_EMITTER)
 
     @JvmField
-    val HIGH_CAP_VALLEY_BATTERY: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CAP_VALLEY_BATTERY)
-        .set(DataComponentTypes.ITEM_MODEL, Material.REDSTONE_BLOCK.key)
-        .build()
+    val PROTOCOL_CORE_CONTROLLER: ItemStack = item(Material.BEACON, EndfieldIndustryKeys.PROTOCOL_CORE_CONTROLLER)
 
-    @JvmField
-    val LARGE_BUD_SPRAY: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.LARGE_BUD_SPRAY)
-        .set(DataComponentTypes.ITEM_MODEL, Material.POTION.key)
-        .build()
+    // endregion
 
-    @JvmField
-    val HIGH_CRYSTAL_BOTTLE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CRYSTAL_BOTTLE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.GLASS_BOTTLE.key)
-        .build()
+    // region 植物与作物
 
     @JvmField
-    val STEEL_BOTTLE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.STEEL_BOTTLE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.IRON_INGOT.key)
-        .build()
+    val BUCKWHEAT: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BUCKWHEAT, Material.POPPY)
 
     @JvmField
-    val FINE_GROUND_BUCKWHEAT_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.FINE_GROUND_BUCKWHEAT_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SUGAR.key)
-        .build()
+    val GRAY_WHEAT: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.GRAY_WHEAT, Material.WHEAT)
 
     @JvmField
-    val FINE_GROUND_CITRUS_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.FINE_GROUND_CITRUS_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.ORANGE_DYE.key)
-        .build()
+    val KETONE_BUSH: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.KETONE_BUSH, Material.DEAD_BUSH)
 
     @JvmField
-    val STEEL_BLOCK: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.STEEL_BLOCK)
-        .set(DataComponentTypes.ITEM_MODEL, Material.IRON_BLOCK.key)
-        .build()
+    val CITRUS: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.CITRUS, Material.ORANGE_DYE)
 
     @JvmField
-    val HIGH_CRYSTAL_FIBER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CRYSTAL_FIBER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.STRING.key)
-        .build()
+    val JIN_GRASS: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.JIN_GRASS, Material.SHORT_GRASS)
 
     @JvmField
-    val DENSE_CRYSTAL: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.DENSE_CRYSTAL)
-        .set(DataComponentTypes.ITEM_MODEL, Material.DIAMOND.key)
-        .build()
+    val BUD_NEEDLE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BUD_NEEDLE, Material.SWEET_BERRIES)
 
     @JvmField
-    val BUCKWHEAT: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BUCKWHEAT)
-        .set(DataComponentTypes.ITEM_MODEL, Material.POPPY.key)
-        .build()
+    val GOLD_STONE_RICE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.GOLD_STONE_RICE, Material.WHEAT)
 
     @JvmField
-    val BUCKWHEAT_SEED: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BUCKWHEAT_SEED)
-        .set(DataComponentTypes.ITEM_MODEL, Material.WHEAT_SEEDS.key)
-        .build()
+    val JADE_LEAF_GINSENG: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.JADE_LEAF_GINSENG, Material.CARROT)
 
     @JvmField
-    val SEED_EXTRACTOR: ItemStack = ItemStackBuilder
-        .rebar(Material.FURNACE, EndfieldIndustryKeys.SEED_EXTRACTOR)
-        .build()
+    val SAND_LEAF: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.SAND_LEAF, Material.DEAD_BUSH)
 
     @JvmField
-    val PLANTER: ItemStack = ItemStackBuilder
-        .rebar(Material.SMOKER, EndfieldIndustryKeys.PLANTER)
-        .build()
+    val FIRE_BUCKWHEAT: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.FIRE_BUCKWHEAT, Material.RED_TULIP)
 
     @JvmField
-    val RELAY_BASE: ItemStack = ItemStackBuilder
-        .rebar(Material.FURNACE, EndfieldIndustryKeys.RELAY_BASE)
-        .build()
+    val DARK_SILVER_CITRUS: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.DARK_SILVER_CITRUS, Material.ORANGE_DYE)
 
     @JvmField
-    val RELAY_DIFFUSER: ItemStack = ItemStackBuilder
-        .rebar(Material.FURNACE, EndfieldIndustryKeys.RELAY_DIFFUSER)
-        .build()
+    val LOG: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.LOG, Material.OAK_LOG)
 
     @JvmField
-    val POWER_STATION_BASE: ItemStack = ItemStackBuilder
-        .rebar(Material.FURNACE, EndfieldIndustryKeys.POWER_STATION_BASE)
-        .build()
+    val FLUFFY_JIN_GRASS: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.FLUFFY_JIN_GRASS, Material.SHORT_GRASS)
 
     @JvmField
-    val POWER_STATION_EMITTER: ItemStack = ItemStackBuilder
-        .rebar(Material.FURNACE, EndfieldIndustryKeys.POWER_STATION_EMITTER)
-        .build()
+    val THORN_BUD_NEEDLE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.THORN_BUD_NEEDLE, Material.SWEET_BERRIES)
 
-    @JvmField
-    val PROTOCOL_CORE_CONTROLLER: ItemStack = ItemStackBuilder
-        .rebar(Material.BEACON, EndfieldIndustryKeys.PROTOCOL_CORE_CONTROLLER)
-        .build()
+    // endregion
 
-    @JvmField
-    val LIGHT_DIM_STONE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.LIGHT_DIM_STONE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.ECHO_SHARD.key)
-        .build()
+    // region 种子
 
     @JvmField
-    val CARTILAGE_FRAGMENT: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.CARTILAGE_FRAGMENT)
-        .set(DataComponentTypes.ITEM_MODEL, Material.BONE_MEAL.key)
-        .build()
+    val BUCKWHEAT_SEED: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BUCKWHEAT_SEED, Material.WHEAT_SEEDS)
 
     @JvmField
-    val CARBON_BLOCK: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.CARBON_BLOCK)
-        .set(DataComponentTypes.ITEM_MODEL, Material.COAL.key)
-        .build()
+    val GRAY_WHEAT_SEED: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.GRAY_WHEAT_SEED, Material.WHEAT_SEEDS)
 
     @JvmField
-    val AMETHYST_FIBER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_FIBER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.AMETHYST_SHARD.key)
-        .build()
+    val KETONE_TREE_SEED: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.KETONE_TREE_SEED, Material.OAK_SAPLING)
 
     @JvmField
-    val BLUE_IRON_BLOCK: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BLUE_IRON_BLOCK)
-        .set(DataComponentTypes.ITEM_MODEL, Material.LAPIS_BLOCK.key)
-        .build()
+    val CITRUS_SEED: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.CITRUS_SEED, Material.ORANGE_DYE)
 
     @JvmField
-    val CARBON_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.CARBON_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.GUNPOWDER.key)
-        .build()
+    val JIN_GRASS_SEED: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.JIN_GRASS_SEED, Material.WHEAT_SEEDS)
 
     @JvmField
-    val INDUSTRIAL_EXPLOSIVE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.INDUSTRIAL_EXPLOSIVE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.TNT_MINECART.key)
-        .build()
+    val BUD_NEEDLE_SEED: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BUD_NEEDLE_SEED, Material.WHEAT_SEEDS)
 
     @JvmField
-    val GRAY_WHEAT_SEED: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.GRAY_WHEAT_SEED)
-        .set(DataComponentTypes.ITEM_MODEL, Material.WHEAT_SEEDS.key)
-        .build()
+    val GOLD_STONE_RICE_SEED: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.GOLD_STONE_RICE_SEED, Material.WHEAT_SEEDS)
 
     @JvmField
-    val GRAY_WHEAT: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.GRAY_WHEAT)
-        .set(DataComponentTypes.ITEM_MODEL, Material.WHEAT.key)
-        .build()
+    val JADE_LEAF_GINSENG_SEED: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.JADE_LEAF_GINSENG_SEED, Material.WHEAT_SEEDS)
 
     @JvmField
-    val KETONE_TREE_SEED: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.KETONE_TREE_SEED)
-        .set(DataComponentTypes.ITEM_MODEL, Material.OAK_SAPLING.key)
-        .build()
+    val SAND_LEAF_SEED: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.SAND_LEAF_SEED, Material.WHEAT_SEEDS)
 
-    @JvmField
-    val CITRUS_SEED: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.CITRUS_SEED)
-        .set(DataComponentTypes.ITEM_MODEL, Material.ORANGE_DYE.key)
-        .build()
+    // endregion
 
-    @JvmField
-    val BLUE_IRON_ORE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BLUE_IRON_ORE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.LAPIS_ORE.key)
-        .build()
+    // region 菌类与特殊植物
 
     @JvmField
-    val GLOW_SHELL_BUG: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.GLOW_SHELL_BUG)
-        .set(DataComponentTypes.ITEM_MODEL, Material.GLOW_INK_SAC.key)
-        .build()
+    val LIGHT_RED_PILLAR_FUNGUS: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.LIGHT_RED_PILLAR_FUNGUS, Material.RED_MUSHROOM)
 
     @JvmField
-    val AMETHYST_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.AMETHYST_SHARD.key)
-        .build()
+    val MID_RED_PILLAR_FUNGUS: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.MID_RED_PILLAR_FUNGUS, Material.RED_MUSHROOM)
 
     @JvmField
-    val GRASS_SEED_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.GRASS_SEED_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SHORT_GRASS.key)
-        .build()
+    val HEAVY_RED_PILLAR_FUNGUS: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.HEAVY_RED_PILLAR_FUNGUS, Material.RED_MUSHROOM)
 
     @JvmField
-    val VALLEY_DISPATCH_TICKET: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.VALLEY_DISPATCH_TICKET)
-        .set(DataComponentTypes.ITEM_MODEL, Material.PAPER.key)
-        .build()
+    val BLOOD_FUNGUS: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BLOOD_FUNGUS, Material.NETHER_WART)
 
     @JvmField
-    val CRYSTAL_SHELL: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.CRYSTAL_SHELL)
-        .set(DataComponentTypes.ITEM_MODEL, Material.QUARTZ.key)
-        .build()
+    val STAR_GATE_FUNGUS: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.STAR_GATE_FUNGUS, Material.BROWN_MUSHROOM)
 
     @JvmField
-    val BEAST_MEAT: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BEAST_MEAT)
-        .set(DataComponentTypes.ITEM_MODEL, Material.BEEF.key)
-        .build()
+    val CRYSTALIZED_TOOTHED_LEAF: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.CRYSTALIZED_TOOTHED_LEAF, Material.DIAMOND)
 
     @JvmField
-    val HIGH_ENERGY_FRAGRANT_STONE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_ENERGY_FRAGRANT_STONE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.GLOWSTONE_DUST.key)
-        .build()
+    val PURE_CRYSTAL_TOOTHED_LEAF: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.PURE_CRYSTAL_TOOTHED_LEAF, Material.DIAMOND)
 
     @JvmField
-    val HARD_FRAGRANT_STONE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.HARD_FRAGRANT_STONE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.STONE.key)
-        .build()
+    val ULTIMATE_CRYSTAL_TOOTHED_LEAF: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.ULTIMATE_CRYSTAL_TOOTHED_LEAF, Material.DIAMOND)
 
-    @JvmField
-    val CRYSTAL_SHELL_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.CRYSTAL_SHELL_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.QUARTZ.key)
-        .build()
+    // endregion
 
-    @JvmField
-    val LIGHT_RED_PILLAR_FUNGUS: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.LIGHT_RED_PILLAR_FUNGUS)
-        .set(DataComponentTypes.ITEM_MODEL, Material.RED_MUSHROOM.key)
-        .build()
+    // region 材料（块）
 
     @JvmField
-    val CRYSTALIZED_TOOTHED_LEAF: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.CRYSTALIZED_TOOTHED_LEAF)
-        .set(DataComponentTypes.ITEM_MODEL, Material.DIAMOND.key)
-        .build()
+    val STABLE_CARBON_BLOCK: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.STABLE_CARBON_BLOCK, Material.COAL_BLOCK)
 
     @JvmField
-    val FIRE_BUCKWHEAT: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.FIRE_BUCKWHEAT)
-        .set(DataComponentTypes.ITEM_MODEL, Material.RED_TULIP.key)
-        .build()
+    val CARBON_BLOCK: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.CARBON_BLOCK, Material.COAL)
 
     @JvmField
-    val DARK_SILVER_CITRUS: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.DARK_SILVER_CITRUS)
-        .set(DataComponentTypes.ITEM_MODEL, Material.ORANGE_DYE.key)
-        .build()
+    val STEEL_BLOCK: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.STEEL_BLOCK, Material.IRON_BLOCK)
 
     @JvmField
-    val LOG: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.LOG)
-        .set(DataComponentTypes.ITEM_MODEL, Material.OAK_LOG.key)
-        .build()
+    val BLUE_IRON_BLOCK: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BLUE_IRON_BLOCK, Material.LAPIS_BLOCK)
 
     @JvmField
-    val KETONE_BUSH: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.KETONE_BUSH)
-        .set(DataComponentTypes.ITEM_MODEL, Material.DEAD_BUSH.key)
-        .build()
+    val DENSE_CRYSTAL: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.DENSE_CRYSTAL, Material.DIAMOND)
 
-    @JvmField
-    val ORIGINIUM_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.ORIGINIUM_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.GLOWSTONE_DUST.key)
-        .build()
+    // endregion
 
-    @JvmField
-    val AMETHYST_ORE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_ORE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.AMETHYST_CLUSTER.key)
-        .build()
+    // region 材料（粉末）
 
     @JvmField
-    val BLUE_IRON_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BLUE_IRON_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.LAPIS_LAZULI.key)
-        .build()
+    val SAND_LEAF_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.SAND_LEAF_POWDER, Material.SAND)
 
     @JvmField
-    val KETONE_BUSH_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.KETONE_BUSH_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SAND.key)
-        .build()
+    val DENSE_ORIGINIUM_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.DENSE_ORIGINIUM_POWDER, Material.GLOWSTONE_DUST)
 
     @JvmField
-    val AMETHYST_BOTTLE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_BOTTLE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.GLASS_BOTTLE.key)
-        .build()
+    val DENSE_CRYSTAL_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.DENSE_CRYSTAL_POWDER, Material.DIAMOND)
 
     @JvmField
-    val BLUE_IRON_BOTTLE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BLUE_IRON_BOTTLE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.GLASS_BOTTLE.key)
-        .build()
+    val HIGH_CRYSTAL_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CRYSTAL_POWDER, Material.AMETHYST_SHARD)
 
     @JvmField
-    val IRON_PART: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.IRON_PART)
-        .set(DataComponentTypes.ITEM_MODEL, Material.IRON_NUGGET.key)
-        .build()
+    val DENSE_BLUE_IRON_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.DENSE_BLUE_IRON_POWDER, Material.LAPIS_LAZULI)
 
     @JvmField
-    val AMETHYST_EQUIPMENT_PART: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_EQUIPMENT_PART)
-        .set(DataComponentTypes.ITEM_MODEL, Material.AMETHYST_SHARD.key)
-        .build()
+    val DENSE_CARBON_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.DENSE_CARBON_POWDER, Material.GUNPOWDER)
 
     @JvmField
-    val BLUE_IRON_EQUIPMENT_PART: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BLUE_IRON_EQUIPMENT_PART)
-        .set(DataComponentTypes.ITEM_MODEL, Material.LAPIS_LAZULI.key)
-        .build()
+    val ORIGINIUM_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.ORIGINIUM_POWDER, Material.GLOWSTONE_DUST)
 
     @JvmField
-    val LOW_CAP_VALLEY_BATTERY: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.LOW_CAP_VALLEY_BATTERY)
-        .set(DataComponentTypes.ITEM_MODEL, Material.REDSTONE.key)
-        .build()
+    val BLUE_IRON_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BLUE_IRON_POWDER, Material.LAPIS_LAZULI)
 
     @JvmField
-    val AMETHYST_PART: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_PART)
-        .set(DataComponentTypes.ITEM_MODEL, Material.AMETHYST_SHARD.key)
-        .build()
+    val AMETHYST_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_POWDER, Material.AMETHYST_SHARD)
 
     @JvmField
-    val MID_CAP_VALLEY_BATTERY: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.MID_CAP_VALLEY_BATTERY)
-        .set(DataComponentTypes.ITEM_MODEL, Material.REDSTONE.key)
-        .build()
+    val CARBON_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.CARBON_POWDER, Material.GUNPOWDER)
 
     @JvmField
-    val BUCKWHEAT_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BUCKWHEAT_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SUGAR.key)
-        .build()
+    val KETONE_BUSH_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.KETONE_BUSH_POWDER, Material.SAND)
 
     @JvmField
-    val CITRUS_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.CITRUS_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.ORANGE_DYE.key)
-        .build()
+    val BUCKWHEAT_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BUCKWHEAT_POWDER, Material.SUGAR)
 
     @JvmField
-    val MID_DIM_STONE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.MID_DIM_STONE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.ECHO_SHARD.key)
-        .build()
+    val CITRUS_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.CITRUS_POWDER, Material.ORANGE_DYE)
 
     @JvmField
-    val BUCKWHEAT_MEDICINE_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BUCKWHEAT_MEDICINE_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SUGAR.key)
-        .build()
+    val JIN_GRASS_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.JIN_GRASS_POWDER, Material.SHORT_GRASS)
 
     @JvmField
-    val CITRUS_DRAFT: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.CITRUS_DRAFT)
-        .set(DataComponentTypes.ITEM_MODEL, Material.POTION.key)
-        .build()
+    val BUD_NEEDLE_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BUD_NEEDLE_POWDER, Material.SWEET_BERRIES)
 
     @JvmField
-    val BUCKWHEAT_CAPSULE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BUCKWHEAT_CAPSULE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SUNFLOWER.key)
-        .build()
+    val FLUFFY_JIN_GRASS_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.FLUFFY_JIN_GRASS_POWDER, Material.SHORT_GRASS)
 
     @JvmField
-    val QUALITY_BUCKWHEAT_CAPSULE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.QUALITY_BUCKWHEAT_CAPSULE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SUNFLOWER.key)
-        .build()
+    val THORN_BUD_NEEDLE_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.THORN_BUD_NEEDLE_POWDER, Material.SWEET_BERRIES)
 
     @JvmField
-    val CITRUS_CAN: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.CITRUS_CAN)
-        .set(DataComponentTypes.ITEM_MODEL, Material.ORANGE_DYE.key)
-        .build()
+    val GRASS_SEED_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.GRASS_SEED_POWDER, Material.SHORT_GRASS)
 
     @JvmField
-    val QUALITY_CITRUS_CAN: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.QUALITY_CITRUS_CAN)
-        .set(DataComponentTypes.ITEM_MODEL, Material.ORANGE_DYE.key)
-        .build()
+    val FINE_GROUND_BUCKWHEAT_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.FINE_GROUND_BUCKWHEAT_POWDER, Material.SUGAR)
 
     @JvmField
-    val SMALL_BUCKWHEAT_RESTORATION_AGENT: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.SMALL_BUCKWHEAT_RESTORATION_AGENT)
-        .set(DataComponentTypes.ITEM_MODEL, Material.POTION.key)
-        .build()
+    val FINE_GROUND_CITRUS_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.FINE_GROUND_CITRUS_POWDER, Material.ORANGE_DYE)
 
     @JvmField
-    val SMALL_CITRUS_DRAFT: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.SMALL_CITRUS_DRAFT)
-        .set(DataComponentTypes.ITEM_MODEL, Material.POTION.key)
-        .build()
+    val CRYSTAL_SHELL_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.CRYSTAL_SHELL_POWDER, Material.QUARTZ)
 
-    @JvmField
-    val SELECT_BUCKWHEAT_CAPSULE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.SELECT_BUCKWHEAT_CAPSULE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SUNFLOWER.key)
-        .build()
+    // endregion
 
-    @JvmField
-    val SELECT_CITRUS_CAN: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.SELECT_CITRUS_CAN)
-        .set(DataComponentTypes.ITEM_MODEL, Material.ORANGE_DYE.key)
-        .build()
+    // region 材料（矿石与天然物）
 
     @JvmField
-    val HEAVY_RED_PILLAR_FUNGUS: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.HEAVY_RED_PILLAR_FUNGUS)
-        .set(DataComponentTypes.ITEM_MODEL, Material.RED_MUSHROOM.key)
-        .build()
+    val BLUE_IRON_ORE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BLUE_IRON_ORE, Material.LAPIS_ORE)
 
     @JvmField
-    val PURE_CRYSTAL_TOOTHED_LEAF: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.PURE_CRYSTAL_TOOTHED_LEAF)
-        .set(DataComponentTypes.ITEM_MODEL, Material.DIAMOND.key)
-        .build()
+    val AMETHYST_ORE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_ORE, Material.AMETHYST_CLUSTER)
 
     @JvmField
-    val SELECT_CITRUS_DRAFT: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.SELECT_CITRUS_DRAFT)
-        .set(DataComponentTypes.ITEM_MODEL, Material.POTION.key)
-        .build()
+    val ORIGINIUM_ORE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.ORIGINIUM_ORE, Material.GLOWSTONE)
 
     @JvmField
-    val SELECT_BUCKWHEAT_RESTORATION_AGENT: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.SELECT_BUCKWHEAT_RESTORATION_AGENT)
-        .set(DataComponentTypes.ITEM_MODEL, Material.POTION.key)
-        .build()
+    val LIGHT_DIM_STONE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.LIGHT_DIM_STONE, Material.ECHO_SHARD)
 
     @JvmField
-    val JIN_GRASS_SEED: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.JIN_GRASS_SEED)
-        .set(DataComponentTypes.ITEM_MODEL, Material.WHEAT_SEEDS.key)
-        .build()
+    val MID_DIM_STONE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.MID_DIM_STONE, Material.ECHO_SHARD)
 
     @JvmField
-    val LARGE_BUCKWHEAT_RESTORATION_AGENT: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.LARGE_BUCKWHEAT_RESTORATION_AGENT)
-        .set(DataComponentTypes.ITEM_MODEL, Material.POTION.key)
-        .build()
+    val HARD_FRAGRANT_STONE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.HARD_FRAGRANT_STONE, Material.STONE)
 
     @JvmField
-    val BUD_NEEDLE_SEED: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BUD_NEEDLE_SEED)
-        .set(DataComponentTypes.ITEM_MODEL, Material.WHEAT_SEEDS.key)
-        .build()
+    val HIGH_ENERGY_FRAGRANT_STONE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_ENERGY_FRAGRANT_STONE, Material.GLOWSTONE_DUST)
 
     @JvmField
-    val FLUFFY_JIN_GRASS: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.FLUFFY_JIN_GRASS)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SHORT_GRASS.key)
-        .build()
+    val XI_RANG: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.XI_RANG, Material.DIRT)
 
     @JvmField
-    val THORN_BUD_NEEDLE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.THORN_BUD_NEEDLE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SWEET_BERRIES.key)
-        .build()
+    val EMBEDDED_CRYSTAL_JADE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.EMBEDDED_CRYSTAL_JADE, Material.EMERALD)
 
     @JvmField
-    val GOLD_STONE_RICE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.GOLD_STONE_RICE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.WHEAT.key)
-        .build()
+    val CRYSTAL_SHELL: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.CRYSTAL_SHELL, Material.QUARTZ)
 
     @JvmField
-    val GOLD_STONE_RICE_SEED: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.GOLD_STONE_RICE_SEED)
-        .set(DataComponentTypes.ITEM_MODEL, Material.WHEAT_SEEDS.key)
-        .build()
+    val CARTILAGE_FRAGMENT: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.CARTILAGE_FRAGMENT, Material.BONE_MEAL)
 
     @JvmField
-    val BUD_NEEDLE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BUD_NEEDLE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SWEET_BERRIES.key)
-        .build()
+    val GLOW_SHELL_BUG: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.GLOW_SHELL_BUG, Material.GLOW_INK_SAC)
 
     @JvmField
-    val JADE_LEAF_GINSENG: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.JADE_LEAF_GINSENG)
-        .set(DataComponentTypes.ITEM_MODEL, Material.CARROT.key)
-        .build()
+    val BEAST_MEAT: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BEAST_MEAT, Material.BEEF)
 
     @JvmField
-    val JADE_LEAF_GINSENG_SEED: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.JADE_LEAF_GINSENG_SEED)
-        .set(DataComponentTypes.ITEM_MODEL, Material.WHEAT_SEEDS.key)
-        .build()
+    val INDUSTRIAL_EXPLOSIVE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.INDUSTRIAL_EXPLOSIVE, Material.TNT_MINECART)
 
-    @JvmField
-    val JIN_GRASS_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.JIN_GRASS_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SHORT_GRASS.key)
-        .build()
+    // endregion
 
-    @JvmField
-    val BUD_NEEDLE_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BUD_NEEDLE_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SWEET_BERRIES.key)
-        .build()
+    // region 零件
 
     @JvmField
-    val FLUFFY_JIN_GRASS_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.FLUFFY_JIN_GRASS_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SHORT_GRASS.key)
-        .build()
+    val HIGH_CRYSTAL_PART: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CRYSTAL_PART, Material.QUARTZ)
 
     @JvmField
-    val THORN_BUD_NEEDLE_POWDER: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.THORN_BUD_NEEDLE_POWDER)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SWEET_BERRIES.key)
-        .build()
+    val STEEL_PART: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.STEEL_PART, Material.IRON_NUGGET)
 
     @JvmField
-    val MID_RED_PILLAR_FUNGUS: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.MID_RED_PILLAR_FUNGUS)
-        .set(DataComponentTypes.ITEM_MODEL, Material.RED_MUSHROOM.key)
-        .build()
+    val IRON_PART: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.IRON_PART, Material.IRON_NUGGET)
 
     @JvmField
-    val BLOOD_FUNGUS: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.BLOOD_FUNGUS)
-        .set(DataComponentTypes.ITEM_MODEL, Material.NETHER_WART.key)
-        .build()
+    val AMETHYST_PART: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_PART, Material.AMETHYST_SHARD)
 
     @JvmField
-    val ULTIMATE_CRYSTAL_TOOTHED_LEAF: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.ULTIMATE_CRYSTAL_TOOTHED_LEAF)
-        .set(DataComponentTypes.ITEM_MODEL, Material.DIAMOND.key)
-        .build()
+    val HIGH_CRYSTAL_FIBER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CRYSTAL_FIBER, Material.STRING)
 
     @JvmField
-    val LOW_CAP_WULING_BATTERY: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.LOW_CAP_WULING_BATTERY)
-        .set(DataComponentTypes.ITEM_MODEL, Material.REDSTONE.key)
-        .build()
+    val AMETHYST_FIBER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_FIBER, Material.AMETHYST_SHARD)
 
     @JvmField
-    val XI_RANG: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.XI_RANG)
-        .set(DataComponentTypes.ITEM_MODEL, Material.DIRT.key)
-        .build()
+    val HIGH_CRYSTAL_BOTTLE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CRYSTAL_BOTTLE, Material.GLASS_BOTTLE)
 
     @JvmField
-    val SAND_LEAF: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.SAND_LEAF)
-        .set(DataComponentTypes.ITEM_MODEL, Material.DEAD_BUSH.key)
-        .build()
+    val STEEL_BOTTLE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.STEEL_BOTTLE, Material.IRON_INGOT)
 
     @JvmField
-    val JIN_GRASS: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.JIN_GRASS)
-        .set(DataComponentTypes.ITEM_MODEL, Material.SHORT_GRASS.key)
-        .build()
+    val AMETHYST_BOTTLE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_BOTTLE, Material.GLASS_BOTTLE)
 
     @JvmField
-    val CITRUS: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.CITRUS)
-        .set(DataComponentTypes.ITEM_MODEL, Material.ORANGE_DYE.key)
-        .build()
+    val BLUE_IRON_BOTTLE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BLUE_IRON_BOTTLE, Material.GLASS_BOTTLE)
 
     @JvmField
-    val ORIGINIUM_ORE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.ORIGINIUM_ORE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.GLOWSTONE.key)
-        .build()
+    val AMETHYST_EQUIPMENT_PART: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.AMETHYST_EQUIPMENT_PART, Material.AMETHYST_SHARD)
 
     @JvmField
-    val HIGH_CRYSTAL_EQUIPMENT_PART: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CRYSTAL_EQUIPMENT_PART)
-        .set(DataComponentTypes.ITEM_MODEL, Material.AMETHYST_SHARD.key)
-        .build()
+    val BLUE_IRON_EQUIPMENT_PART: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BLUE_IRON_EQUIPMENT_PART, Material.LAPIS_LAZULI)
 
     @JvmField
-    val XI_RANG_EQUIPMENT_PART: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.XI_RANG_EQUIPMENT_PART)
-        .set(DataComponentTypes.ITEM_MODEL, Material.DIRT.key)
-        .build()
+    val HIGH_CRYSTAL_EQUIPMENT_PART: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CRYSTAL_EQUIPMENT_PART, Material.AMETHYST_SHARD)
 
     @JvmField
-    val SAND_LEAF_SEED: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.SAND_LEAF_SEED)
-        .set(DataComponentTypes.ITEM_MODEL, Material.WHEAT_SEEDS.key)
-        .build()
+    val XI_RANG_EQUIPMENT_PART: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.XI_RANG_EQUIPMENT_PART, Material.DIRT)
 
-    @JvmField
-    val STAR_GATE_FUNGUS: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.STAR_GATE_FUNGUS)
-        .set(DataComponentTypes.ITEM_MODEL, Material.BROWN_MUSHROOM.key)
-        .build()
+    // endregion
 
-    @JvmField
-    val EMBEDDED_CRYSTAL_JADE: ItemStack = ItemStackBuilder
-        .rebar(Material.CLAY_BALL, EndfieldIndustryKeys.EMBEDDED_CRYSTAL_JADE)
-        .set(DataComponentTypes.ITEM_MODEL, Material.EMERALD.key)
-        .build()
+    // region 药品
 
     @JvmField
-    val GOLD_TICKET: ItemStack = ItemStackBuilder
-        .rebar(Material.PAPER, EndfieldIndustryKeys.GOLD_TICKET)
-        .set(DataComponentTypes.ITEM_MODEL, Material.GOLD_INGOT.key)
-        .build()
-
-    init {
-        RebarItem.register(RebarItem::class.java, HIGH_CRYSTAL_PART)
-        EndfieldIndustryPages.COMPONENTS.addItem(HIGH_CRYSTAL_PART)
-
-        RebarItem.register(RebarItem::class.java, STEEL_PART)
-        EndfieldIndustryPages.COMPONENTS.addItem(STEEL_PART)
-
-        RebarItem.register(RebarItem::class.java, STABLE_CARBON_BLOCK)
-        EndfieldIndustryPages.MATERIALS.addItem(STABLE_CARBON_BLOCK)
-
-        RebarItem.register(RebarItem::class.java, SAND_LEAF_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(SAND_LEAF_POWDER)
-
-        RebarItem.register(RebarItem::class.java, DENSE_ORIGINIUM_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(DENSE_ORIGINIUM_POWDER)
-
-        RebarItem.register(RebarItem::class.java, DENSE_CRYSTAL_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(DENSE_CRYSTAL_POWDER)
-
-        RebarItem.register(RebarItem::class.java, HIGH_CRYSTAL_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(HIGH_CRYSTAL_POWDER)
-
-        RebarItem.register(RebarItem::class.java, DENSE_BLUE_IRON_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(DENSE_BLUE_IRON_POWDER)
-
-        RebarItem.register(RebarItem::class.java, DENSE_CARBON_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(DENSE_CARBON_POWDER)
-
-        RebarItem.register(RebarItem::class.java, HIGH_CAP_VALLEY_BATTERY)
-        EndfieldIndustryPages.PRODUCTS.addItem(HIGH_CAP_VALLEY_BATTERY)
-
-        RebarItem.register(RebarItem::class.java, LARGE_BUD_SPRAY)
-        EndfieldIndustryPages.MEDICINES.addItem(LARGE_BUD_SPRAY)
-
-        RebarItem.register(RebarItem::class.java, HIGH_CRYSTAL_BOTTLE)
-        EndfieldIndustryPages.COMPONENTS.addItem(HIGH_CRYSTAL_BOTTLE)
-
-        RebarItem.register(RebarItem::class.java, STEEL_BOTTLE)
-        EndfieldIndustryPages.COMPONENTS.addItem(STEEL_BOTTLE)
-
-        RebarItem.register(RebarItem::class.java, FINE_GROUND_BUCKWHEAT_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(FINE_GROUND_BUCKWHEAT_POWDER)
-
-        RebarItem.register(RebarItem::class.java, FINE_GROUND_CITRUS_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(FINE_GROUND_CITRUS_POWDER)
-
-        RebarItem.register(RebarItem::class.java, STEEL_BLOCK)
-        EndfieldIndustryPages.MATERIALS.addItem(STEEL_BLOCK)
-
-        RebarItem.register(RebarItem::class.java, HIGH_CRYSTAL_FIBER)
-        EndfieldIndustryPages.COMPONENTS.addItem(HIGH_CRYSTAL_FIBER)
-
-        RebarItem.register(RebarItem::class.java, DENSE_CRYSTAL)
-        EndfieldIndustryPages.MATERIALS.addItem(DENSE_CRYSTAL)
-
-        RebarItem.register(RebarItem::class.java, BUCKWHEAT)
-        EndfieldIndustryPages.PLANTS.addItem(BUCKWHEAT)
-
-        RebarItem.register(RebarItem::class.java, BUCKWHEAT_SEED)
-        EndfieldIndustryPages.PLANTS.addItem(BUCKWHEAT_SEED)
-
-        RebarItem.register(RebarItem::class.java, SEED_EXTRACTOR, EndfieldIndustryKeys.SEED_EXTRACTOR)
-        EndfieldIndustryPages.MACHINES.addItem(SEED_EXTRACTOR)
-
-        RebarItem.register(RebarItem::class.java, PLANTER, EndfieldIndustryKeys.PLANTER)
-        EndfieldIndustryPages.MACHINES.addItem(PLANTER)
-
-        RebarItem.register(RebarItem::class.java, RELAY_BASE, EndfieldIndustryKeys.RELAY_BASE)
-        EndfieldIndustryPages.MACHINES.addItem(RELAY_BASE)
-
-        RebarItem.register(RebarItem::class.java, RELAY_DIFFUSER, EndfieldIndustryKeys.RELAY_DIFFUSER)
-        EndfieldIndustryPages.MACHINES.addItem(RELAY_DIFFUSER)
-
-        RebarItem.register(RebarItem::class.java, POWER_STATION_BASE, EndfieldIndustryKeys.POWER_STATION_BASE)
-        EndfieldIndustryPages.MACHINES.addItem(POWER_STATION_BASE)
-
-        RebarItem.register(RebarItem::class.java, POWER_STATION_EMITTER, EndfieldIndustryKeys.POWER_STATION_EMITTER)
-        EndfieldIndustryPages.MACHINES.addItem(POWER_STATION_EMITTER)
-
-        RebarItem.register(RebarItem::class.java, PROTOCOL_CORE_CONTROLLER, EndfieldIndustryKeys.PROTOCOL_CORE_CONTROLLER)
-        EndfieldIndustryPages.MACHINES.addItem(PROTOCOL_CORE_CONTROLLER)
-
-        RebarItem.register(RebarItem::class.java, LIGHT_DIM_STONE)
-        EndfieldIndustryPages.MATERIALS.addItem(LIGHT_DIM_STONE)
-
-        RebarItem.register(RebarItem::class.java, CARTILAGE_FRAGMENT)
-        EndfieldIndustryPages.MATERIALS.addItem(CARTILAGE_FRAGMENT)
-
-        RebarItem.register(RebarItem::class.java, CARBON_BLOCK)
-        EndfieldIndustryPages.MATERIALS.addItem(CARBON_BLOCK)
-
-        RebarItem.register(RebarItem::class.java, AMETHYST_FIBER)
-        EndfieldIndustryPages.MATERIALS.addItem(AMETHYST_FIBER)
-
-        RebarItem.register(RebarItem::class.java, BLUE_IRON_BLOCK)
-        EndfieldIndustryPages.MATERIALS.addItem(BLUE_IRON_BLOCK)
-
-        RebarItem.register(RebarItem::class.java, CARBON_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(CARBON_POWDER)
-
-        RebarItem.register(RebarItem::class.java, INDUSTRIAL_EXPLOSIVE)
-        EndfieldIndustryPages.PRODUCTS.addItem(INDUSTRIAL_EXPLOSIVE)
-
-        RebarItem.register(RebarItem::class.java, GRAY_WHEAT_SEED)
-        EndfieldIndustryPages.PLANTS.addItem(GRAY_WHEAT_SEED)
-
-        RebarItem.register(RebarItem::class.java, GRAY_WHEAT)
-        EndfieldIndustryPages.PLANTS.addItem(GRAY_WHEAT)
-
-        RebarItem.register(RebarItem::class.java, KETONE_TREE_SEED)
-        EndfieldIndustryPages.PLANTS.addItem(KETONE_TREE_SEED)
-
-        RebarItem.register(RebarItem::class.java, CITRUS_SEED)
-        EndfieldIndustryPages.PLANTS.addItem(CITRUS_SEED)
-
-        RebarItem.register(RebarItem::class.java, BLUE_IRON_ORE)
-        EndfieldIndustryPages.MATERIALS.addItem(BLUE_IRON_ORE)
-
-        RebarItem.register(RebarItem::class.java, GLOW_SHELL_BUG)
-        EndfieldIndustryPages.MATERIALS.addItem(GLOW_SHELL_BUG)
-
-        RebarItem.register(RebarItem::class.java, AMETHYST_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(AMETHYST_POWDER)
-
-        RebarItem.register(RebarItem::class.java, GRASS_SEED_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(GRASS_SEED_POWDER)
-
-        RebarItem.register(RebarItem::class.java, VALLEY_DISPATCH_TICKET)
-        EndfieldIndustryPages.PRODUCTS.addItem(VALLEY_DISPATCH_TICKET)
-
-        RebarItem.register(RebarItem::class.java, CRYSTAL_SHELL)
-        EndfieldIndustryPages.MATERIALS.addItem(CRYSTAL_SHELL)
-
-        RebarItem.register(RebarItem::class.java, BEAST_MEAT)
-        EndfieldIndustryPages.MATERIALS.addItem(BEAST_MEAT)
+    val LARGE_BUD_SPRAY: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.LARGE_BUD_SPRAY, Material.POTION)
 
-        RebarItem.register(RebarItem::class.java, HIGH_ENERGY_FRAGRANT_STONE)
-        EndfieldIndustryPages.MATERIALS.addItem(HIGH_ENERGY_FRAGRANT_STONE)
-
-        RebarItem.register(RebarItem::class.java, HARD_FRAGRANT_STONE)
-        EndfieldIndustryPages.MATERIALS.addItem(HARD_FRAGRANT_STONE)
-
-        RebarItem.register(RebarItem::class.java, CRYSTAL_SHELL_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(CRYSTAL_SHELL_POWDER)
-
-        RebarItem.register(RebarItem::class.java, LIGHT_RED_PILLAR_FUNGUS)
-        EndfieldIndustryPages.MATERIALS.addItem(LIGHT_RED_PILLAR_FUNGUS)
-
-        RebarItem.register(RebarItem::class.java, CRYSTALIZED_TOOTHED_LEAF)
-        EndfieldIndustryPages.MATERIALS.addItem(CRYSTALIZED_TOOTHED_LEAF)
-
-        RebarItem.register(RebarItem::class.java, FIRE_BUCKWHEAT)
-        EndfieldIndustryPages.PLANTS.addItem(FIRE_BUCKWHEAT)
-
-        RebarItem.register(RebarItem::class.java, DARK_SILVER_CITRUS)
-        EndfieldIndustryPages.PLANTS.addItem(DARK_SILVER_CITRUS)
-
-        RebarItem.register(RebarItem::class.java, LOG)
-        EndfieldIndustryPages.MATERIALS.addItem(LOG)
-
-        RebarItem.register(RebarItem::class.java, KETONE_BUSH)
-        EndfieldIndustryPages.PLANTS.addItem(KETONE_BUSH)
-
-        RebarItem.register(RebarItem::class.java, ORIGINIUM_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(ORIGINIUM_POWDER)
-
-        RebarItem.register(RebarItem::class.java, AMETHYST_ORE)
-        EndfieldIndustryPages.MATERIALS.addItem(AMETHYST_ORE)
-
-        RebarItem.register(RebarItem::class.java, BLUE_IRON_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(BLUE_IRON_POWDER)
-
-        RebarItem.register(RebarItem::class.java, KETONE_BUSH_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(KETONE_BUSH_POWDER)
-
-        RebarItem.register(RebarItem::class.java, AMETHYST_BOTTLE)
-        EndfieldIndustryPages.COMPONENTS.addItem(AMETHYST_BOTTLE)
-
-        RebarItem.register(RebarItem::class.java, BLUE_IRON_BOTTLE)
-        EndfieldIndustryPages.COMPONENTS.addItem(BLUE_IRON_BOTTLE)
-
-        RebarItem.register(RebarItem::class.java, IRON_PART)
-        EndfieldIndustryPages.COMPONENTS.addItem(IRON_PART)
-
-        RebarItem.register(RebarItem::class.java, AMETHYST_EQUIPMENT_PART)
-        EndfieldIndustryPages.COMPONENTS.addItem(AMETHYST_EQUIPMENT_PART)
-
-        RebarItem.register(RebarItem::class.java, BLUE_IRON_EQUIPMENT_PART)
-        EndfieldIndustryPages.COMPONENTS.addItem(BLUE_IRON_EQUIPMENT_PART)
-
-        RebarItem.register(RebarItem::class.java, LOW_CAP_VALLEY_BATTERY)
-        EndfieldIndustryPages.PRODUCTS.addItem(LOW_CAP_VALLEY_BATTERY)
-
-        RebarItem.register(RebarItem::class.java, AMETHYST_PART)
-        EndfieldIndustryPages.COMPONENTS.addItem(AMETHYST_PART)
-
-        RebarItem.register(RebarItem::class.java, MID_CAP_VALLEY_BATTERY)
-        EndfieldIndustryPages.PRODUCTS.addItem(MID_CAP_VALLEY_BATTERY)
-
-        RebarItem.register(RebarItem::class.java, BUCKWHEAT_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(BUCKWHEAT_POWDER)
-
-        RebarItem.register(RebarItem::class.java, CITRUS_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(CITRUS_POWDER)
-
-        RebarItem.register(RebarItem::class.java, MID_DIM_STONE)
-        EndfieldIndustryPages.MATERIALS.addItem(MID_DIM_STONE)
-
-        RebarItem.register(RebarItem::class.java, BUCKWHEAT_MEDICINE_POWDER)
-        EndfieldIndustryPages.MEDICINES.addItem(BUCKWHEAT_MEDICINE_POWDER)
-
-        RebarItem.register(RebarItem::class.java, CITRUS_DRAFT)
-        EndfieldIndustryPages.MEDICINES.addItem(CITRUS_DRAFT)
-
-        RebarItem.register(RebarItem::class.java, BUCKWHEAT_CAPSULE)
-        EndfieldIndustryPages.MEDICINES.addItem(BUCKWHEAT_CAPSULE)
-
-        RebarItem.register(RebarItem::class.java, QUALITY_BUCKWHEAT_CAPSULE)
-        EndfieldIndustryPages.MEDICINES.addItem(QUALITY_BUCKWHEAT_CAPSULE)
-
-        RebarItem.register(RebarItem::class.java, CITRUS_CAN)
-        EndfieldIndustryPages.MEDICINES.addItem(CITRUS_CAN)
-
-        RebarItem.register(RebarItem::class.java, QUALITY_CITRUS_CAN)
-        EndfieldIndustryPages.MEDICINES.addItem(QUALITY_CITRUS_CAN)
-
-        RebarItem.register(RebarItem::class.java, SMALL_BUCKWHEAT_RESTORATION_AGENT)
-        EndfieldIndustryPages.MEDICINES.addItem(SMALL_BUCKWHEAT_RESTORATION_AGENT)
-
-        RebarItem.register(RebarItem::class.java, SMALL_CITRUS_DRAFT)
-        EndfieldIndustryPages.MEDICINES.addItem(SMALL_CITRUS_DRAFT)
-
-        RebarItem.register(RebarItem::class.java, SELECT_BUCKWHEAT_CAPSULE)
-        EndfieldIndustryPages.MEDICINES.addItem(SELECT_BUCKWHEAT_CAPSULE)
-
-        RebarItem.register(RebarItem::class.java, SELECT_CITRUS_CAN)
-        EndfieldIndustryPages.MEDICINES.addItem(SELECT_CITRUS_CAN)
-
-        RebarItem.register(RebarItem::class.java, HEAVY_RED_PILLAR_FUNGUS)
-        EndfieldIndustryPages.MATERIALS.addItem(HEAVY_RED_PILLAR_FUNGUS)
-
-        RebarItem.register(RebarItem::class.java, PURE_CRYSTAL_TOOTHED_LEAF)
-        EndfieldIndustryPages.MATERIALS.addItem(PURE_CRYSTAL_TOOTHED_LEAF)
-
-        RebarItem.register(RebarItem::class.java, SELECT_CITRUS_DRAFT)
-        EndfieldIndustryPages.MEDICINES.addItem(SELECT_CITRUS_DRAFT)
-
-        RebarItem.register(RebarItem::class.java, SELECT_BUCKWHEAT_RESTORATION_AGENT)
-        EndfieldIndustryPages.MEDICINES.addItem(SELECT_BUCKWHEAT_RESTORATION_AGENT)
-
-        RebarItem.register(RebarItem::class.java, JIN_GRASS_SEED)
-        EndfieldIndustryPages.PLANTS.addItem(JIN_GRASS_SEED)
-
-        RebarItem.register(RebarItem::class.java, LARGE_BUCKWHEAT_RESTORATION_AGENT)
-        EndfieldIndustryPages.MEDICINES.addItem(LARGE_BUCKWHEAT_RESTORATION_AGENT)
-
-        RebarItem.register(RebarItem::class.java, BUD_NEEDLE_SEED)
-        EndfieldIndustryPages.PLANTS.addItem(BUD_NEEDLE_SEED)
-
-        RebarItem.register(RebarItem::class.java, FLUFFY_JIN_GRASS)
-        EndfieldIndustryPages.PLANTS.addItem(FLUFFY_JIN_GRASS)
-
-        RebarItem.register(RebarItem::class.java, THORN_BUD_NEEDLE)
-        EndfieldIndustryPages.PLANTS.addItem(THORN_BUD_NEEDLE)
-
-        RebarItem.register(RebarItem::class.java, GOLD_STONE_RICE)
-        EndfieldIndustryPages.PLANTS.addItem(GOLD_STONE_RICE)
-
-        RebarItem.register(RebarItem::class.java, GOLD_STONE_RICE_SEED)
-        EndfieldIndustryPages.PLANTS.addItem(GOLD_STONE_RICE_SEED)
-
-        RebarItem.register(RebarItem::class.java, BUD_NEEDLE)
-        EndfieldIndustryPages.PLANTS.addItem(BUD_NEEDLE)
+    @JvmField
+    val BUCKWHEAT_MEDICINE_POWDER: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BUCKWHEAT_MEDICINE_POWDER, Material.SUGAR)
 
-        RebarItem.register(RebarItem::class.java, JADE_LEAF_GINSENG)
-        EndfieldIndustryPages.PLANTS.addItem(JADE_LEAF_GINSENG)
+    @JvmField
+    val CITRUS_DRAFT: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.CITRUS_DRAFT, Material.POTION)
 
-        RebarItem.register(RebarItem::class.java, JADE_LEAF_GINSENG_SEED)
-        EndfieldIndustryPages.PLANTS.addItem(JADE_LEAF_GINSENG_SEED)
+    @JvmField
+    val BUCKWHEAT_CAPSULE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.BUCKWHEAT_CAPSULE, Material.SUNFLOWER)
 
-        RebarItem.register(RebarItem::class.java, JIN_GRASS_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(JIN_GRASS_POWDER)
+    @JvmField
+    val QUALITY_BUCKWHEAT_CAPSULE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.QUALITY_BUCKWHEAT_CAPSULE, Material.SUNFLOWER)
 
-        RebarItem.register(RebarItem::class.java, BUD_NEEDLE_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(BUD_NEEDLE_POWDER)
+    @JvmField
+    val CITRUS_CAN: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.CITRUS_CAN, Material.ORANGE_DYE)
 
-        RebarItem.register(RebarItem::class.java, FLUFFY_JIN_GRASS_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(FLUFFY_JIN_GRASS_POWDER)
+    @JvmField
+    val QUALITY_CITRUS_CAN: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.QUALITY_CITRUS_CAN, Material.ORANGE_DYE)
 
-        RebarItem.register(RebarItem::class.java, THORN_BUD_NEEDLE_POWDER)
-        EndfieldIndustryPages.MATERIALS.addItem(THORN_BUD_NEEDLE_POWDER)
+    @JvmField
+    val SMALL_BUCKWHEAT_RESTORATION_AGENT: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.SMALL_BUCKWHEAT_RESTORATION_AGENT, Material.POTION)
 
-        RebarItem.register(RebarItem::class.java, MID_RED_PILLAR_FUNGUS)
-        EndfieldIndustryPages.MATERIALS.addItem(MID_RED_PILLAR_FUNGUS)
+    @JvmField
+    val SMALL_CITRUS_DRAFT: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.SMALL_CITRUS_DRAFT, Material.POTION)
 
-        RebarItem.register(RebarItem::class.java, BLOOD_FUNGUS)
-        EndfieldIndustryPages.MATERIALS.addItem(BLOOD_FUNGUS)
+    @JvmField
+    val SELECT_BUCKWHEAT_CAPSULE: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.SELECT_BUCKWHEAT_CAPSULE, Material.SUNFLOWER)
 
-        RebarItem.register(RebarItem::class.java, ULTIMATE_CRYSTAL_TOOTHED_LEAF)
-        EndfieldIndustryPages.MATERIALS.addItem(ULTIMATE_CRYSTAL_TOOTHED_LEAF)
+    @JvmField
+    val SELECT_CITRUS_CAN: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.SELECT_CITRUS_CAN, Material.ORANGE_DYE)
 
-        RebarItem.register(RebarItem::class.java, LOW_CAP_WULING_BATTERY)
-        EndfieldIndustryPages.PRODUCTS.addItem(LOW_CAP_WULING_BATTERY)
+    @JvmField
+    val SELECT_CITRUS_DRAFT: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.SELECT_CITRUS_DRAFT, Material.POTION)
 
-        RebarItem.register(RebarItem::class.java, XI_RANG)
-        EndfieldIndustryPages.MATERIALS.addItem(XI_RANG)
+    @JvmField
+    val SELECT_BUCKWHEAT_RESTORATION_AGENT: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.SELECT_BUCKWHEAT_RESTORATION_AGENT, Material.POTION)
 
-        RebarItem.register(RebarItem::class.java, SAND_LEAF)
-        EndfieldIndustryPages.PLANTS.addItem(SAND_LEAF)
+    @JvmField
+    val LARGE_BUCKWHEAT_RESTORATION_AGENT: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.LARGE_BUCKWHEAT_RESTORATION_AGENT, Material.POTION)
 
-        RebarItem.register(RebarItem::class.java, JIN_GRASS)
-        EndfieldIndustryPages.PLANTS.addItem(JIN_GRASS)
+    // endregion
 
-        RebarItem.register(RebarItem::class.java, CITRUS)
-        EndfieldIndustryPages.PLANTS.addItem(CITRUS)
+    // region 产品
 
-        RebarItem.register(RebarItem::class.java, ORIGINIUM_ORE)
-        EndfieldIndustryPages.MATERIALS.addItem(ORIGINIUM_ORE)
+    @JvmField
+    val HIGH_CAP_VALLEY_BATTERY: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.HIGH_CAP_VALLEY_BATTERY, Material.REDSTONE_BLOCK)
 
-        RebarItem.register(RebarItem::class.java, HIGH_CRYSTAL_EQUIPMENT_PART)
-        EndfieldIndustryPages.COMPONENTS.addItem(HIGH_CRYSTAL_EQUIPMENT_PART)
+    @JvmField
+    val MID_CAP_VALLEY_BATTERY: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.MID_CAP_VALLEY_BATTERY, Material.REDSTONE)
 
-        RebarItem.register(RebarItem::class.java, XI_RANG_EQUIPMENT_PART)
-        EndfieldIndustryPages.COMPONENTS.addItem(XI_RANG_EQUIPMENT_PART)
+    @JvmField
+    val LOW_CAP_VALLEY_BATTERY: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.LOW_CAP_VALLEY_BATTERY, Material.REDSTONE)
 
-        RebarItem.register(RebarItem::class.java, SAND_LEAF_SEED)
-        EndfieldIndustryPages.PLANTS.addItem(SAND_LEAF_SEED)
+    @JvmField
+    val LOW_CAP_WULING_BATTERY: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.LOW_CAP_WULING_BATTERY, Material.REDSTONE)
 
-        RebarItem.register(RebarItem::class.java, STAR_GATE_FUNGUS)
-        EndfieldIndustryPages.PLANTS.addItem(STAR_GATE_FUNGUS)
+    @JvmField
+    val VALLEY_DISPATCH_TICKET: ItemStack = item(Material.CLAY_BALL, EndfieldIndustryKeys.VALLEY_DISPATCH_TICKET, Material.PAPER)
 
-        RebarItem.register(RebarItem::class.java, EMBEDDED_CRYSTAL_JADE)
-        EndfieldIndustryPages.PRODUCTS.addItem(EMBEDDED_CRYSTAL_JADE)
+    @JvmField
+    val GOLD_TICKET: ItemStack = item(Material.PAPER, EndfieldIndustryKeys.GOLD_TICKET, Material.GOLD_INGOT)
 
-        RebarItem.register(RebarItem::class.java, GOLD_TICKET)
-        EndfieldIndustryPages.PRODUCTS.addItem(GOLD_TICKET)
-    }
+    // endregion
 
+    /**
+     * 注册全部物品；机器物品绑定对应方块键。
+     */
     fun initialize() {
+        // 机器（绑定方块）
+        RebarItem.register(RebarItem::class.java, SEED_EXTRACTOR, EndfieldIndustryKeys.SEED_EXTRACTOR)
+        RebarItem.register(RebarItem::class.java, PLANTER, EndfieldIndustryKeys.PLANTER)
+        RebarItem.register(RebarItem::class.java, RELAY_BASE, EndfieldIndustryKeys.RELAY_BASE)
+        RebarItem.register(RebarItem::class.java, RELAY_DIFFUSER, EndfieldIndustryKeys.RELAY_DIFFUSER)
+        RebarItem.register(RebarItem::class.java, POWER_STATION_BASE, EndfieldIndustryKeys.POWER_STATION_BASE)
+        RebarItem.register(RebarItem::class.java, POWER_STATION_EMITTER, EndfieldIndustryKeys.POWER_STATION_EMITTER)
+        RebarItem.register(RebarItem::class.java, PROTOCOL_CORE_CONTROLLER, EndfieldIndustryKeys.PROTOCOL_CORE_CONTROLLER)
+
+        // 植物与作物
+        RebarItem.register(RebarItem::class.java, BUCKWHEAT)
+        RebarItem.register(RebarItem::class.java, GRAY_WHEAT)
+        RebarItem.register(RebarItem::class.java, KETONE_BUSH)
+        RebarItem.register(RebarItem::class.java, CITRUS)
+        RebarItem.register(RebarItem::class.java, JIN_GRASS)
+        RebarItem.register(RebarItem::class.java, BUD_NEEDLE)
+        RebarItem.register(RebarItem::class.java, GOLD_STONE_RICE)
+        RebarItem.register(RebarItem::class.java, JADE_LEAF_GINSENG)
+        RebarItem.register(RebarItem::class.java, SAND_LEAF)
+        RebarItem.register(RebarItem::class.java, FIRE_BUCKWHEAT)
+        RebarItem.register(RebarItem::class.java, DARK_SILVER_CITRUS)
+        RebarItem.register(RebarItem::class.java, LOG)
+        RebarItem.register(RebarItem::class.java, FLUFFY_JIN_GRASS)
+        RebarItem.register(RebarItem::class.java, THORN_BUD_NEEDLE)
+
+        // 种子
+        RebarItem.register(RebarItem::class.java, BUCKWHEAT_SEED)
+        RebarItem.register(RebarItem::class.java, GRAY_WHEAT_SEED)
+        RebarItem.register(RebarItem::class.java, KETONE_TREE_SEED)
+        RebarItem.register(RebarItem::class.java, CITRUS_SEED)
+        RebarItem.register(RebarItem::class.java, JIN_GRASS_SEED)
+        RebarItem.register(RebarItem::class.java, BUD_NEEDLE_SEED)
+        RebarItem.register(RebarItem::class.java, GOLD_STONE_RICE_SEED)
+        RebarItem.register(RebarItem::class.java, JADE_LEAF_GINSENG_SEED)
+        RebarItem.register(RebarItem::class.java, SAND_LEAF_SEED)
+
+        // 菌类与特殊植物
+        RebarItem.register(RebarItem::class.java, LIGHT_RED_PILLAR_FUNGUS)
+        RebarItem.register(RebarItem::class.java, MID_RED_PILLAR_FUNGUS)
+        RebarItem.register(RebarItem::class.java, HEAVY_RED_PILLAR_FUNGUS)
+        RebarItem.register(RebarItem::class.java, BLOOD_FUNGUS)
+        RebarItem.register(RebarItem::class.java, STAR_GATE_FUNGUS)
+        RebarItem.register(RebarItem::class.java, CRYSTALIZED_TOOTHED_LEAF)
+        RebarItem.register(RebarItem::class.java, PURE_CRYSTAL_TOOTHED_LEAF)
+        RebarItem.register(RebarItem::class.java, ULTIMATE_CRYSTAL_TOOTHED_LEAF)
+
+        // 材料（块）
+        RebarItem.register(RebarItem::class.java, STABLE_CARBON_BLOCK)
+        RebarItem.register(RebarItem::class.java, CARBON_BLOCK)
+        RebarItem.register(RebarItem::class.java, STEEL_BLOCK)
+        RebarItem.register(RebarItem::class.java, BLUE_IRON_BLOCK)
+        RebarItem.register(RebarItem::class.java, DENSE_CRYSTAL)
+
+        // 材料（粉末）
+        RebarItem.register(RebarItem::class.java, SAND_LEAF_POWDER)
+        RebarItem.register(RebarItem::class.java, DENSE_ORIGINIUM_POWDER)
+        RebarItem.register(RebarItem::class.java, DENSE_CRYSTAL_POWDER)
+        RebarItem.register(RebarItem::class.java, HIGH_CRYSTAL_POWDER)
+        RebarItem.register(RebarItem::class.java, DENSE_BLUE_IRON_POWDER)
+        RebarItem.register(RebarItem::class.java, DENSE_CARBON_POWDER)
+        RebarItem.register(RebarItem::class.java, ORIGINIUM_POWDER)
+        RebarItem.register(RebarItem::class.java, BLUE_IRON_POWDER)
+        RebarItem.register(RebarItem::class.java, AMETHYST_POWDER)
+        RebarItem.register(RebarItem::class.java, CARBON_POWDER)
+        RebarItem.register(RebarItem::class.java, KETONE_BUSH_POWDER)
+        RebarItem.register(RebarItem::class.java, BUCKWHEAT_POWDER)
+        RebarItem.register(RebarItem::class.java, CITRUS_POWDER)
+        RebarItem.register(RebarItem::class.java, JIN_GRASS_POWDER)
+        RebarItem.register(RebarItem::class.java, BUD_NEEDLE_POWDER)
+        RebarItem.register(RebarItem::class.java, FLUFFY_JIN_GRASS_POWDER)
+        RebarItem.register(RebarItem::class.java, THORN_BUD_NEEDLE_POWDER)
+        RebarItem.register(RebarItem::class.java, GRASS_SEED_POWDER)
+        RebarItem.register(RebarItem::class.java, FINE_GROUND_BUCKWHEAT_POWDER)
+        RebarItem.register(RebarItem::class.java, FINE_GROUND_CITRUS_POWDER)
+        RebarItem.register(RebarItem::class.java, CRYSTAL_SHELL_POWDER)
+
+        // 材料（矿石与天然物）
+        RebarItem.register(RebarItem::class.java, BLUE_IRON_ORE)
+        RebarItem.register(RebarItem::class.java, AMETHYST_ORE)
+        RebarItem.register(RebarItem::class.java, ORIGINIUM_ORE)
+        RebarItem.register(RebarItem::class.java, LIGHT_DIM_STONE)
+        RebarItem.register(RebarItem::class.java, MID_DIM_STONE)
+        RebarItem.register(RebarItem::class.java, HARD_FRAGRANT_STONE)
+        RebarItem.register(RebarItem::class.java, HIGH_ENERGY_FRAGRANT_STONE)
+        RebarItem.register(RebarItem::class.java, XI_RANG)
+        RebarItem.register(RebarItem::class.java, EMBEDDED_CRYSTAL_JADE)
+        RebarItem.register(RebarItem::class.java, CRYSTAL_SHELL)
+        RebarItem.register(RebarItem::class.java, CARTILAGE_FRAGMENT)
+        RebarItem.register(RebarItem::class.java, GLOW_SHELL_BUG)
+        RebarItem.register(RebarItem::class.java, BEAST_MEAT)
+        RebarItem.register(RebarItem::class.java, INDUSTRIAL_EXPLOSIVE)
+
+        // 零件
+        RebarItem.register(RebarItem::class.java, HIGH_CRYSTAL_PART)
+        RebarItem.register(RebarItem::class.java, STEEL_PART)
+        RebarItem.register(RebarItem::class.java, IRON_PART)
+        RebarItem.register(RebarItem::class.java, AMETHYST_PART)
+        RebarItem.register(RebarItem::class.java, HIGH_CRYSTAL_FIBER)
+        RebarItem.register(RebarItem::class.java, AMETHYST_FIBER)
+        RebarItem.register(RebarItem::class.java, HIGH_CRYSTAL_BOTTLE)
+        RebarItem.register(RebarItem::class.java, STEEL_BOTTLE)
+        RebarItem.register(RebarItem::class.java, AMETHYST_BOTTLE)
+        RebarItem.register(RebarItem::class.java, BLUE_IRON_BOTTLE)
+        RebarItem.register(RebarItem::class.java, AMETHYST_EQUIPMENT_PART)
+        RebarItem.register(RebarItem::class.java, BLUE_IRON_EQUIPMENT_PART)
+        RebarItem.register(RebarItem::class.java, HIGH_CRYSTAL_EQUIPMENT_PART)
+        RebarItem.register(RebarItem::class.java, XI_RANG_EQUIPMENT_PART)
+
+        // 药品
+        RebarItem.register(RebarItem::class.java, LARGE_BUD_SPRAY)
+        RebarItem.register(RebarItem::class.java, BUCKWHEAT_MEDICINE_POWDER)
+        RebarItem.register(RebarItem::class.java, CITRUS_DRAFT)
+        RebarItem.register(RebarItem::class.java, BUCKWHEAT_CAPSULE)
+        RebarItem.register(RebarItem::class.java, QUALITY_BUCKWHEAT_CAPSULE)
+        RebarItem.register(RebarItem::class.java, CITRUS_CAN)
+        RebarItem.register(RebarItem::class.java, QUALITY_CITRUS_CAN)
+        RebarItem.register(RebarItem::class.java, SMALL_BUCKWHEAT_RESTORATION_AGENT)
+        RebarItem.register(RebarItem::class.java, SMALL_CITRUS_DRAFT)
+        RebarItem.register(RebarItem::class.java, SELECT_BUCKWHEAT_CAPSULE)
+        RebarItem.register(RebarItem::class.java, SELECT_CITRUS_CAN)
+        RebarItem.register(RebarItem::class.java, SELECT_CITRUS_DRAFT)
+        RebarItem.register(RebarItem::class.java, SELECT_BUCKWHEAT_RESTORATION_AGENT)
+        RebarItem.register(RebarItem::class.java, LARGE_BUCKWHEAT_RESTORATION_AGENT)
+
+        // 产品
+        RebarItem.register(RebarItem::class.java, HIGH_CAP_VALLEY_BATTERY)
+        RebarItem.register(RebarItem::class.java, MID_CAP_VALLEY_BATTERY)
+        RebarItem.register(RebarItem::class.java, LOW_CAP_VALLEY_BATTERY)
+        RebarItem.register(RebarItem::class.java, LOW_CAP_WULING_BATTERY)
+        RebarItem.register(RebarItem::class.java, VALLEY_DISPATCH_TICKET)
+        RebarItem.register(RebarItem::class.java, GOLD_TICKET)
     }
 }
