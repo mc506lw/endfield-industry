@@ -4,6 +4,11 @@ import io.github.pylonmc.rebar.addon.RebarAddon
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
+import top.mc506lw.rebar.endfield_industry.content.cloudstorage.CloudStorage
+import top.mc506lw.rebar.endfield_industry.content.cloudstorage.CloudStorageCommand
+import top.mc506lw.rebar.endfield_industry.content.cloudstorage.CloudStorageGui
+import top.mc506lw.rebar.endfield_industry.content.powersystem.PowerSystem
+import top.mc506lw.rebar.endfield_industry.recipes.EndfieldIndustryRecipeTypes
 import java.util.Locale
 
 /**
@@ -31,6 +36,16 @@ class EndfieldIndustry : JavaPlugin(), RebarAddon {
 
         registerWithRebar()
         saveDefaultConfig()
+
+        PowerSystem.initialize()
+        EndfieldIndustryItems.initialize()
+        EndfieldIndustryBlocks.initialize()
+        EndfieldIndustryRecipes.initialize()
+        EndfieldIndustryRecipeTypes.initialize()
+        EndfieldIndustryPages.initialize()
+        CloudStorage.initialize()
+        CloudStorageGui.initialize()
+        CloudStorageCommand.register()
     }
 
     override fun onDisable() = Unit

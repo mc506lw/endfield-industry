@@ -876,12 +876,6 @@ gui:
     chart_no_data: "<gray>No data</gray>"
     device_seed_extractor: "<gold>Seed Extractor</gold>"
     device_planter: "<green>Planter</green>"
-
-waila:
-  structure_incomplete: " <red>(Structure incomplete)</red>"
-  not_connected: " <yellow>(Not connected to power grid)</yellow>"
-  power_low: " <gold>(Insufficient power)</gold>"
-gui:
   cloud_storage:
     info: "<light_purple>Storage Info</light_purple>"
     prev_page: "<yellow>Previous Page</yellow>"
@@ -919,3 +913,9 @@ gui:
     storage_info_header: "<white>Storage info: %value%</white>"
     global_whitelist_added: "<green>Added %value% to global whitelist</green>"
     global_whitelist_list: "<white>Global whitelist (%value% items):</white>"
+
+waila:
+  structure_incomplete: " <red>(Structure incomplete)</red>"
+  not_connected: " <yellow>(Not connected to power grid)</yellow>"
+  power_low: " <gold>(Insufficient power)</gold>"
+

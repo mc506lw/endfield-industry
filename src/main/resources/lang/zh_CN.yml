@@ -885,11 +885,6 @@ gui:
     device_seed_extractor: <gold>采种机</gold>
     device_planter: <green>种植机</green>
     click_to_view_storage: <yellow>点击查看云仓库</yellow>
-waila:
-  structure_incomplete: ' <red>(结构未完成)</red>'
-  not_connected: ' <yellow>(未连接电网)</yellow>'
-  power_low: ' <gold>(电量不足)</gold>'
-gui:
   cloud_storage:
     info: <light_purple>仓库信息</light_purple>
     prev_page: <yellow>上一页</yellow>
@@ -927,3 +922,8 @@ gui:
     storage_info_header: '<white>仓库信息: %value%</white>'
     global_whitelist_added: '<green>已添加 %value% 到全局白名单</green>'
     global_whitelist_list: '<white>全局白名单列表 (%value% 项):</white>'
+waila:
+  structure_incomplete: ' <red>(结构未完成)</red>'
+  not_connected: ' <yellow>(未连接电网)</yellow>'
+  power_low: ' <gold>(电量不足)</gold>'
+
