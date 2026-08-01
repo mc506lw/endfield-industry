@@ -26,12 +26,37 @@ repositories {
 
 val rebarVersion = project.properties["rebar.version"] as String
 val minecraftVersion = project.properties["minecraft.version"] as String
+val paperApiVersion = project.properties["paper.api.version"] as String
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:$minecraftVersion-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:$paperApiVersion")
     compileOnly("io.github.pylonmc:rebar:$rebarVersion")
+    // Rebar 的 paperLibraryApi 依赖，插件代码直接使用 InvUI 的 Gui / VirtualInventory / Window
+    compileOnly("xyz.xenondevs.invui:invui:2.1.0")
+    compileOnly("xyz.xenondevs.invui:invui-kotlin:2.1.0")
     compileOnly(kotlin("stdlib"))
     implementation("com.h2database:h2:2.2.224")
+}
+
+kotlin {
+    jvmToolchain(25)
+
+    sourceSets {
+        main {
+            kotlin.exclude(
+                // TODO(重构): 以下模块尚未迁移到 Rebar 0.42.1 的新 API。
+                // 每完成一个模块的迁移，就从该列表中移除对应的排除项。
+                "**/EndfieldIndustryItems.kt",
+                "**/EndfieldIndustryBlocks.kt",
+                "**/EndfieldIndustryRecipes.kt",
+                "**/EndfieldIndustryPages.kt",
+                "**/recipes/**",
+                "**/content/**",
+                "**/event/**",
+                "**/util/**",
+            )
+        }
+    }
 }
 
 idea {
@@ -42,12 +67,12 @@ idea {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 
 tasks.withType<JavaCompile> {
@@ -57,7 +82,7 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_25)
     }
 }
 
@@ -73,7 +98,7 @@ bukkit {
     name = project.name
     main = project.properties["main-class"] as String
     version = project.version.toString()
-    apiVersion = "1.21"
+    apiVersion = "26.1.2"
     depend = listOf("Rebar")
     load = BukkitPluginDescription.PluginLoadOrder.STARTUP
 }
@@ -88,7 +113,7 @@ tasks.runServer {
 
 tasks.register<Copy>("copyToServer") {
     from(tasks.shadowJar)
-    into("D:\\我的世界资源库\\服务器\\岚域3.0\\plugins")
+    into("E:\\Minecraft\\开发\\Pylon开发\\plugins")
     outputs.upToDateWhen { false }
 }
 

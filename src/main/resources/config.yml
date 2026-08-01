@@ -1,4 +1,7 @@
 # Endfield Industry Configuration
-# Main configuration file
 
+# 调试模式：输出更多日志信息
 debug: false
+
+# 语言文件缺失时的回退语言（en / zh_CN）
+default-language: en

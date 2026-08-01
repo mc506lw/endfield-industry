@@ -4,12 +4,14 @@ import io.github.pylonmc.rebar.addon.RebarAddon
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
-import top.mc506lw.rebar.endfield_industry.content.powersystem.PowerSystem
-import top.mc506lw.rebar.endfield_industry.content.cloudstorage.CloudStorage
-import top.mc506lw.rebar.endfield_industry.content.cloudstorage.CloudStorageGui
-import top.mc506lw.rebar.endfield_industry.content.cloudstorage.CloudStorageCommand
-import top.mc506lw.rebar.endfield_industry.recipes.EndfieldIndustryRecipeTypes
+import java.util.Locale
 
+/**
+ * Endfield Industry 插件主类。
+ *
+ * 同时作为 Rebar 插件附加（addon）注册，所有内容（物品、方块、配方、电力系统等）
+ * 都以 [RebarAddon] 的形式由 Rebar 框架统一管理。
+ */
 class EndfieldIndustry : JavaPlugin(), RebarAddon {
 
     companion object {
@@ -17,6 +19,9 @@ class EndfieldIndustry : JavaPlugin(), RebarAddon {
         lateinit var instance: EndfieldIndustry
             private set
 
+        /**
+         * 生成插件的命名空间键，内容 id 形如 `endfield-industry:<key>`。
+         */
         @JvmStatic
         fun key(key: String): NamespacedKey = NamespacedKey(instance, key)
     }
@@ -25,35 +30,17 @@ class EndfieldIndustry : JavaPlugin(), RebarAddon {
         instance = this
 
         registerWithRebar()
-
         saveDefaultConfig()
-
-        PowerSystem.initialize()
-
-        EndfieldIndustryItems.initialize()
-        EndfieldIndustryBlocks.initialize()
-        EndfieldIndustryEntities.initialize()
-        EndfieldIndustryFluids.initialize()
-        EndfieldIndustryRecipes.initialize()
-        EndfieldIndustryRecipeTypes.initialize()
-        EndfieldIndustryPages.initialize()
-        
-        CloudStorage.initialize()
-        CloudStorageGui.initialize()
-        CloudStorageCommand.register()
     }
-    
-    override fun onDisable() {
-        PowerSystem.shutdown()
-        CloudStorage.shutdown()
-    }
+
+    override fun onDisable() = Unit
 
     override val javaPlugin: JavaPlugin
-        get() = instance
-
-    override val languages: Set<java.util.Locale>
-        get() = setOf(java.util.Locale.ENGLISH, java.util.Locale.SIMPLIFIED_CHINESE)
+        get() = this
 
     override val material: Material
         get() = Material.DEAD_BUSH
+
+    override val defaultLanguage: Locale
+        get() = Locale.forLanguageTag(config.getString("default-language", "en"))
 }
