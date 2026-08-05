@@ -1,10 +1,10 @@
 # AGENTS.md
 
-Minecraft Paper plugin "Endfield Industry" (终末地工业) built on the **Rebar framework** (io.github.pylonmc:rebar, compileOnly). Rebar and Paper API are compileOnly — the jar only runs on a server with Rebar installed.
+Minecraft Paper plugin "Lapis-EndfieldIndustry" (终末地工业) built on the **Rebar framework** (io.github.pylonmc:rebar, compileOnly). Rebar and Paper API are compileOnly — the jar only runs on a server with Rebar installed.
 
 ## Build / dev commands (Windows)
 
-- Build jar only: `.\gradlew.bat shadowJar` → `build/libs/Endfield-Industry-1.0.0.jar`
+- Build jar only: `.\gradlew.bat shadowJar` → `build/libs/Lapis-EndfieldIndustry-1.0.0.jar`
 - **Gotcha**: `.\gradlew.bat build` auto-runs the `copyToServer` task which copies the jar to a hardcoded local server dir (`E:\Minecraft\开发\Pylon开发\plugins` in build.gradle.kts). It fails on machines without that path and always re-runs (`outputs.upToDateWhen { false }`). Use `shadowJar` to skip it.
 - Run a dev server: `.\gradlew.bat runServer` (downloads the matching rebar jar from GitHub, MC version from `gradle.properties`).
 - No tests, no CI, no lint config — `shadowJar` is the only verification.

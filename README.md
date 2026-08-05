@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./readme-header.png" alt="Endfield Industry Banner" width="100%">
+  <img src="./readme-header.png" alt="Lapis-EndfieldIndustry Banner" width="100%">
 </p>
 
 <p align="center">
@@ -101,7 +101,7 @@
 ### 安装
 
 1. 确保服务器已安装 Rebar 插件
-2. 将 `EndfieldIndustry-1.0.0.jar` 放入服务器的 `plugins` 目录
+2. 将 `Lapis-EndfieldIndustry-1.0.0.jar` 放入服务器的 `plugins` 目录
 3. 重启服务器
 
 ### 构建
@@ -116,7 +116,7 @@ D:\gradle-9.4.0\bin\gradle.bat build
 
 ## 🔧 配置
 
-插件配置文件位于 `plugins/EndfieldIndustry/config.yml`
+插件配置文件位于 `plugins/Lapis-EndfieldIndustry/config.yml`
 
 ### 电力系统配置
 

@@ -1,1 +1,1 @@
-rootProject.name = "Endfield-Industry"
+rootProject.name = "Lapis-EndfieldIndustry"
